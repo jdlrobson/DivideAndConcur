@@ -29,11 +29,21 @@ function translate(word) {
 	return translate + composition;
 }
 
+/**
+ * @param {Number} wordLength (character length) to restrict words to. If word length is zero
+ * it will be assumed you want to obtain radicals.
+ * Only words which do not have decompositions will be shown.
+ * If wordLength is 1 single characters which have not been decomposed will be shown
+ * For all other word counts we assume that each character can be decomposed.
+ * @param {Number} [max] if defined results will be limited to this amount of results.
+ */
 function getWords(wordLength, max) {
 	var keys = Object.keys( words ).filter((w) => {
 			if ( wordLength === 0 && w.length === 1 ) {
+				// only return words without known decompositions (radicals)
 				return !decompositions[w];
 			} else if ( wordLength === 1 && w.length === 1 ) {
+				// only return words of length 1 if they have decompositions
 				return decompositions[w];
 			} else {
 				return w.length === wordLength;

@@ -7,14 +7,23 @@ var dict = require('./data/dictionary');
 var app = express()
 app.use(express.static('dist'))
 
-app.get('/data', function (req, res) {
-	dict.load().then((data) => {
-		res.send( data );
-	});
+app.get('/data/:size', function (req, res) {
+  dict.load().then((dictionary) => {
+    // get 10 words of length size
+    let words = dict.getWords(parseInt(req.params.size)).
+      // jumble up
+      sort(()=>Math.random() < 0.5 ? -1 : 1);
+
+    let data = {};
+    words.forEach((word) => {
+      data[word] = dictionary[word];
+    })
+    res.send( data );
+  });
 })
 
 app.get('/', function (req, res) {
-	res.sendFile(path.join(__dirname + '/index.html'));
+  res.sendFile(path.join(__dirname + '/index.html'));
 })
 
 app.listen(3000, function () {
