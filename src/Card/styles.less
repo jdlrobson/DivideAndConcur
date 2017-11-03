@@ -1,0 +1,38 @@
+@cardBorder: 3px;
+.card {
+  width: 120px;
+  height: 120px;
+  background: #ccc;
+  float: left;
+  margin-right: 10px;
+  margin-top: 10px;
+  text-align: center;
+  position: relative;
+  border: solid @cardBorder transparent;
+  
+  &.card-known {
+    border: solid @cardBorder green;
+    opacity: 0.4;
+  }
+}
+
+.button {
+  cursor: pointer;
+}
+
+.wrong {
+  position: absolute;
+  left: 10px;
+  bottom: 0;
+}
+
+.tick {
+  position: absolute;
+  right: 10px;
+  bottom: 0;
+}
+
+.char {
+  font-size: 40px;
+  font-weight: bold;
+}
