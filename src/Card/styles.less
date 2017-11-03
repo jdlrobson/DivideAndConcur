@@ -21,6 +21,28 @@
   }
 }
 
+.difficulty-bar {
+  float: left;
+  height: 10px;
+  width: 100%;
+  &:after {
+    content: "";
+    display: block;
+    clear: both;
+  }
+
+  div {
+    float: left;
+    margin-right: 1px;
+    width: 10px;
+    height: 10px;
+    background-color: red;
+    &.easy {
+      background-color: green;
+    }
+  }
+}
+
 .button {
   cursor: pointer;
 }

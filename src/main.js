@@ -5,8 +5,15 @@ import Game from './Game'
 /** @jsx h */
 
 (function () {
+  let memory = localStorage.getItem('memory');
+  memory = memory ? JSON.parse( memory ) : false;
+
+  function saveMemory(newMemory) {
+    localStorage.setItem('memory', JSON.stringify(newMemory));
+  }
+
   render(
-    <Game level={1} />,
+    <Game level={1} initialMemory={memory} saveMemory={saveMemory} />,
     document.getElementById('container')
   );
 }());

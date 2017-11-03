@@ -8,20 +8,38 @@ class Card extends Component {
   };
   wrong() {
     this.setState({done: true});
+    if ( this.props.onIncorrect ) {
+      this.props.onIncorrect( this.props.character );
+    }
   };
   tick() {
     this.setState({done: true, knew: true});
+    if ( this.props.onCorrect ) {
+      this.props.onCorrect( this.props.character );
+    }
   };
   render() {
-    var hidden = { display: 'none' };
-    var state = this.state;
-    var className = 'card';
-    var props = this.props;
+    const hidden = { display: 'none' };
+    const state = this.state;
+    let className = 'card';
+    const props = this.props;
+    let dLevel = props.difficultyLevel;
+    const isEasy = dLevel < 0 ? true : false;
+
+    if ( isEasy ) {
+      dLevel = -dLevel;
+    }
+
     if ( state.done ) {
       className += state.knew ? ' card-known' : ' card-unknown';
     }
     return (
       <div className={className} onClick={this.onClick.bind(this)}>
+          <div className={"difficulty-bar"}>
+          {
+            new Array(dLevel).fill((<div className={isEasy ? 'easy' : ''} />))
+          }
+          </div>
           <div key='char' className="char">{props.character}</div>
           <div key='lang' className='english' style={state.revealed ? {} : hidden}>{props.english}</div>
           <div key='tick' className='tick button' onClick={this.tick.bind(this)}
