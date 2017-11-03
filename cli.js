@@ -1,5 +1,5 @@
 var util = require('util');
-var dict = require('./src/dictionary');
+var dict = require('./data/dictionary');
 const chalk = require('chalk');
 
 function addDictionaryItem() {

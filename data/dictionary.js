@@ -2,7 +2,7 @@ var fs = require('fs');
 
 var words = {};
 var decompositions = {};
-const DICTIONARY_FILE = 'dictionary.json';
+const DICTIONARY_FILE = './data/dictionary.json';
 
 function translate(word) {
 	var translate = getWord(word);

@@ -2,7 +2,7 @@ var express = require('express');
 var fs = require('fs');
 var path = require('path');
 
-var dict = require('./src/dictionary');
+var dict = require('./data/dictionary');
 
 var app = express()
 app.use(express.static('dist'))
