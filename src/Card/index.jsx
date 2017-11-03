@@ -17,8 +17,8 @@ class Card extends Component {
     var state = this.state;
     var className = 'card';
     var props = this.props;
-    if ( this.state.knew ) {
-      className += ' card-known';
+    if ( state.done ) {
+      className += state.knew ? ' card-known' : ' card-unknown';
     }
     return (
       <div className={className} onClick={this.onClick.bind(this)}>
