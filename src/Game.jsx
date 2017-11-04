@@ -9,7 +9,7 @@ const NUM_CARDS_PER_LEVEL = 10;
 export default class Game extends Component {
   constructor() {
     super();
-    this.state = { score: 0, cards: false, level: 1 };
+    this.state = { score: 0, cards: false, level: 1, answered: 0, round: 0 };
   }
   componentWillMount() {
     const props = this.props;
@@ -23,7 +23,7 @@ export default class Game extends Component {
   deal( dictionary ) {
     const memory = this.memory;
     let offset = 0;
-    let level = this.state.level;
+    let level = 1;
     let curDict = dictionary.deal(offset, NUM_CARDS_PER_LEVEL);
     let knownCards = {};
 
@@ -42,7 +42,9 @@ export default class Game extends Component {
     });
 
     // present
-    this.setState( { cards, level, knownCards: Object.keys( knownCards ) } );
+    this.setState( { cards, level, answered: 0,
+      round: this.state.round + 1,
+      knownCards: Object.keys( knownCards ) } );
   }
   componentDidMount() {
     const setState = this.setState.bind( this );
@@ -56,17 +58,26 @@ export default class Game extends Component {
 
     this.updateScore();
   }
+  componentDidUpdate() {
+    if ( this.state.cards ) {
+      if ( this.state.answered === this.state.cards.length ) {
+        this.deal( this.dictionary );
+      }
+    }
+  }
   updateScore() {
     this.setState( { score: this.memory.getScore() } );
   }
   updateScoreFromWrongAnswer( char ) {
     this.memory.markAsDifficult( char );
     this.updateScore();
+    this.setState( { answered: this.state.answered + 1 });
   }
   updateScoreFromCorrectAnswer( char ) {
     const score = this.state.score + 1;
     this.memory.markAsEasy( char );
     this.updateScore();
+    this.setState( { answered: this.state.answered + 1 });
   }
   render() {
     const props = this.props;
@@ -85,7 +96,7 @@ export default class Game extends Component {
 
       return <Card {...events}
         className='card'
-        key={'card-' + char}
+        key={'card-' + char + '-' + state.round}
         difficultyLevel={rating}
         character={char}
         english={dictionary.toEnglish(char)}
