@@ -25,11 +25,11 @@ export default class Game extends Component {
     let offset = 0;
     let level = 1;
     let curDict = dictionary.deal(offset, NUM_CARDS_PER_LEVEL);
-    let knownCards = {};
+    let previous = [];
 
     while ( Object.keys( curDict ).length && memory.knowsWords( Object.keys( curDict ) ) ) {
       offset += NUM_CARDS_PER_LEVEL;
-      Object.assign( knownCards, curDict );
+      previous.push( Object.keys( curDict ) );
       curDict = dictionary.deal(offset, NUM_CARDS_PER_LEVEL);
       level += 1;
     }
@@ -44,7 +44,8 @@ export default class Game extends Component {
     // present
     this.setState( { cards, level, answered: 0,
       round: this.state.round + 1,
-      knownCards: Object.keys( knownCards ) } );
+      previous: previous.reverse()
+    } );
   }
   componentDidMount() {
     const setState = this.setState.bind( this );
@@ -105,8 +106,8 @@ export default class Game extends Component {
       } );
     }
     const cards = state.cards ? state.cards.map(mapCardWithEvents) : false;
-    const knownCards = state.knownCards ? state.knownCards.map(mapCard) : false;
     const loader = <div>Loading up!</div>;
+    const prev = state.previous || [];
 
     return (
       <div className="game">
@@ -114,7 +115,11 @@ export default class Game extends Component {
       <div>Score: {state.score}</div>
       {cards || loader }
       <h3>Previous history</h3>
-      {knownCards}
+      {
+        prev.map((cards)=>{
+          return cards.map(mapCard)
+        })
+      }
       </div>
     );
   }
