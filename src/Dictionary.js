@@ -11,7 +11,7 @@ export default class Dictionary {
   load(unitSize) {
     const self = this;
 
-    return fetch('/data/' + unitSize).then((r) => {
+    return fetch('/data/' + unitSize +'/0').then((r) => {
       return r.json();
     }).then((r) => {
       self.data = r;

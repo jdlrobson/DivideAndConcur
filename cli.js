@@ -15,6 +15,14 @@ function addDictionaryItem() {
 	} );
 }
 
+function rateWord() {
+	return getUserInput('What is the Chinese word you want to rate?').then((word) => {
+		return getUserInput('How difficult is that? (1+)').then((rating) => {
+			return dict.rateWord(word, parseInt(rating, 10));
+		});
+	});
+}
+
 function getUserInput( msg ) {
 	return new Promise( ( resolve, reject ) => {
 		feedback( msg, true );
@@ -28,7 +36,7 @@ function getUserInput( msg ) {
 function deal(wordLength, max, _keys) {
 	max = max || 10;
 	if ( !_keys ) {
-		_keys = dict.getWords(wordLength, max);
+		_keys = dict.getWords(wordLength, undefined, max);
 	}
 
 	if ( _keys.length ) {
@@ -83,7 +91,8 @@ function menu() {
 		'4: Deal triple cards',
 		'5: Add to dictionary',
 		'6: Decompose chinese word',
-		'7: Translate'
+		'7: Translate',
+		'8: Report difficulty of word'
 	];
 	getUserInput( '**********************\n' + options.join('\n') + '\n**********************' )
 		.then( ( val ) => {
@@ -109,6 +118,9 @@ function menu() {
 					break;
 				case 7:
 					translate().then(() => menu());
+					break;
+				case 8:
+					rateWord().then(() => menu());
 					break;
 				default:
 					feedback('Huh?');

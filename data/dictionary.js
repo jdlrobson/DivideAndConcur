@@ -1,6 +1,7 @@
 var fs = require('fs');
 
 var words = {};
+var difficulty = {};
 var decompositions = {};
 const DICTIONARY_FILE = './data/dictionary.json';
 
@@ -29,24 +30,38 @@ function translate(word) {
 	return translate + composition;
 }
 
+function getDifficultyRating(word) {
+	return difficulty[word] || 0;
+}
+
+function rateWord(word, rating) {
+	difficulty[word] = rating;
+	return save();
+}
+
 /**
  * @param {Number} wordLength (character length) to restrict words to. If word length is zero
  * it will be assumed you want to obtain radicals.
  * Only words which do not have decompositions will be shown.
  * If wordLength is 1 single characters which have not been decomposed will be shown
  * For all other word counts we assume that each character can be decomposed.
+ * @param {Number} [difficultyLevel] if defined results will be limited to this difficulty level
  * @param {Number} [max] if defined results will be limited to this amount of results.
  */
-function getWords(wordLength, max) {
+function getWords(wordLength, difficultyLevel, max) {
+	function matchesDifficultyLevel(w) {
+		console.log(w, difficultyLevel, getDifficultyRating(w))
+		return difficultyLevel === undefined || getDifficultyRating(w) === difficultyLevel
+	}
 	var keys = Object.keys( words ).filter((w) => {
 			if ( wordLength === 0 && w.length === 1 ) {
 				// only return words without known decompositions (radicals)
-				return !decompositions[w];
+				return !decompositions[w] && matchesDifficultyLevel(w);
 			} else if ( wordLength === 1 && w.length === 1 ) {
 				// only return words of length 1 if they have decompositions
-				return decompositions[w];
+				return decompositions[w] && matchesDifficultyLevel(w);
 			} else {
-				return w.length === wordLength;
+				return w.length === wordLength && matchesDifficultyLevel(w);
 			}
 		} );
 	return keys.slice( 0, max );
@@ -61,10 +76,11 @@ function load() {
 			if ( data.words ) {
 				words = data.words;
 				decompositions = data.decompositions;
+				difficulty = data.difficulty || {};
 			} else {
 				words = data;
 			}
-			resolve(words, decompositions);
+			resolve(words, decompositions, difficulty);
 		} );
 	})
 }
@@ -72,7 +88,7 @@ function load() {
 function save() {
 	return new Promise((resolve) => {
 		fs.writeFile(DICTIONARY_FILE,
-			JSON.stringify({ words: words, decompositions: decompositions }),
+			JSON.stringify({ words: words, decompositions: decompositions, difficulty: difficulty }),
 			function( err ) {
 				if ( !err ) {
 					resolve();
@@ -102,6 +118,7 @@ function addDecomposition( char, components ) {
 }
 
 module.exports = {
+	rateWord: rateWord,
 	addDecomposition: addDecomposition,
 	getWord: getWord,
 	saveWord: saveWord,
