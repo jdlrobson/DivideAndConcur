@@ -87,12 +87,8 @@ export default class Game extends Component {
     const onIncorrect = this.updateScoreFromWrongAnswer.bind(this);
     const onCorrect = this.updateScoreFromCorrectAnswer.bind(this);
 
-    function mapCard( char ) {
+    function mapCard( char, events = {} ) {
       const rating = memory.getDifficulty(char);
-      const events = rating > -5 ? {
-        onIncorrect: onIncorrect,
-        onCorrect: onCorrect
-      } : {};
 
       return <Card {...events}
         className='card'
@@ -102,7 +98,13 @@ export default class Game extends Component {
         english={dictionary.toEnglish(char)}
       />;
     }
-    const cards = state.cards ? state.cards.map(mapCard) : false;
+    function mapCardWithEvents( char ) {
+      return mapCard( char, {
+        onIncorrect: onIncorrect,
+        onCorrect: onCorrect
+      } );
+    }
+    const cards = state.cards ? state.cards.map(mapCardWithEvents) : false;
     const knownCards = state.knownCards ? state.knownCards.map(mapCard) : false;
     const loader = <div>Loading up!</div>;
 
