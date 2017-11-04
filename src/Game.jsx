@@ -25,9 +25,11 @@ export default class Game extends Component {
     let offset = 0;
     let level = this.state.level;
     let curDict = dictionary.deal(offset, NUM_CARDS_PER_LEVEL);
+    let knownCards = {};
 
     while ( Object.keys( curDict ).length && memory.knowsWords( Object.keys( curDict ) ) ) {
       offset += NUM_CARDS_PER_LEVEL;
+      Object.assign( knownCards, curDict );
       curDict = dictionary.deal(offset, NUM_CARDS_PER_LEVEL);
       level += 1;
     }
@@ -40,7 +42,7 @@ export default class Game extends Component {
     });
 
     // present
-    this.setState( { cards, level } );
+    this.setState( { cards, level, knownCards: Object.keys( knownCards ) } );
   }
   componentDidMount() {
     const setState = this.setState.bind( this );
@@ -71,18 +73,26 @@ export default class Game extends Component {
     const state = this.state;
     const memory = this.memory;
     const dictionary = this.dictionary;
+    const onIncorrect = this.updateScoreFromWrongAnswer.bind(this);
+    const onCorrect = this.updateScoreFromCorrectAnswer.bind(this);
 
-    const cards = state.cards ? state.cards.map((char) => {
-      return <Card
+    function mapCard( char ) {
+      const rating = memory.getDifficulty(char);
+      const events = rating > -5 ? {
+        onIncorrect: onIncorrect,
+        onCorrect: onCorrect
+      } : {};
+
+      return <Card {...events}
         className='card'
         key={'card-' + char}
-        difficultyLevel={memory.getDifficulty(char)}
-        onIncorrect={this.updateScoreFromWrongAnswer.bind(this)}
-        onCorrect={this.updateScoreFromCorrectAnswer.bind(this)}
+        difficultyLevel={rating}
         character={char}
         english={dictionary.toEnglish(char)}
       />;
-    }) : false;
+    }
+    const cards = state.cards ? state.cards.map(mapCard) : false;
+    const knownCards = state.knownCards ? state.knownCards.map(mapCard) : false;
     const loader = <div>Loading up!</div>;
 
     return (
@@ -90,6 +100,8 @@ export default class Game extends Component {
       <h2>Level {state.level}</h2>
       <div>Score: {state.score}</div>
       {cards || loader }
+      <h3>Previous history</h3>
+      {knownCards}
       </div>
     );
   }

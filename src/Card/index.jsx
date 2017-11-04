@@ -25,6 +25,7 @@ class Card extends Component {
     const props = this.props;
     let dLevel = props.difficultyLevel;
     const isEasy = dLevel < 0 ? true : false;
+    const isKnown = dLevel < -4;
 
     if ( isEasy ) {
       dLevel = -dLevel;
@@ -43,9 +44,9 @@ class Card extends Component {
           <div key='char' className="char">{props.character}</div>
           <div key='lang' className='english' style={state.revealed ? {} : hidden}>{props.english}</div>
           <div key='tick' className='tick button' onClick={this.tick.bind(this)}
-            style={state.revealed && !state.done ? {} : hidden}>✅</div>
+            style={state.revealed && !state.done && !isKnown ? {} : hidden}>✅</div>
           <div key='wrong' className='wrong button' onClick={this.wrong.bind(this)}
-            style={state.revealed && !state.done ? {} : hidden}>❌</div>
+            style={state.revealed && !state.done && !isKnown ? {} : hidden}>❌</div>
       </div>
     );
   }
