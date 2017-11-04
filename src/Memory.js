@@ -3,9 +3,33 @@ const SCORE_CORRECT_ANSWER = 1
 
 export default class Memory {
   constructor(initialMemory, saveFunction) {
-    this.answers = initialMemory ? initialMemory.answers : {};
+    if ( initialMemory ) {
+      this.answers = initialMemory.answers || {};
+      this.stack = initialMemory.stack || false;
+    } else {
+      this.answers = {};
+      this.stack = false;
+    }
     this.saveFunction = saveFunction;
     this.score = this.getScore();
+  }
+  /**
+   * Check if the user knows all the words
+   * @param {Array} words
+   * @return {Boolean}
+   */
+  knowsWords(words) {
+    var answers = this.answers;
+    /**
+     * @param {String} words
+     */
+    function knowsWord(word) {
+      return answers[word] < -4;
+    }
+
+    return words.reduce((accumulator, word)=> {
+      return knowsWord(word) && accumulator;
+    }, true );
   }
   saveMemory() {
     if ( this.saveFunction ) {

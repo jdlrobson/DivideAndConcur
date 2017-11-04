@@ -2,39 +2,56 @@
 import { Component, h } from 'preact';
 import Card from './Card'
 import Memory from './Memory'
+import Dictionary from './Dictionary'
 
-function getWords(size) {
-  return fetch('/data/' + size).then((r) => {
-    return r.json();
-  });
-}
+const NUM_CARDS_PER_LEVEL = 10;
 
 export default class Game extends Component {
   constructor() {
     super();
-    this.state = { score: 0 };
+    this.state = { score: 0, cards: false, level: 1 };
   }
   componentWillMount() {
     const props = this.props;
     this.memory = new Memory(props.initialMemory, props.saveMemory);
+    this.dictionary = new Dictionary();
   }
-  deal() {
-    const dictionary = this.state.dictionary;
+  /**
+   * Deal ten cards from the dictionary that the user is unfamiliar with
+   * sorted by difficulty level
+   */
+  deal( dictionary ) {
     const memory = this.memory;
-    const cards = dictionary ? Object.keys( dictionary ).
-      sort((char, char2) => {
-        // sort by difficulty
-        return memory.getDifficulty(char) < memory.getDifficulty(char2) ? 1 : -1;
-      }) : false;
-    this.setState( { cards } );
+    let offset = 0;
+    let level = this.state.level;
+    let curDict = dictionary.deal(offset, NUM_CARDS_PER_LEVEL);
+
+    while ( Object.keys( curDict ).length && memory.knowsWords( Object.keys( curDict ) ) ) {
+      offset += NUM_CARDS_PER_LEVEL;
+      curDict = dictionary.deal(offset, NUM_CARDS_PER_LEVEL);
+      level += 1;
+    }
+
+    // We now have a dictionary of 10 words that the user doesn't know.
+
+    const cards = Object.keys( curDict ).sort((char, char2) => {
+      // sort by difficulty
+      return memory.getDifficulty(char) < memory.getDifficulty(char2) ? 1 : -1;
+    });
+
+    // present
+    this.setState( { cards, level } );
   }
   componentDidMount() {
     const setState = this.setState.bind( this );
     const deal = this.deal.bind( this );
-    getWords(0).then((dictionary) => {
-      setState( { dictionary } );
-      deal();
+    const dictionary = this.dictionary;
+
+    // Load the dictionary
+    dictionary.load(0).then(()=> {
+      deal( dictionary );
     });
+
     this.updateScore();
   }
   updateScore() {
@@ -53,7 +70,8 @@ export default class Game extends Component {
     const props = this.props;
     const state = this.state;
     const memory = this.memory;
-    const dictionary = this.state.dictionary;
+    const dictionary = this.dictionary;
+
     const cards = state.cards ? state.cards.map((char) => {
       return <Card
         className='card'
@@ -62,14 +80,14 @@ export default class Game extends Component {
         onIncorrect={this.updateScoreFromWrongAnswer.bind(this)}
         onCorrect={this.updateScoreFromCorrectAnswer.bind(this)}
         character={char}
-        english={dictionary[char]}
+        english={dictionary.toEnglish(char)}
       />;
     }) : false;
     const loader = <div>Loading up!</div>;
 
     return (
       <div className="game">
-      <h2>Level {props.level}</h2>
+      <h2>Level {state.level}</h2>
       <div>Score: {state.score}</div>
       {cards || loader }
       </div>

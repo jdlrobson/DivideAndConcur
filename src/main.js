@@ -13,7 +13,7 @@ import Game from './Game'
   }
 
   render(
-    <Game level={1} initialMemory={memory} saveMemory={saveMemory} />,
+    <Game initialMemory={memory} saveMemory={saveMemory} />,
     document.getElementById('container')
   );
 }());
