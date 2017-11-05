@@ -92,7 +92,8 @@ function menu() {
 		'5: Add to dictionary',
 		'6: Decompose chinese word',
 		'7: Translate',
-		'8: Report difficulty of word'
+		'8: Report difficulty of word',
+		'9: Lookup word difficulty',
 	];
 	getUserInput( '**********************\n' + options.join('\n') + '\n**********************' )
 		.then( ( val ) => {
@@ -121,6 +122,12 @@ function menu() {
 					break;
 				case 8:
 					rateWord().then(() => menu());
+					break;
+				case 9:
+					getUserInput('Enter chinese character').then((msg) => {
+						feedback( dict.getDifficultyRating(msg) )
+						return menu()
+					} );
 					break;
 				default:
 					feedback('Huh?');

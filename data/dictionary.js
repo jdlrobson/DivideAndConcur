@@ -50,7 +50,6 @@ function rateWord(word, rating) {
  */
 function getWords(wordLength, difficultyLevel, max) {
 	function matchesDifficultyLevel(w) {
-		console.log(w, difficultyLevel, getDifficultyRating(w))
 		return difficultyLevel === undefined || getDifficultyRating(w) === difficultyLevel
 	}
 	var keys = Object.keys( words ).filter((w) => {
@@ -119,6 +118,7 @@ function addDecomposition( char, components ) {
 
 module.exports = {
 	rateWord: rateWord,
+	getDifficultyRating: getDifficultyRating,
 	addDecomposition: addDecomposition,
 	getWord: getWord,
 	saveWord: saveWord,
