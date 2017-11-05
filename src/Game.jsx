@@ -3,13 +3,16 @@ import { Component, h } from 'preact';
 import Card from './Card'
 import Memory from './Memory'
 import Dictionary from './Dictionary'
+import './game.less'
 
 const NUM_CARDS_PER_LEVEL = 10;
 
 export default class Game extends Component {
   constructor() {
     super();
-    this.state = { score: 0, cards: false, level: 1, answered: 0, round: 0 };
+    this.state = { score: 0, cards: false, level: 1,
+      difficulty: 0, wordSize: 0,
+      answered: 0, round: 0 };
   }
   componentWillMount() {
     const props = this.props;
@@ -48,20 +51,43 @@ export default class Game extends Component {
     } );
   }
   componentDidMount() {
-    const setState = this.setState.bind( this );
+    this.updateDeck(0,0)
+  }
+  loadDeck(wordSize, wordDifficulty) {
     const deal = this.deal.bind( this );
     const dictionary = this.dictionary;
+    const loadDeck = this.loadDeck.bind( this );
 
     // Load the dictionary
-    dictionary.load(0).then(()=> {
-      deal( dictionary );
+    return dictionary.expand(wordSize, wordDifficulty).then(()=> {
+      if ( dictionary.size() > 0 ) {
+        deal( dictionary );
+      } else {
+        if ( wordDifficulty === 0 ) {
+          throw 'reached end of game';
+        } else {
+          return loadDeck( wordSize + 1, 0 );
+        }
+      }
     });
-
-    this.updateScore();
+  }
+  updateDeck(wordSize, wordDifficulty) {
+    const setState = this.setState.bind( this );
+    const updateScore = this.updateScore.bind( this );
+    this.loadDeck(wordSize, wordDifficulty).
+      then(() => {
+        updateScore();
+        setState( { wordSize: wordSize, difficulty: wordDifficulty });
+      });
   }
   componentDidUpdate() {
-    if ( this.state.cards ) {
-      if ( this.state.answered === this.state.cards.length ) {
+    const state = this.state;
+    const cards = state.cards;
+
+    if ( cards ) {
+      if ( !cards.length ) {
+        this.loadDeck( state.wordSize, state.difficulty + 1 );
+      } else if ( cards.length && this.state.answered === cards.length ) {
         this.deal( this.dictionary );
       }
     }

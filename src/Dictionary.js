@@ -3,19 +3,24 @@ export default class Dictionary {
     this.data = {};
     this.keys = [];
   }
+  size() {
+    return Object.keys( this.data ).length;
+  }
   /**
-   * Loads a dictionary of all words of a given size
+   * Expands a dictionary of all words of a given size
    * @param {Number} unitSize
+   * @param {Number} difficultyLevel
    * @return {Promise}
    */
-  load(unitSize) {
+  expand(unitSize, difficultyLevel = 0) {
     const self = this;
 
-    return fetch('/data/' + unitSize +'/0').then((r) => {
+    return fetch('/data/' + unitSize +'/' + difficultyLevel).then((r) => {
       return r.json();
     }).then((r) => {
-      self.data = r;
-    })
+      Object.assign( self.data, r );
+      return self;
+    });
   }
  /**
   * Deal the cards from the deck starting with the offset
