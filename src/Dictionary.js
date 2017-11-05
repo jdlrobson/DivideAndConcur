@@ -18,6 +18,7 @@ export default class Dictionary {
     return fetch('/data/' + unitSize +'/' + difficultyLevel).then((r) => {
       return r.json();
     }).then((r) => {
+      self.keys = self.keys.concat( Object.keys( r ).sort() );
       Object.assign( self.data, r );
       return self;
     });
@@ -30,10 +31,7 @@ export default class Dictionary {
   */
   deal(offset, total) {
     const subset = {};
-    // Something to think about later..
-    // Sorting needs to be predictable and fixed
-    // That said.. should be by difficulty not alphabetical.. right?
-    Object.keys( this.data ).sort().slice(offset, offset + total).forEach((key) => {
+    this.keys.slice(offset, offset + total).forEach((key) => {
       subset[key] = this.data[key];
     });
     return subset;

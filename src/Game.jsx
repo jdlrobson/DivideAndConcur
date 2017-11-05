@@ -3,6 +3,7 @@ import { Component, h } from 'preact';
 import Card from './Card'
 import Memory from './Memory'
 import Dictionary from './Dictionary'
+import Dealer from './Dealer'
 import './game.less'
 
 const NUM_CARDS_PER_LEVEL = 10;
@@ -18,67 +19,38 @@ export default class Game extends Component {
     const props = this.props;
     this.memory = new Memory(props.initialMemory, props.saveMemory);
     this.dictionary = new Dictionary();
+    this.dealer = new Dealer( this.dictionary, this.memory );
   }
   /**
    * Deal ten cards from the dictionary that the user is unfamiliar with
    * sorted by difficulty level
    */
-  deal( dictionary ) {
-    const memory = this.memory;
-    let offset = 0;
-    let level = 1;
-    let curDict = dictionary.deal(offset, NUM_CARDS_PER_LEVEL);
-    let previous = [];
-
-    while ( Object.keys( curDict ).length && memory.knowsWords( Object.keys( curDict ) ) ) {
-      offset += NUM_CARDS_PER_LEVEL;
-      previous.push( Object.keys( curDict ) );
-      curDict = dictionary.deal(offset, NUM_CARDS_PER_LEVEL);
-      level += 1;
-    }
-
-    // We now have a dictionary of 10 words that the user doesn't know.
-
-    const cards = Object.keys( curDict ).sort((char, char2) => {
-      // sort by difficulty
-      return memory.getDifficulty(char) < memory.getDifficulty(char2) ? 1 : -1;
-    });
+  deal() {
+    const cards = this.dealer.deal();
+    const level = this.dealer.getLevel();
+    const previous = this.dealer.getHistory();
+    const wordSize = this.dealer.currentWordSize;
+    const difficulty = this.dealer.currentDifficultyLevel;
 
     // present
     this.setState( { cards, level, answered: 0,
       round: this.state.round + 1,
-      previous: previous.reverse()
+      wordSize,
+      difficulty,
+      previous: previous
     } );
+    this.updateScore();
   }
   componentDidMount() {
-    this.updateDeck(0,0)
+    this.loadDeck(0,0)
   }
   loadDeck(wordSize, wordDifficulty) {
     const deal = this.deal.bind( this );
-    const dictionary = this.dictionary;
-    const loadDeck = this.loadDeck.bind( this );
 
     // Load the dictionary
-    return dictionary.expand(wordSize, wordDifficulty).then(()=> {
-      if ( dictionary.size() > 0 ) {
-        deal( dictionary );
-      } else {
-        if ( wordDifficulty === 0 ) {
-          throw 'reached end of game';
-        } else {
-          return loadDeck( wordSize + 1, 0 );
-        }
-      }
+    return this.dealer.load(wordSize, wordDifficulty).then(()=> {
+      deal();
     });
-  }
-  updateDeck(wordSize, wordDifficulty) {
-    const setState = this.setState.bind( this );
-    const updateScore = this.updateScore.bind( this );
-    this.loadDeck(wordSize, wordDifficulty).
-      then(() => {
-        updateScore();
-        setState( { wordSize: wordSize, difficulty: wordDifficulty });
-      });
   }
   componentDidUpdate() {
     const state = this.state;
@@ -88,7 +60,7 @@ export default class Game extends Component {
       if ( !cards.length ) {
         this.loadDeck( state.wordSize, state.difficulty + 1 );
       } else if ( cards.length && this.state.answered === cards.length ) {
-        this.deal( this.dictionary );
+        this.deal();
       }
     }
   }
@@ -137,7 +109,7 @@ export default class Game extends Component {
 
     return (
       <div className="game">
-      <h2>Level {state.level}</h2>
+      <h2>Level {state.level} [{state.wordSize},{state.difficulty}]</h2>
       <div>Score: {state.score}</div>
       {cards || loader }
       <h3>Previous history</h3>
