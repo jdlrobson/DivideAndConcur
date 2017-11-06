@@ -5,8 +5,25 @@ var difficulty = {};
 var decompositions = {};
 const DICTIONARY_FILE = './data/dictionary.json';
 
+function decompose(word) {
+	var parts = [];
+	Array.from(word).forEach((radical) => {
+		var decomp = decompositions[radical];
+		if ( !decomp ) {
+			// no decompositions possible, have reached smallest unit
+			parts.push(radical);
+		} else {
+			// this radical itself is composed of different parts
+			Array.from( decomp ).forEach((decomposedRadical) => {
+				var _decomposition = decompose( decomposedRadical );
+				parts = parts.concat( decompose( decomposedRadical ) );
+			});
+		}
+	});
+	return parts;
+}
 function translate(word) {
-	var translate = getWord(word);
+	var translation = getWord(word) || '?';
 	var composition = '';
 	var decomp;
 
@@ -20,14 +37,23 @@ function translate(word) {
 		var c = [];
 		Array.from( decomp ).forEach((radical) => {
 			if ( words[radical] ) {
-				c.push( words[radical] );
+				// can it be decomposed further?
+				if ( decompositions[radical] ) {
+					c.push( translate( radical ) );
+				} else {
+					c.push( words[radical] );
+				}
 			} else {
-				c.push( '?' );
+				if ( decompositions[radical] ) {
+					c.push( translate(radical) );
+				} else {
+					c.push( '?' );
+				}
 			}
 		});
 		composition = ' (' + c.join(' · ') + ')';
 	}
-	return translate + composition;
+	return translation + composition;
 }
 
 function getDifficultyRating(word) {
@@ -53,12 +79,14 @@ function getWords(wordLength, difficultyLevel, max) {
 		return difficultyLevel === undefined || getDifficultyRating(w) === difficultyLevel
 	}
 	var keys = Object.keys( words ).filter((w) => {
+			// 1 character long cannot be decomposed
 			if ( wordLength === 0 && w.length === 1 ) {
 				// only return words without known decompositions (radicals)
 				return !decompositions[w] && matchesDifficultyLevel(w);
+			// one character long can be decomposed to two parts
 			} else if ( wordLength === 1 && w.length === 1 ) {
 				// only return words of length 1 if they have decompositions
-				return decompositions[w] && matchesDifficultyLevel(w);
+				return decompose(w).length === 2 && matchesDifficultyLevel(w);
 			} else {
 				return w.length === wordLength && matchesDifficultyLevel(w);
 			}
@@ -117,6 +145,7 @@ function addDecomposition( char, components ) {
 }
 
 module.exports = {
+	decompose: decompose,
 	rateWord: rateWord,
 	getDifficultyRating: getDifficultyRating,
 	addDecomposition: addDecomposition,

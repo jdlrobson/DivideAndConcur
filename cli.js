@@ -77,6 +77,11 @@ function decomposeWord() {
 	} );
 }
 
+function viewDecomposition() {
+	return getUserInput('Enter chinese character to decompose').then((word) => {
+		feedback( dict.decompose(word).join( '*' ) );
+	} );
+}
 function translate() {
 	return getUserInput('What is the Chinese word you want to translate?').then((answer) => {
 		feedback( dict.translate(answer) );
@@ -94,6 +99,7 @@ function menu() {
 		'7: Translate',
 		'8: Report difficulty of word',
 		'9: Lookup word difficulty',
+		'10: Expand a word'
 	];
 	getUserInput( '**********************\n' + options.join('\n') + '\n**********************' )
 		.then( ( val ) => {
@@ -128,6 +134,9 @@ function menu() {
 						feedback( dict.getDifficultyRating(msg) )
 						return menu()
 					} );
+					break;
+				case 10:
+					viewDecomposition().then(() => menu());
 					break;
 				default:
 					feedback('Huh?');
