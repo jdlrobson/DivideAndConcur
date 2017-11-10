@@ -29,6 +29,7 @@ module.exports = {
         loader: 'babel-loader',
 
         options: {
+          sourceMap: true,
           presets: ['es2015']
         }
       },
@@ -38,16 +39,10 @@ module.exports = {
         use: ExtractTextPlugin.extract({
           use: [
             {
-              loader: 'css-loader',
-              options: {
-                sourceMap: true
-              }
+              loader: 'css-loader'
             },
             {
-              loader: 'less-loader',
-              options: {
-                sourceMap: true
-              }
+              loader: 'less-loader'
             }
           ],
           fallback: 'style-loader'
