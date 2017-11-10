@@ -107,7 +107,9 @@ function load() {
 			} else {
 				words = data;
 			}
-			resolve(words, decompositions, difficulty);
+			words._decompositions = decompositions;
+			words._difficulty = difficulty;
+			resolve(words);
 		} );
 	})
 }
@@ -144,7 +146,12 @@ function addDecomposition( char, components ) {
 	decompositions[char] = components;
 }
 
+function getDecompositions() {
+	return decompositions;
+}
+
 module.exports = {
+	getDecompositions: getDecompositions,
 	decompose: decompose,
 	rateWord: rateWord,
 	getDifficultyRating: getDifficultyRating,

@@ -12,6 +12,7 @@ export default class Game extends Component {
   constructor() {
     super();
     this.state = { score: 0, cards: false, level: 1,
+      highlighted: [],
       difficulty: 0, wordSize: 0,
       answered: 0, round: 0 };
   }
@@ -37,9 +38,9 @@ export default class Game extends Component {
       round: this.state.round + 1,
       wordSize,
       difficulty,
+      score: this.memory.getScore(),
       previous: previous
     } );
-    this.updateScore();
   }
   componentDidMount() {
     this.loadDeck(0,0)
@@ -64,19 +65,20 @@ export default class Game extends Component {
       }
     }
   }
-  updateScore() {
-    this.setState( { score: this.memory.getScore() } );
-  }
   updateScoreFromWrongAnswer( char ) {
     this.memory.markAsDifficult( char );
-    this.updateScore();
-    this.setState( { answered: this.state.answered + 1 });
+    this.setState( { answered: this.state.answered + 1,
+      highlighted: this.dictionary.toRadicals( char ),
+      score: this.memory.getScore()
+    });
   }
   updateScoreFromCorrectAnswer( char ) {
     const score = this.state.score + 1;
     this.memory.markAsEasy( char );
-    this.updateScore();
-    this.setState( { answered: this.state.answered + 1 });
+    this.setState( { answered: this.state.answered + 1,
+      highlighted: this.dictionary.toRadicals( char ),
+      score: this.memory.getScore()
+    });
   }
   render() {
     const props = this.props;
@@ -91,6 +93,7 @@ export default class Game extends Component {
 
       return <Card {...events}
         className='card'
+        isHighlighted={state.highlighted.indexOf(char) > -1}
         key={'card-' + char + '-' + state.round}
         difficultyLevel={rating}
         character={char}

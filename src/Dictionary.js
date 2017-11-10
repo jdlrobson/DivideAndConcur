@@ -1,7 +1,10 @@
 export default class Dictionary {
   constructor() {
+    const self = this;
     this.data = {};
     this.keys = [];
+    fetch( '/decompositions' ).then((res) => { return res.json(); } ).
+      then((json)=>{ self.decompositions = json } );
   }
   size() {
     return Object.keys( this.data ).length;
@@ -35,6 +38,19 @@ export default class Dictionary {
       subset[key] = this.data[key];
     });
     return subset;
+  }
+  /**
+  * Decompose a word into its parts. If not able to do so (due to an incomplete http
+  * request) return empty array. This is rare, should only happen early on.
+  * @param {String}
+  * @return {String[]}
+  */
+  toRadicals(word) {
+    if ( !this.decompositions ) {
+      return [];
+    } else {
+      return this.decompositions[word] || [];
+    }
   }
   /**
    * Translates a string

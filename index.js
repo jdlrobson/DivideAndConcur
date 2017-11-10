@@ -7,8 +7,9 @@ var dict = require('./data/dictionary');
 var app = express()
 app.use(express.static('dist'))
 
+var loadedDictionary = dict.load();
 app.get('/data/:size/:difficulty', function (req, res) {
-  dict.load().then((dictionary) => {
+  loadedDictionary.then((dictionary) => {
     // get 10 words of length size
     let words = dict.getWords(parseInt(req.params.size, 10), parseInt(req.params.difficulty, 10)).
       // jumble up
@@ -19,6 +20,12 @@ app.get('/data/:size/:difficulty', function (req, res) {
       data[word] = dictionary[word];
     })
     res.send( data );
+  });
+})
+
+app.get('/decompositions', function (req, res) {
+  loadedDictionary.then((words, decompositions) => {
+    res.send( words._decompositions );
   });
 })
 

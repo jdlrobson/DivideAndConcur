@@ -34,6 +34,9 @@ class Card extends Component {
     if ( state.done ) {
       className += state.knew ? ' card-known' : ' card-unknown';
     }
+    if ( props.isHighlighted ) {
+      className += ' card-highlighted';
+    }
     return (
       <div className={className} onClick={this.onClick.bind(this)}>
           <div className={"difficulty-bar"}>
