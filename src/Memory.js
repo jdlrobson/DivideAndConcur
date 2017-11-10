@@ -25,7 +25,7 @@ export default class Memory {
      * @param {String} words
      */
     function knowsWord(word) {
-      return answers[word] < -4;
+      return answers[word] <= -ROUNDS_BEFORE_KNOWN;
     }
 
     return words.reduce((accumulator, word)=> {
