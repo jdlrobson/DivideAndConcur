@@ -4,7 +4,7 @@ var path = require('path');
 var fetch = require('node-fetch');
 
 var dict = require('./data/dictionary');
-
+var PORT = process.env.PORT ? parseInt( process.env.PORT, 10) : 3000;
 var app = express()
 app.use(express.static('dist'))
 
@@ -60,6 +60,6 @@ app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname + '/index.html'));
 })
 
-app.listen(3000, function () {
-  console.log('Example app listening on port 3000!')
+app.listen(PORT, function () {
+  console.log(`Example app listening on port ${PORT}!`)
 });
