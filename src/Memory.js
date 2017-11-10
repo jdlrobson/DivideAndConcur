@@ -1,5 +1,6 @@
 const SCORE_INCORRECT_ANSWER = -2
 const SCORE_CORRECT_ANSWER = 1
+const ROUNDS_BEFORE_KNOWN = 3
 
 export default class Memory {
   constructor(initialMemory, saveFunction) {
@@ -57,9 +58,9 @@ export default class Memory {
   }
   getDifficulty( char ) {
     if ( this.answers[char] > 0 ) {
-      return this.answers[char] ? Math.min( this.answers[char], 5 ) : 0;
+      return this.answers[char] ? Math.min( this.answers[char], ROUNDS_BEFORE_KNOWN ) : 0;
     } else {
-      return this.answers[char] ? Math.max( this.answers[char], -5 ) : 0;
+      return this.answers[char] ? Math.max( this.answers[char], -ROUNDS_BEFORE_KNOWN ) : 0;
     }
   }
   markAsEasy( char ) {
