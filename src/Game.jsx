@@ -4,6 +4,7 @@ import Card from './Card'
 import Memory from './Memory'
 import Dictionary from './Dictionary'
 import Dealer from './Dealer'
+import CharacterPreviewOverlay from './CharacterPreviewOverlay'
 import './game.less'
 
 const NUM_CARDS_PER_LEVEL = 10;
@@ -80,10 +81,24 @@ export default class Game extends Component {
       score: this.memory.getScore()
     });
   }
+  previewCharacter(ev, char) {
+    if ( !this.state.overlay ) {
+      this.setState( {
+        overlay: <CharacterPreviewOverlay char={char} />
+      } );
+    }
+    ev.stopPropagation();
+  }
+  clearOverlay() {
+    this.setState( {
+      overlay: null
+    } );
+  }
   render() {
     const props = this.props;
     const state = this.state;
     const memory = this.memory;
+    const preview = this.previewCharacter.bind(this);
     const dictionary = this.dictionary;
     const onIncorrect = this.updateScoreFromWrongAnswer.bind(this);
     const onCorrect = this.updateScoreFromCorrectAnswer.bind(this);
@@ -97,6 +112,7 @@ export default class Game extends Component {
         key={'card-' + char + '-' + state.round}
         difficultyLevel={rating}
         character={char}
+        onClick={preview}
         english={dictionary.toEnglish(char)}
       />;
     }
@@ -111,7 +127,8 @@ export default class Game extends Component {
     const prev = state.previous || [];
 
     return (
-      <div className="game">
+      <div className="game" onClick={this.clearOverlay.bind(this)}>
+      {state.overlay}
       <h2>Level {state.level} [{state.wordSize},{state.difficulty}]</h2>
       <div>Score: {state.score}</div>
       {cards || loader }

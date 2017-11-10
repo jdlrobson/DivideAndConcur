@@ -18,6 +18,11 @@ class Card extends Component {
       this.props.onCorrect( this.props.character );
     }
   };
+  onClickGlyph(ev) {
+    if ( this.state.revealed && this.props ) {
+      this.props.onClick(ev, this.props.character);
+    }
+  };
   render() {
     const hidden = { display: 'none' };
     const state = this.state;
@@ -44,7 +49,9 @@ class Card extends Component {
             new Array(dLevel).fill((<div className={isEasy ? 'easy' : ''} />))
           }
           </div>
-          <div key='char' className="char">{props.character}</div>
+          <div key='char' className="char">
+            <a onClick={this.onClickGlyph.bind(this)}>{props.character}</a>
+          </div>
           <div key='lang' className='english' style={state.revealed ? {} : hidden}>{props.english}</div>
           <div key='tick' className='tick button' onClick={this.tick.bind(this)}
             style={state.revealed && !state.done && !isKnown ? {} : hidden}>✅</div>

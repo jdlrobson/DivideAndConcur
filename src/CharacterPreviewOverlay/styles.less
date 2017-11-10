@@ -1,0 +1,29 @@
+.overlay {
+  background: white;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 2;
+  border: solid 1px gray;
+  padding: 32px;
+  margin: 0 0 0 30%;
+  right: 0;
+  left: 0;
+
+  h2 {
+    font-size: 3em;
+    text-align: right;
+    margin: 0;
+  }
+
+  > div {
+    overflow: scroll;
+    height: 200px;
+  }
+}
+
+@media (min-width: 720px) {
+  .overlay {
+    margin-left: 70%;
+  }
+}
