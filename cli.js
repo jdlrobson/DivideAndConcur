@@ -1,5 +1,8 @@
 var util = require('util');
 var dict = require('./data/dictionary');
+const mcs = require('./mcs');
+
+const htmlToText = require('html-to-text');
 const chalk = require('chalk');
 
 function addDictionaryItem() {
@@ -90,6 +93,7 @@ function translate() {
 
 function menu() {
 	const options = [
+		'0: Lookup character',
 		'1: Deal radicals',
 		'2: Deal singles',
 		'3: Deal double cards',
@@ -105,6 +109,14 @@ function menu() {
 		.then( ( val ) => {
 			val = parseInt( val, 10 );
 			switch ( val ) {
+				case 0:
+					getUserInput('Enter chinese character').then((msg) => {
+						return mcs.getDefinition( msg )
+					}).then((text)=> {
+						console.log(htmlToText.fromString(text));
+						return menu();
+					});
+					break;
 				case 1:
 					deal( 0 );
 					break;

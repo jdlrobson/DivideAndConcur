@@ -2,6 +2,7 @@ var express = require('express');
 var fs = require('fs');
 var path = require('path');
 var fetch = require('node-fetch');
+var mcs = require('./mcs');
 
 var dict = require('./data/dictionary');
 var PORT = process.env.PORT ? parseInt( process.env.PORT, 10) : 3000;
@@ -31,31 +32,11 @@ app.get('/decompositions', function (req, res) {
 })
 
 app.get('/summarize/:character', function (req, res) {
-  return fetch('https://en.wiktionary.org/api/rest_v1/page/mobile-sections/' + encodeURIComponent(req.params.character))
-    .then((res) => res.json())
-    .then((json) => {
-      let text = '';
-      let isChinese = false;
-      let chineseLevel;
-      if ( json && json.remaining && json.remaining.sections ) {
-        json.remaining.sections.forEach((section) => {
-          if ( isChinese && section.toclevel === chineseLevel ) {
-            isChinese = false;
-          }
-          if ( section.line === 'Chinese' ) {
-            isChinese = true;
-            chineseLevel = section.toclevel;
-          }
-          if ( isChinese ) {
-            if ( section.line === 'Pronunciation' ) {
-              text = section.text;
-            }
-          }
-        });
-      }
-      res.send( { text: text } );
-    });
+  return mcs.getPronounciation(req.params.character).then((text) => {
+    res.send( { text: text } );
+  });
 })
+
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname + '/index.html'));
 })
