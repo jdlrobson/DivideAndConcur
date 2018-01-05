@@ -1,6 +1,6 @@
 const SCORE_INCORRECT_ANSWER = -2
 const SCORE_CORRECT_ANSWER = 1
-const ROUNDS_BEFORE_KNOWN = 3
+const ROUNDS_BEFORE_KNOWN = 1
 
 export default class Memory {
   constructor(initialMemory, saveFunction) {
