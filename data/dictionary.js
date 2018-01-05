@@ -4,60 +4,19 @@ var words = {};
 var difficulty = {};
 var decompositions = {};
 const DICTIONARY_FILE = './data/dictionary.json';
+const DictionaryUtils = require( './DictionaryUtils' );
+
+var utils; // will be defined on load
 
 function decompose(word) {
-	var parts = [];
-	Array.from(word).forEach((radical) => {
-		var decomp = decompositions[radical];
-		if ( !decomp ) {
-			// no decompositions possible, have reached smallest unit
-			parts.push(radical);
-		} else {
-			// this radical itself is composed of different parts
-			Array.from( decomp ).forEach((decomposedRadical) => {
-				var _decomposition = decompose( decomposedRadical );
-				parts = parts.concat( decompose( decomposedRadical ) );
-			});
-		}
-	});
-	return parts;
+  return utils.decompose( word );
 }
 function translate(word) {
-	var translation = getWord(word) || '?';
-	var composition = '';
-	var decomp;
-
-	if ( word.length > 1 ) {
-		decomp = word;
-	} else {
-		decomp = decompositions[word]
-	}
-
-	if ( decomp ) {
-		var c = [];
-		Array.from( decomp ).forEach((radical) => {
-			if ( words[radical] ) {
-				// can it be decomposed further?
-				if ( decompositions[radical] ) {
-					c.push( translate( radical ) );
-				} else {
-					c.push( words[radical] );
-				}
-			} else {
-				if ( decompositions[radical] ) {
-					c.push( translate(radical) );
-				} else {
-					c.push( '?' );
-				}
-			}
-		});
-		composition = ' (' + c.join(' · ') + ')';
-	}
-	return translation + composition;
+	return utils.translate( word );
 }
 
 function getDifficultyRating(word) {
-	return difficulty[word] || 0;
+	return utils.getDifficultyRating( word );
 }
 
 function rateWord(word, rating) {
@@ -75,23 +34,7 @@ function rateWord(word, rating) {
  * @param {Number} [max] if defined results will be limited to this amount of results.
  */
 function getWords(wordLength, difficultyLevel, max) {
-	function matchesDifficultyLevel(w) {
-		return difficultyLevel === undefined || getDifficultyRating(w) === difficultyLevel
-	}
-	var keys = Object.keys( words ).filter((w) => {
-			// 1 character long cannot be decomposed
-			if ( wordLength === 0 && w.length === 1 ) {
-				// only return words without known decompositions (radicals)
-				return !decompositions[w] && matchesDifficultyLevel(w);
-			// one character long can be decomposed to two parts
-			} else if ( wordLength === 1 && w.length === 1 ) {
-				// only return words of length 1 if they have decompositions
-				return decompose(w).length === 2 && matchesDifficultyLevel(w);
-			} else {
-				return w.length === wordLength && matchesDifficultyLevel(w);
-			}
-		} );
-	return keys.slice( 0, max );
+	return utils.getWords( wordLength, difficultyLevel, max );
 }
 
 function load() {
@@ -109,6 +52,7 @@ function load() {
 			}
 			words._decompositions = decompositions;
 			words._difficulty = difficulty;
+			utils = new DictionaryUtils( words, decompositions, difficulty );
 			resolve(words);
 		} );
 	})
@@ -116,6 +60,8 @@ function load() {
 
 function save() {
 	return new Promise((resolve) => {
+    // update the utils
+		utils = new DictionaryUtils( words, decompositions, difficulty );
 		fs.writeFile(DICTIONARY_FILE,
 			JSON.stringify({ words: words, decompositions: decompositions, difficulty: difficulty }),
 			function( err ) {
@@ -139,15 +85,16 @@ function saveWord( chinese, english ) {
 }
 
 function getWord(word) {
-	return words[word];
+	return utils.getWord( word );
 }
 
 function addDecomposition( char, components ) {
 	decompositions[char] = components;
+	save();
 }
 
 function getDecompositions() {
-	return decompositions;
+	return utils.getDecompositions();
 }
 
 module.exports = {
