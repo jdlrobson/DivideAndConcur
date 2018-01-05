@@ -20,15 +20,14 @@ export default class Dealer {
 
     // Load the dictionary
     const previousSize = dictionary.size();
-    return dictionary.expand(wordSize, wordDifficulty).then(()=> {
-      if ( dictionary.size() === previousSize ) {
-        if ( wordDifficulty === 0 ) {
-          throw 'reached end of game';
-        } else {
-          return loadDeck( wordSize + 1, 0 );
-        }
+    dictionary.expand(wordSize, wordDifficulty);
+    if ( dictionary.size() === previousSize ) {
+      if ( wordDifficulty === 0 ) {
+        throw 'reached end of game';
+      } else {
+        return loadDeck( wordSize + 1, 0 );
       }
-    });
+    }
   }
   getLevel() {
     return this.level;

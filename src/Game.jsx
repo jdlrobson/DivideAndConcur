@@ -50,9 +50,8 @@ export default class Game extends Component {
     const deal = this.deal.bind( this );
 
     // Load the dictionary
-    return this.dealer.load(wordSize, wordDifficulty).then(()=> {
-      deal();
-    });
+    this.dealer.load(wordSize, wordDifficulty);
+    deal();
   }
   componentDidUpdate() {
     const state = this.state;

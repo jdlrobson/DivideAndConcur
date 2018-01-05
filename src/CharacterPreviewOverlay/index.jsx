@@ -2,10 +2,12 @@
 import { Component, h } from 'preact';
 import './styles.less';
 
+import mcs from './../../mcs'
+
 export default class CharacterPreview extends Component {
   componentDidMount() {
-    fetch( '/summarize/' + encodeURIComponent( this.props.char ) ).then((res)=>res.json())
-      .then((state) => this.setState(state));
+    mcs.getPronounciation( this.props.char )
+      .then(( text ) => this.setState( { text } ));
   }
   stopPropagation(ev) {
     ev.stopPropagation();
@@ -18,7 +20,6 @@ export default class CharacterPreview extends Component {
     } else if ( !content ) {
       content = 'No information available';
     }
-    console.log(content);
     return (
       <div className="overlay" onClick={this.stopPropagation}>
         <h2>{props.char}</h2>

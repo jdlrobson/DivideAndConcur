@@ -1,4 +1,4 @@
-var fetch = require('node-fetch');
+require('isomorphic-fetch');
 
 function lookup(character, lines) {
   return fetch('https://en.wiktionary.org/api/rest_v1/page/mobile-sections/' + encodeURIComponent(character))

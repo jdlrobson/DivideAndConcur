@@ -1,10 +1,13 @@
+import dictJson from './../data/dictionary.json'
+import DictionaryUtils from './../data/DictionaryUtils';
+
 export default class Dictionary {
   constructor() {
     const self = this;
     this.data = {};
     this.keys = [];
-    fetch( '/decompositions' ).then((res) => { return res.json(); } ).
-      then((json)=>{ self.decompositions = json } );
+    this.utils = new DictionaryUtils( dictJson.words,
+      dictJson.decompositions, dictJson.difficulty );
   }
   size() {
     return Object.keys( this.data ).length;
@@ -16,15 +19,17 @@ export default class Dictionary {
    * @return {Promise}
    */
   expand(unitSize, difficultyLevel = 0) {
-    const self = this;
+    const utils = this.utils;
+    let words = this.utils.getWords(unitSize, difficultyLevel).
+      // jumble up
+      sort( () => Math.random() < 0.5 ? -1 : 1 );
 
-    return fetch('/data/' + unitSize +'/' + difficultyLevel).then((r) => {
-      return r.json();
-    }).then((r) => {
-      self.keys = self.keys.concat( Object.keys( r ).sort() );
-      Object.assign( self.data, r );
-      return self;
-    });
+    let data = {};
+    words.forEach((word) => {
+      data[word] = utils.getWord( word );
+    })
+    this.keys = this.keys.concat( Object.keys( data ).sort() );
+    Object.assign( this.data, data );
   }
  /**
   * Deal the cards from the deck starting with the offset

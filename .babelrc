@@ -1,6 +1,7 @@
 {
   "presets": ["env"],
   "plugins": [
-    ["transform-react-jsx", { "pragma":"preact.h" }]
+    ["transform-react-jsx", { "pragma":"preact.h" }],
+    ["inline-json", {"matchPattern": "config"}]
   ]
 }
