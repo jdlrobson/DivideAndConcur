@@ -9,7 +9,8 @@ import actionTypes from './actionTypes'
 
 // Tell Babel to transform JSX into h() calls:
 /** @jsx h */
-const store = createStore( reducer );
+const store = createStore( reducer,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__() );
 
 import 'preact/devtools'
 
@@ -27,7 +28,6 @@ import 'preact/devtools'
    *******************************************
    */
   const renderGame = () => {
-    console.log('render');
     document.getElementById('container').innerHTML = '';
     render(
       <Game initialMemory={memory} saveMemory={saveMemory}

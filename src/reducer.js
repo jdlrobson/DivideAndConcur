@@ -36,14 +36,13 @@ function actionRevealPronounciation( state, char ) {
 }
 
 // clears the current overlay
-function clearOverlay() {
-  return Object.assign( {}, {
+function clearOverlay( state ) {
+  return Object.assign( {}, state, {
     overlay: null
   } );
 }
 
 export default ( state, action ) => {
-  console.log( 'ACTION=', action.type );
   switch ( action.type ) {
     case actionTypes.REVEAL_FLASHCARD_PRONOUNCIATION.type:
       return actionRevealPronounciation( state, action.char );
