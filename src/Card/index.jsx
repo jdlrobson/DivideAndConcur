@@ -4,7 +4,9 @@ import './styles.less';
 
 class Card extends Component {
   onClick() {
+    const props = this.props;
     this.setState({revealed: true});
+    props.store.dispatch( props.actionTypes.REVEAL_FLASHCARD );
   };
   wrong() {
     this.setState({done: true});
@@ -19,8 +21,13 @@ class Card extends Component {
     }
   };
   onClickGlyph(ev) {
-    if ( this.state.revealed && this.props ) {
-      this.props.onClick(ev, this.props.character);
+    const props = this.props;
+    if ( this.state.revealed && props ) {
+      props.store.dispatch( {
+        type: props.actionTypes.REVEAL_FLASHCARD_PRONOUNCIATION.type,
+        char: props.character
+      } );
+      ev.stopPropagation();
     }
   };
   render() {

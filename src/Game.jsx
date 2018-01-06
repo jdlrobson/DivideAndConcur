@@ -4,7 +4,6 @@ import Card from './Card'
 import Memory from './Memory'
 import Dictionary from './Dictionary'
 import Dealer from './Dealer'
-import CharacterPreviewOverlay from './CharacterPreviewOverlay'
 import './game.less'
 
 const NUM_CARDS_PER_LEVEL = 10;
@@ -43,7 +42,12 @@ export default class Game extends Component {
       previous: previous
     } );
   }
+  refresh() {
+    this.setState( this.props.store.getState() );
+  }
   componentDidMount() {
+    // On any change in global state re-render.
+    this.props.store.subscribe( this.refresh.bind( this ) );
     this.loadDeck(0,0)
   }
   loadDeck(wordSize, wordDifficulty) {
@@ -80,24 +84,13 @@ export default class Game extends Component {
       score: this.memory.getScore()
     });
   }
-  previewCharacter(ev, char) {
-    if ( !this.state.overlay ) {
-      this.setState( {
-        overlay: <CharacterPreviewOverlay char={char} />
-      } );
-    }
-    ev.stopPropagation();
-  }
-  clearOverlay() {
-    this.setState( {
-      overlay: null
-    } );
+  onGameClick() {
+    this.props.store.dispatch( this.props.actionTypes.CLICK_ROOT_NODE );
   }
   render() {
     const props = this.props;
     const state = this.state;
     const memory = this.memory;
-    const preview = this.previewCharacter.bind(this);
     const dictionary = this.dictionary;
     const onIncorrect = this.updateScoreFromWrongAnswer.bind(this);
     const onCorrect = this.updateScoreFromCorrectAnswer.bind(this);
@@ -111,7 +104,8 @@ export default class Game extends Component {
         key={'card-' + char + '-' + state.round}
         difficultyLevel={rating}
         character={char}
-        onClick={preview}
+        store={props.store}
+        actionTypes={props.actionTypes}
         english={dictionary.toEnglish(char)}
       />;
     }
@@ -126,7 +120,7 @@ export default class Game extends Component {
     const prev = state.previous || [];
 
     return (
-      <div className="game" onClick={this.clearOverlay.bind(this)}>
+      <div className="game" onClick={this.onGameClick.bind(this)}>
       {state.overlay}
       <h2>Level {state.level} [{state.wordSize},{state.difficulty}]</h2>
       <div>Score: {state.score}</div>
