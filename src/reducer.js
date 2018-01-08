@@ -31,6 +31,7 @@ function actionBoot() {
     dealer: dealer,
     memory: memory,
     answered: 0,
+    round: 0,
     score: memory.getScore()
   };
 }
@@ -66,8 +67,28 @@ function actionAnswerCard( state, action ) {
   } );
 }
 
+/**
+ * Deal ten cards from the dictionary that the user is unfamiliar with
+ * sorted by difficulty level
+ */
+function dealCards( state ) {
+  const cards = dealer.deal();
+  const level = dealer.getLevel();
+  const previous = dealer.getHistory();
+  const wordSize = dealer.currentWordSize;
+  const difficulty = dealer.currentDifficultyLevel;
+
+  return Object.assign( {}, state, {
+    round: state.round + 1,
+    answered: 0,
+    wordSize, difficulty, level, cards, previous
+  })
+}
+
 export default ( state, action ) => {
   switch ( action.type ) {
+    case actionTypes.DEAL_CARDS.type:
+      return dealCards( state );
     case actionTypes.GUESS_FLASHCARD_WRONG.type:
     case actionTypes.GUESS_FLASHCARD_RIGHT.type:
       return actionAnswerCard( state, action );
