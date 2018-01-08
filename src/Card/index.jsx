@@ -9,16 +9,20 @@ class Card extends Component {
     props.store.dispatch( props.actionTypes.REVEAL_FLASHCARD );
   };
   wrong() {
+    const props = this.props;
     this.setState({done: true});
-    if ( this.props.onIncorrect ) {
-      this.props.onIncorrect( this.props.character );
-    }
+    props.store.dispatch( {
+      type: props.actionTypes.GUESS_FLASHCARD_WRONG.type,
+      char: props.character
+    } );
   };
   tick() {
+    const props = this.props;
     this.setState({done: true, knew: true});
-    if ( this.props.onCorrect ) {
-      this.props.onCorrect( this.props.character );
-    }
+    props.store.dispatch( {
+      type: props.actionTypes.GUESS_FLASHCARD_RIGHT.type,
+      char: props.character
+    } );
   };
   onClickGlyph(ev) {
     const props = this.props;

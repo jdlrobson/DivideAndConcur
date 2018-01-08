@@ -18,9 +18,10 @@ export default class Game extends Component {
   }
   componentWillMount() {
     const props = this.props;
-    this.memory = new Memory(props.initialMemory, props.saveMemory);
-    this.dictionary = new Dictionary();
-    this.dealer = new Dealer( this.dictionary, this.memory );
+    const storeState = props.store.getState();
+    this.memory = storeState.memory;
+    this.dictionary = storeState.dictionary;
+    this.dealer = storeState.dealer;
   }
   /**
    * Deal ten cards from the dictionary that the user is unfamiliar with
@@ -69,21 +70,6 @@ export default class Game extends Component {
       }
     }
   }
-  updateScoreFromWrongAnswer( char ) {
-    this.memory.markAsDifficult( char );
-    this.setState( { answered: this.state.answered + 1,
-      highlighted: this.dictionary.toRadicals( char ),
-      score: this.memory.getScore()
-    });
-  }
-  updateScoreFromCorrectAnswer( char ) {
-    const score = this.state.score + 1;
-    this.memory.markAsEasy( char );
-    this.setState( { answered: this.state.answered + 1,
-      highlighted: this.dictionary.toRadicals( char ),
-      score: this.memory.getScore()
-    });
-  }
   onGameClick() {
     this.props.store.dispatch( this.props.actionTypes.CLICK_ROOT_NODE );
   }
@@ -92,8 +78,6 @@ export default class Game extends Component {
     const state = this.state;
     const memory = this.memory;
     const dictionary = this.dictionary;
-    const onIncorrect = this.updateScoreFromWrongAnswer.bind(this);
-    const onCorrect = this.updateScoreFromCorrectAnswer.bind(this);
 
     function mapCard( char, events = {} ) {
       const rating = memory.getDifficulty(char);
@@ -109,13 +93,7 @@ export default class Game extends Component {
         english={dictionary.toEnglish(char)}
       />;
     }
-    function mapCardWithEvents( char ) {
-      return mapCard( char, {
-        onIncorrect: onIncorrect,
-        onCorrect: onCorrect
-      } );
-    }
-    const cards = state.cards ? state.cards.map(mapCardWithEvents) : false;
+    const cards = state.cards ? state.cards.map(mapCard) : false;
     const loader = <div>Loading up!</div>;
     const prev = state.previous || [];
 
