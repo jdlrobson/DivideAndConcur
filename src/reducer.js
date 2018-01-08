@@ -25,6 +25,7 @@ function actionBoot() {
   dict = new Dictionary();
   memory = new Memory(loadMemoryData(), saveMemoryData);
   dealer = new Dealer( dict, memory );
+  dealer.load(0, 0);
 
   return {
     dictionary: dict,

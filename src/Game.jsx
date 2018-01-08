@@ -31,14 +31,12 @@ export default class Game extends Component {
   componentDidMount() {
     // On any change in global state re-render.
     this.props.store.subscribe( this.refresh.bind( this ) );
-    this.loadDeck(0,0)
+    this.deal();
   }
   loadDeck(wordSize, wordDifficulty) {
-    const deal = this.deal.bind( this );
-
     // Load the dictionary
     this.dealer.load(wordSize, wordDifficulty);
-    deal();
+    this.deal();
   }
   componentDidUpdate() {
     const state = this.state;
