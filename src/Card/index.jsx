@@ -6,12 +6,12 @@ class Card extends Component {
   onClick() {
     const props = this.props;
     this.setState({revealed: true});
-    props.store.dispatch( props.actionTypes.REVEAL_FLASHCARD );
+    props.dispatch( props.actionTypes.REVEAL_FLASHCARD );
   };
   wrong() {
     const props = this.props;
     this.setState({done: true});
-    props.store.dispatch( {
+    props.dispatch( {
       type: props.actionTypes.GUESS_FLASHCARD_WRONG.type,
       char: props.character
     } );
@@ -19,7 +19,7 @@ class Card extends Component {
   tick() {
     const props = this.props;
     this.setState({done: true, knew: true});
-    props.store.dispatch( {
+    props.dispatch( {
       type: props.actionTypes.GUESS_FLASHCARD_RIGHT.type,
       char: props.character
     } );
@@ -27,7 +27,7 @@ class Card extends Component {
   onClickGlyph(ev) {
     const props = this.props;
     if ( this.state.revealed && props ) {
-      props.store.dispatch( {
+      props.dispatch( {
         type: props.actionTypes.REVEAL_FLASHCARD_PRONOUNCIATION.type,
         char: props.character
       } );

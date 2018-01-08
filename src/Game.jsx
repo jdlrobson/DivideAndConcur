@@ -71,7 +71,7 @@ export default class Game extends Component {
     }
   }
   onGameClick() {
-    this.props.store.dispatch( this.props.actionTypes.CLICK_ROOT_NODE );
+    this.props.dispatch( this.props.actionTypes.CLICK_ROOT_NODE );
   }
   render() {
     const props = this.props;
@@ -88,7 +88,7 @@ export default class Game extends Component {
         key={'card-' + char + '-' + state.round}
         difficultyLevel={rating}
         character={char}
-        store={props.store}
+        dispatch={props.dispatch}
         actionTypes={props.actionTypes}
         english={dictionary.toEnglish(char)}
       />;

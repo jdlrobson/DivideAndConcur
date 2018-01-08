@@ -32,6 +32,7 @@ import 'preact/devtools'
     render(
       <Game initialMemory={memory} saveMemory={saveMemory}
         store={store}
+        dispatch={store.dispatch}
         actionTypes={actionTypes}
       />,
       document.getElementById('container')
