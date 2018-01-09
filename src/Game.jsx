@@ -11,9 +11,6 @@ const NUM_CARDS_PER_LEVEL = 10;
 export default class Game extends Component {
   constructor() {
     super();
-    this.state = { cards: false, level: 1,
-      difficulty: 0, wordSize: 0,
-      round: 0 };
   }
   componentWillMount() {
     const props = this.props;
@@ -43,7 +40,6 @@ export default class Game extends Component {
   render() {
     const props = this.props;
     const state = this.state;
-    const storeState = this.props.store.getState();
     const memory = this.memory;
     const dictionary = this.dictionary;
 
@@ -69,7 +65,7 @@ export default class Game extends Component {
       <div className="game" onClick={this.onGameClick.bind(this)}>
       {state.overlay}
       <h2>Level {state.level} [{state.wordSize},{state.difficulty}]</h2>
-      <div>Score: {state.score || storeState.score}</div>
+      <div>Score: {state.score}</div>
       {cards || loader }
       <h3>Previous history</h3>
       {

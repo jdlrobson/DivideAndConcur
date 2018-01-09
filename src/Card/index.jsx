@@ -41,7 +41,7 @@ class Card extends Component {
     const props = this.props;
     let dLevel = props.difficultyLevel;
     const isEasy = dLevel < 0 ? true : false;
-    const isKnown = dLevel < -4 && !this.props.onCorrect;
+    const isKnown = dLevel < -4;
 
     if ( isEasy ) {
       dLevel = -dLevel;
