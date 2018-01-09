@@ -61,6 +61,7 @@ function actionAnswerCard( state, action ) {
     case actionTypes.GUESS_FLASHCARD_RIGHT.type:
       memory.markAsEasy( char );
   }
+
   return Object.assign( {}, state, {
     score: memory.getScore(),
     highlighted: dict.toRadicals( char ),
@@ -77,18 +78,30 @@ function dealCards( state ) {
   const level = dealer.getLevel();
   const previous = dealer.getHistory();
   const wordSize = dealer.currentWordSize;
-  const difficulty = dealer.currentDifficultyLevel;
+  const difficulty = cards.length ? dealer.currentDifficultyLevel
+    : dealer.currentDifficultyLevel + 1;
 
-  return Object.assign( {}, state, {
-    round: state.round + 1,
-    answered: 0,
-    wordSize, difficulty, level, cards, previous
-  })
+  // The current deck was depleted so let's get a new deck
+  if ( !cards.length ) {
+    dealer.load( wordSize, difficulty );
+
+    return Object.assign( {},
+      dealCards( state ),
+      { difficulty }
+    );
+  } else {
+    // if all have been answered lets deal again..
+    return Object.assign( {}, state, {
+      round: state.round + 1,
+      answered: 0,
+      wordSize, difficulty, level, cards, previous
+    })
+  }
 }
 
 export default ( state, action ) => {
   switch ( action.type ) {
-    case actionTypes.DEAL_CARDS.type:
+    case actionTypes.START_ROUND.type:
       return dealCards( state );
     case actionTypes.GUESS_FLASHCARD_WRONG.type:
     case actionTypes.GUESS_FLASHCARD_RIGHT.type:
@@ -101,6 +114,8 @@ export default ( state, action ) => {
     // reset on boot
     case actionTypes.BOOT.type:
       return actionBoot();
+    case actionTypes.END_ROUND.type:
+      return dealCards( state );
     default:
       return state;
   }

@@ -20,10 +20,6 @@ export default class Game extends Component {
     const storeState = props.store.getState();
     this.memory = storeState.memory;
     this.dictionary = storeState.dictionary;
-    this.dealer = storeState.dealer;
-  }
-  deal() {
-    this.props.dispatch( this.props.actionTypes.DEAL_CARDS );
   }
   refresh() {
     this.setState( this.props.store.getState() );
@@ -31,23 +27,14 @@ export default class Game extends Component {
   componentDidMount() {
     // On any change in global state re-render.
     this.props.store.subscribe( this.refresh.bind( this ) );
-    this.deal();
-  }
-  loadDeck(wordSize, wordDifficulty) {
-    // Load the dictionary
-    this.dealer.load(wordSize, wordDifficulty);
-    this.deal();
+    this.props.dispatch( this.props.actionTypes.START_ROUND );
   }
   componentDidUpdate() {
     const state = this.state;
     const cards = state.cards;
 
-    if ( cards ) {
-      if ( !cards.length ) {
-        this.loadDeck( state.wordSize, state.difficulty + 1 );
-      } else if ( cards.length && state.answered === cards.length ) {
-        this.deal();
-      }
+    if ( cards && cards.length && state.answered === cards.length ) {
+      this.props.dispatch( this.props.actionTypes.END_ROUND );
     }
   }
   onGameClick() {

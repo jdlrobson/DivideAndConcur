@@ -30,14 +30,19 @@ const GUESS_FLASHCARD_WRONG = {
   type: 'GUESS_FLASHCARD_WRONG'
 };
 
-const DEAL_CARDS = {
-  type: 'DEAL_CARDS'
+const START_ROUND = {
+  type: 'START_ROUND'
+};
+
+const END_ROUND = {
+  type: 'END_ROUND'
 };
 
 export default {
   BOOT,
   CLICK_ROOT_NODE,
-  DEAL_CARDS,
+  START_ROUND,
+  END_ROUND,
   GUESS_FLASHCARD_RIGHT,
   GUESS_FLASHCARD_WRONG,
   REVEAL_FLASHCARD,
