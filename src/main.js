@@ -4,6 +4,7 @@ import { createStore } from 'redux'
 import Game from './Game'
 
 import reducer from './reducer'
+import { checkIfEndOfRound } from './subscribers';
 
 import actionTypes from './actionTypes'
 
@@ -13,6 +14,7 @@ const store = createStore( reducer,
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__() );
 
 import 'preact/devtools'
+
 
 (function () {
   let memory = localStorage.getItem('memory');
@@ -38,6 +40,9 @@ import 'preact/devtools'
       document.getElementById('container')
     );
   }
+
+  // setup subscribers
+  store.subscribe( checkIfEndOfRound( store ) );
 
   /**
    *******************************************

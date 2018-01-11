@@ -26,14 +26,6 @@ export default class Game extends Component {
     this.props.store.subscribe( this.refresh.bind( this ) );
     this.props.dispatch( this.props.actionTypes.START_ROUND );
   }
-  componentDidUpdate() {
-    const state = this.state;
-    const cards = state.cards;
-
-    if ( cards && cards.length && state.answered === cards.length ) {
-      this.props.dispatch( this.props.actionTypes.END_ROUND );
-    }
-  }
   onGameClick() {
     this.props.dispatch( this.props.actionTypes.CLICK_ROOT_NODE );
   }
