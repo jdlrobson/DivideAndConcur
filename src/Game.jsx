@@ -4,6 +4,7 @@ import Card from './Card'
 import Memory from './Memory'
 import Dictionary from './Dictionary'
 import Dealer from './Dealer'
+import FlashcardRound from './FlashcardRound'
 import './game.less'
 
 const NUM_CARDS_PER_LEVEL = 10;
@@ -11,12 +12,6 @@ const NUM_CARDS_PER_LEVEL = 10;
 export default class Game extends Component {
   constructor() {
     super();
-  }
-  componentWillMount() {
-    const props = this.props;
-    const storeState = props.store.getState();
-    this.memory = storeState.memory;
-    this.dictionary = storeState.dictionary;
   }
   refresh() {
     this.setState( this.props.store.getState() );
@@ -32,24 +27,8 @@ export default class Game extends Component {
   render() {
     const props = this.props;
     const state = this.state;
-    const memory = this.memory;
-    const dictionary = this.dictionary;
-
-    function mapCard( char, events = {} ) {
-      const rating = memory.getDifficulty(char);
-
-      return <Card {...events}
-        className='card'
-        isHighlighted={state.highlighted && state.highlighted.indexOf(char) > -1}
-        key={'card-' + char + '-' + state.round}
-        difficultyLevel={rating}
-        character={char}
-        dispatch={props.dispatch}
-        actionTypes={props.actionTypes}
-        english={dictionary.toEnglish(char)}
-      />;
-    }
-    const cards = state.cards ? state.cards.map(mapCard) : false;
+    const cards = state.cards ? <FlashcardRound {...props}
+      round={state.round} cards={state.cards} /> : false;
     const loader = <div>Loading up!</div>;
     const prev = state.previous || [];
 
@@ -61,8 +40,9 @@ export default class Game extends Component {
       {cards || loader }
       <h3>Previous history</h3>
       {
-        prev.map((cards)=>{
-          return cards.map(mapCard)
+        prev.map((cards, i)=>{
+          return <FlashcardRound key={'round-' + i}
+            {...props} cards={cards} round={state.round} />
         })
       }
       </div>

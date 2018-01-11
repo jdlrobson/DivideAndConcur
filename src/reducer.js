@@ -28,9 +28,7 @@ function actionBoot() {
   dealer.load(0, 0);
 
   return {
-    dictionary: dict,
-    dealer: dealer,
-    memory: memory,
+    highlighted: [],
     answered: 0,
     round: 0,
     score: memory.getScore()
@@ -69,14 +67,22 @@ function actionAnswerCard( state, action ) {
   } );
 }
 
+function mapCard( character, isHighlighted ) {
+  return {
+    character,
+    isHighlighted,
+    difficultyLevel: memory.getDifficulty(character),
+    english: dict.toEnglish(character)
+  };
+}
 /**
  * Deal ten cards from the dictionary that the user is unfamiliar with
  * sorted by difficulty level
  */
 function dealCards( state ) {
-  const cards = dealer.deal();
+  const cards = dealer.deal().map((char)=>mapCard(char, state.highlighted.indexOf(char) > -1));
   const level = dealer.getLevel();
-  const previous = dealer.getHistory();
+  const previous = dealer.getHistory().map((round) => round.map((char)=>mapCard(char, state.highlighted.indexOf(char) > -1)));
   const wordSize = dealer.currentWordSize;
   const difficulty = cards.length ? dealer.currentDifficultyLevel
     : dealer.currentDifficultyLevel + 1;
