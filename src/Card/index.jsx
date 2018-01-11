@@ -3,26 +3,28 @@ import { Component, h } from 'preact';
 import './styles.less';
 
 class Card extends Component {
-  onClick() {
+  onClick(ev) {
     const props = this.props;
     this.setState({revealed: true});
     props.dispatch( props.actionTypes.REVEAL_FLASHCARD );
   };
-  wrong() {
+  wrong(ev) {
     const props = this.props;
     this.setState({done: true});
     props.dispatch( {
       type: props.actionTypes.GUESS_FLASHCARD_WRONG.type,
       char: props.character
     } );
+    ev.stopPropagation();
   };
-  tick() {
+  tick(ev) {
     const props = this.props;
     this.setState({done: true, knew: true});
     props.dispatch( {
       type: props.actionTypes.GUESS_FLASHCARD_RIGHT.type,
       char: props.character
     } );
+    ev.stopPropagation();
   };
   onClickGlyph(ev) {
     const props = this.props;
@@ -31,8 +33,8 @@ class Card extends Component {
         type: props.actionTypes.REVEAL_FLASHCARD_PRONOUNCIATION.type,
         char: props.character
       } );
-      ev.stopPropagation();
     }
+    ev.stopPropagation();
   };
   render() {
     const hidden = { display: 'none' };
