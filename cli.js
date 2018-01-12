@@ -1,9 +1,9 @@
 var util = require('util');
 var dict = require('./data/dictionary');
 const mcs = require('./src/mcs');
-
 const htmlToText = require('html-to-text');
 const chalk = require('chalk');
+var fs = require('fs');
 
 function addDictionaryItem() {
 	return new Promise( ( resolve ) => {
@@ -156,5 +156,22 @@ function menu() {
 			}
 		});
 }
-dict.load().then(() => menu());
 
+if ( process.argv[2] ) {
+	fs.readFile(process.argv[2], 'utf-8', ( err, data ) => {
+		const json = JSON.parse( data );
+		let promises = [];
+		dict.load().then(() => {
+			json.forEach((word) => {
+				if ( !dict.getWord( word ) && !word.match( /[\—\:\+\─]/ ) ) {
+					promises.push( dict.saveWord( word, '?' ) );
+				}
+			})
+			console.log('Imported', promises.length, 'words');
+			Promise.all(promises).then(()=>dict.save());
+		});
+	} );
+
+} else {
+	dict.load().then(() => menu());
+}
