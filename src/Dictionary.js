@@ -2,6 +2,9 @@ import dictJson from './../data/dictionary.json'
 import DictionaryUtils from './../data/DictionaryUtils';
 
 export default class Dictionary {
+  maxSize() {
+    return Object.keys( dictJson.words ).length;
+  }
   constructor() {
     const self = this;
     this.data = {};

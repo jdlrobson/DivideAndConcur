@@ -30,6 +30,7 @@ function actionBoot() {
 
   return {
     highlighted: [],
+    maxSize: dict.maxSize(),
     answered: 0,
     round: 0
   };
