@@ -3,7 +3,7 @@ import { Component, h } from 'preact';
 
 import actionTypes from './actionTypes';
 import Memory from './Memory'
-import Dealer from './Dealer'
+import Dealer, { NUM_CARDS_PER_LEVEL } from './Dealer'
 import Dictionary from './Dictionary'
 
 import CharacterPreviewOverlay from './ui/CharacterPreviewOverlay'
@@ -106,6 +106,9 @@ function dealCards( state ) {
       dealCards( state ),
       { difficulty }
     );
+  } else if ( cards.length < NUM_CARDS_PER_LEVEL ) {
+      dealer.load( wordSize, difficulty + 1 );
+      return Object.assign( {}, dealCards( state ), { difficulty: difficulty + 1 } );
   } else {
     // if all have been answered lets deal again..
     return Object.assign( {}, state, {

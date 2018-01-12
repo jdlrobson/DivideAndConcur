@@ -1,4 +1,4 @@
-const NUM_CARDS_PER_LEVEL = 10;
+export const NUM_CARDS_PER_LEVEL = 10;
 
 export default class Dealer {
   constructor( dictionary, memory ) {
