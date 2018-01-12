@@ -8,16 +8,18 @@ export default class CharacterPreview extends Component {
   }
   render() {
     const props = this.props;
-    let content = props.pinyin;
-    if ( content === undefined ) {
+    let content;
+    if ( props.pinyin === undefined ) {
       content = 'Loading...';
-    } else if ( !content ) {
+    } else if ( !props.pinyin ) {
       content = 'No information available';
+    } else {
+      content = <div className="pinyin">{props.pinyin}</div>
     }
     return (
       <div className="overlay" onClick={this.stopPropagation}>
         <h2>{props.char}</h2>
-        <div dangerouslySetInnerHTML={{__html: content}}></div>
+        {content}
       </div>
     )
   }
