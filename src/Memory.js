@@ -1,5 +1,3 @@
-const SCORE_INCORRECT_ANSWER = -2
-const SCORE_CORRECT_ANSWER = 1
 const ROUNDS_BEFORE_KNOWN = 1
 
 export default class Memory {
@@ -11,10 +9,12 @@ export default class Memory {
       this.answers = {};
       this.stack = false;
     }
-    this.score = this.getScore();
   }
   toJSON() {
     return { answers: this.answers }
+  }
+  knownWordCount() {
+    return Object.keys( this.answers ).length;
   }
   /**
    * Check if the user knows all the words
@@ -39,18 +39,6 @@ export default class Memory {
       this.answers[char] = 0;
     }
     this.answers[char]++;
-    this.score += SCORE_INCORRECT_ANSWER;
-  }
-  getScore() {
-    if ( this.score ) {
-      return this.score;
-    } else {
-      return Object.keys( this.answers ).reduce((accumulator, key) => {
-        const val = this.answers[key];
-        return accumulator + ( val < 0 ? ( Math.abs(val) * SCORE_CORRECT_ANSWER ) :
-          ( val * SCORE_INCORRECT_ANSWER ) );
-      }, 0);
-    }
   }
   getDifficulty( char ) {
     if ( this.answers[char] > 0 ) {
@@ -63,7 +51,6 @@ export default class Memory {
     if ( !this.answers[char] ) {
       this.answers[char] = 0;
     }
-    this.score += SCORE_CORRECT_ANSWER;
     this.answers[char]--;
   }
 }

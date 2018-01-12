@@ -31,8 +31,7 @@ function actionBoot() {
   return {
     highlighted: [],
     answered: 0,
-    round: 0,
-    score: memory.getScore()
+    round: 0
   };
 }
 
@@ -70,7 +69,6 @@ function actionAnswerCard( state, action ) {
   }
 
   return Object.assign( {}, state, {
-    score: memory.getScore(),
     highlighted: dict.toRadicals( char ),
     answered: state.answered + 1
   } );
@@ -110,6 +108,7 @@ function dealCards( state ) {
     return Object.assign( {}, state, {
       round: state.round + 1,
       answered: 0,
+      knownWordCount: memory.knownWordCount(),
       wordSize, difficulty, level, cards, previous
     })
   }

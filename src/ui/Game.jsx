@@ -2,9 +2,11 @@
 import { Component, h } from 'preact';
 import Card from './Card'
 import FlashcardRound from './FlashcardRound'
+import ProgressBar from './ProgressBar'
 import './game.less'
 
 const NUM_CARDS_PER_LEVEL = 10;
+const TOTAL_WORDS = 3000
 
 export default class Game extends Component {
   constructor() {
@@ -33,7 +35,9 @@ export default class Game extends Component {
       <div className="game" onClick={this.onGameClick.bind(this)}>
       {state.overlay}
       <h2>Level {state.level} [{state.wordSize},{state.difficulty}]</h2>
-      <div>Score: {state.score}</div>
+      <ProgressBar percent={(state.knownWordCount/TOTAL_WORDS) * 100}>
+        {`${state.knownWordCount} of ${TOTAL_WORDS} words`}
+      </ProgressBar>
       {cards || loader }
       <h3>Previous history</h3>
       {
