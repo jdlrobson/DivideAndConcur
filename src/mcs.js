@@ -49,7 +49,7 @@ function lookup(character, lines) {
             }
           });
         }
-        return extractPinyin(text);
+        return text;
       } );
 }
 
@@ -58,6 +58,6 @@ module.exports = {
     return lookup( character, [ 'Definitions', 'Definition' ] )
   },
   getPronounciation: function ( character ) {
-    return lookup( character, [ 'Pronunciation' ] )
+    return lookup( character, [ 'Pronunciation' ] ).then((text) => extractPinyin(text));
   }
 };
