@@ -33,7 +33,7 @@ export default class Game extends Component {
     return (
       <div className="game" onClick={this.onGameClick.bind(this)}>
       {state.overlay}
-      <h2>Level {state.level} [{state.wordSize},{state.difficulty}]</h2>
+      <div className="debug-tools">Level {state.level} [{state.wordSize},{state.difficulty}]</div>
       <ProgressBar percent={(state.knownWordCount/state.maxSize) * 100}>
         {`${state.knownWordCount} of ${state.maxSize} words`}
       </ProgressBar>
