@@ -1,7 +1,7 @@
 import { h, render, Component } from 'preact';
 import { createStore } from 'redux'
 
-import Game from './Game'
+import Game from './ui/Game'
 
 import reducer from './reducer'
 import { checkIfEndOfRound, checkIfPinyinNeeded } from './subscribers';

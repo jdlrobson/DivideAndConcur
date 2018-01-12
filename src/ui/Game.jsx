@@ -1,9 +1,6 @@
 /** @jsx h */
 import { Component, h } from 'preact';
 import Card from './Card'
-import Memory from './Memory'
-import Dictionary from './Dictionary'
-import Dealer from './Dealer'
 import FlashcardRound from './FlashcardRound'
 import './game.less'
 

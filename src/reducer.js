@@ -5,7 +5,8 @@ import actionTypes from './actionTypes';
 import Memory from './Memory'
 import Dealer from './Dealer'
 import Dictionary from './Dictionary'
-import CharacterPreviewOverlay from './CharacterPreviewOverlay'
+
+import CharacterPreviewOverlay from './ui/CharacterPreviewOverlay'
 
 let memory;
 let dealer;
