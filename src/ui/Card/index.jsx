@@ -63,6 +63,7 @@ class Card extends Component {
 
     return (
       <div className={className} onClick={this.onClick.bind(this)}>
+      <div className="front">
           <div className={"difficulty-bar"}>
           {
             new Array(dLevel).fill((<div className={isEasy ? 'easy' : ''} />))
@@ -77,6 +78,8 @@ class Card extends Component {
           <div key='wrong' className='wrong button' onClick={this.wrong.bind(this)}
             style={isSelected && !done && !isKnown && !isFrozen ? {} : hidden}>❌</div>
           <div key="pinyin" className="pinyin button" onClick={this.requestPidgin.bind(this)}>🔊</div>
+      </div>
+      <div className="back" />
       </div>
     );
   }

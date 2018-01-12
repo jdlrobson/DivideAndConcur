@@ -1,5 +1,8 @@
 @cardBorder: 3px;
 .card {
+  transition: 0.6s;
+  transform-style: preserve-3d;
+  perspective: 1000px;
   width: 120px;
   height: 120px;
   background: #ccc;
@@ -15,10 +18,23 @@
     opacity: 0.4;
   }
 
+  .front,
+  .back {
+    backface-visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+  .front {
+    z-index: 2;
+    background: #ccc;
+    /* for firefox 31 */
+    transform: rotateY(0deg);
+  }
   &.card-flipped {
-    * {
-      visibility: hidden;
-    }
+    transform: rotateY(180deg);
   }
   &.card-highlighted {
     border: solid @cardBorder yellow;
@@ -28,6 +44,9 @@
   &.card-unknown {
     border: solid @cardBorder red;
     opacity: 0.4;
+  }
+  .english {
+    font-size: 0.8em;
   }
 }
 
