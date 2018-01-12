@@ -26,7 +26,7 @@ export default class Game extends Component {
       {
         prev.map((cards, i)=>{
           return <FlashcardRound key={'round-' + i}
-            {...props} cards={cards} />
+            {...props} cards={cards} round={i} />
         })
       }
       </div>
