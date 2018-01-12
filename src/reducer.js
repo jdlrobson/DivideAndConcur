@@ -84,6 +84,18 @@ function mapCard( character, isHighlighted, index ) {
     english: dict.toEnglish(character)
   };
 }
+
+function addKnownWordCount(state) {
+  const prev = state.previous;
+  const cards = state.cards;
+  let knownWordCount = cards.filter((card)=>card.isKnown).length;
+
+  prev.forEach((round) => {
+    knownWordCount += round.length
+  })
+  return Object.assign({}, state, { knownWordCount } );
+}
+
 /**
  * Deal ten cards from the dictionary that the user is unfamiliar with
  * sorted by difficulty level
@@ -110,10 +122,11 @@ function dealCards( state ) {
       return Object.assign( {}, dealCards( state ), { difficulty: difficulty + 1 } );
   } else {
     // if all have been answered lets deal again..
-    return Object.assign( {}, state, {
-      knownWordCount: memory.knownWordCount(),
-      wordSize, difficulty, level, cards, previous
-    })
+    return addKnownWordCount(
+      Object.assign( {}, state, {
+        wordSize, difficulty, level, cards, previous
+      })
+    );
   }
 }
 

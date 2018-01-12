@@ -13,9 +13,6 @@ export default class Memory {
   toJSON() {
     return { answers: this.answers }
   }
-  knownWordCount() {
-    return Object.keys( this.answers ).length;
-  }
   /**
    * Check if the user knows all the words
    * @param {Array} words
