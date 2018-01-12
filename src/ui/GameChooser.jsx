@@ -1,8 +1,10 @@
 /** @jsx h */
 import { Component, h } from 'preact';
 import Game from './Game'
+import GameMatchPairs from './GameMatchPairs'
 import ProgressBar from './ProgressBar'
 
+export const MATCH_PAIRS = 'pairs';
 export const FLIP_CARDS = 'flip';
 
 export default class GameChooser extends Component {
@@ -28,8 +30,10 @@ export default class GameChooser extends Component {
         </ProgressBar>
         <div>
           <button disabled={game === FLIP_CARDS} onClick={(ev)=>this.setGame( FLIP_CARDS )}>Flip</button>
+          <button disabled={game === MATCH_PAIRS} onClick={(ev)=>this.setGame( MATCH_PAIRS )}>Pairs</button>
         </div>
         { game === FLIP_CARDS && <Game {...props} {...state} /> }
+        { game === MATCH_PAIRS && <GameMatchPairs {...props} {...state} /> }
       </div>
     );
   }

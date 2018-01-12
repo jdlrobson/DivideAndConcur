@@ -57,6 +57,9 @@ class Card extends Component {
     if ( props.isHighlighted ) {
       className += ' card-highlighted';
     }
+    if ( props.isFlipped && !isSelected ) {
+      className += ' card-flipped';
+    }
 
     return (
       <div className={className} onClick={this.onClick.bind(this)}>

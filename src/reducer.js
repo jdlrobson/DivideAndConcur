@@ -7,7 +7,7 @@ import Dealer, { NUM_CARDS_PER_LEVEL } from './Dealer'
 import Dictionary from './Dictionary'
 
 import CharacterPreviewOverlay from './ui/CharacterPreviewOverlay'
-import { FLIP_CARDS } from './ui/GameChooser'
+import { FLIP_CARDS, MATCH_PAIRS } from './ui/GameChooser'
 
 let memory;
 let dealer;
@@ -74,11 +74,10 @@ function actionAnswerCard( state, action ) {
   } );
 }
 
-function mapCard( character, isHighlighted, index ) {
+function mapCard( character, isHighlighted ) {
   const difficultyLevel = memory.getDifficulty(character);
   return {
     character,
-    index,
     isHighlighted,
     difficultyLevel,
     english: dict.toEnglish(character)
@@ -101,7 +100,7 @@ function addKnownWordCount(state) {
  * sorted by difficulty level
  */
 function dealCards( state ) {
-  const cards = dealer.deal().map((char, i)=>mapCard(char, state.highlighted.indexOf(char) > -1, i));
+  const cards = dealer.deal().map((char, i)=>mapCard(char, state.highlighted.indexOf(char) > -1));
   const level = dealer.getLevel();
   const previous = dealer.getHistory().map((round) => round.map((char)=>mapCard(char, state.highlighted.indexOf(char) > -1)));
   const wordSize = dealer.currentWordSize;
@@ -134,6 +133,7 @@ function setGame( state, action ) {
   return {
     game: action ? action.game : FLIP_CARDS,
     highlighted: [],
+    cards: [],
     maxSize: dict.maxSize()
   };
 }
@@ -145,10 +145,81 @@ function updateCardInCards( cards, action, props ) {
   } );
 }
 
-function revealedFlashcard( state, action ) {
+function markCardsAsAnswered( cards, character, isKnown ) {
+  return cards.map((card, i) => {
+    return character === card.character ?
+      Object.assign( {}, card,  { isAnswered: true, isKnown } ) : card;
+  } );
+}
+
+function deselectUnansweredCards( cards ) {
+  return cards.map((card, i) => {
+    return card.isSelected && !card.isAnswered ?
+      Object.assign( {}, card,  { isSelected: false } ) : card;
+  } );
+}
+
+function revealedFlashcardPairGame(state, action) {
+  state = revealCardInAction(state, action);
+  let selectedCards = state.cards.filter((card)=>card.isSelected && !card.isAnswered);
+  if ( selectedCards.length === 2 ) {
+    let cards;
+
+    if ( selectedCards[0].character === selectedCards[1].character ) {
+      memory.markAsEasy( action.character );
+      cards = markCardsAsAnswered( state.cards, action.character, true );
+    } else {
+      cards = deselectUnansweredCards( state.cards );
+    }
+    return Object.assign( {}, state, { cards } );
+  }
+  return state;
+}
+
+function revealCardInAction(state, action) {
   return Object.assign( {}, state, {
     cards: updateCardInCards( state.cards, action, { isSelected: true } )
   } );
+}
+
+function revealedFlashcard( state, action ) {
+  if (  state.game === MATCH_PAIRS ) {
+    return revealedFlashcardPairGame(state, action);
+  }  else {
+    return revealCardInAction(state, action);
+  }
+}
+
+function freezeCards(state) {
+  const isFrozen = true;
+  return Object.assign({}, state, {
+    cards: state.cards.map((card) => Object.assign({}, card, { isFrozen } ))
+  });
+}
+
+function shuffleCards(state) {
+  return Object.assign({}, state, {
+    cards: state.cards.sort((a,b) => Math.random() < 0.5 ? -1 : 1)
+  });
+}
+function cloneCards(state) {
+  const cards = state.cards;
+  return Object.assign( {}, state, {
+    cards: cards.concat(cards)
+  } );
+}
+
+function addIndexToCards(state) {
+  return Object.assign( {}, state, {
+    cards: state.cards.map((card, i) => Object.assign({}, card, { index: i } ))
+  } )
+}
+function newRound(state) {
+  if ( state.game === MATCH_PAIRS ) {
+    return addIndexToCards(shuffleCards( freezeCards( cloneCards( dealCards( state ) ) ) ));
+  } else {
+    return addIndexToCards(dealCards( state ));
+  }
 }
 
 export default ( state, action ) => {
@@ -157,8 +228,9 @@ export default ( state, action ) => {
       return revealedFlashcard( state, action );
     case actionTypes.SWITCH_GAME.type:
       return setGame( state, action );
+    case actionTypes.END_ROUND.type:
     case actionTypes.START_ROUND.type:
-      return dealCards( state );
+      return newRound(state);
     case actionTypes.GUESS_FLASHCARD_WRONG.type:
     case actionTypes.GUESS_FLASHCARD_RIGHT.type:
       return actionAnswerCard( state, action );
@@ -171,8 +243,6 @@ export default ( state, action ) => {
     // reset on boot
     case actionTypes.BOOT.type:
       return actionBoot();
-    case actionTypes.END_ROUND.type:
-      return dealCards( state );
     default:
       return state;
   }
