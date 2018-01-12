@@ -41,7 +41,7 @@ class Card extends Component {
     const hidden = { display: 'none' };
     let className = 'card';
     let dLevel = props.difficultyLevel;
-    const isEasy = dLevel < 0 ? true : false;
+    const isEasy = dLevel < 0;
     const isKnown = dLevel < -4;
     const isSelected = props.isSelected;
     const isFrozen = props.isFrozen;

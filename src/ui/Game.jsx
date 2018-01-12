@@ -20,7 +20,8 @@ export default class Game extends Component {
 
     return (
       <div className="game" onClick={this.onGameClick.bind(this)}>
-      <div className="debug-tools">Level {props.level} [{props.wordSize},{props.difficulty}]</div>
+      <div className="debug-tools">Level {props.level}&nbsp;
+       [word size = {props.wordSize} difficultyLevel {props.difficulty}]</div>
       {cards || loader }
       <h3>Previous history</h3>
       {
