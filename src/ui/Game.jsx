@@ -14,7 +14,7 @@ export default class Game extends Component {
     this.props.dispatch( this.props.actionTypes.CLICK_ROOT_NODE );
   }
   render(props) {
-    const cards = props.cards ? <FlashcardRound {...props} /> : false;
+    const cards = props.cards ? <FlashcardRound {...props} round={0} /> : false;
     const loader = <div>Loading up!</div>;
     const prev = props.previous || [];
 
@@ -25,8 +25,9 @@ export default class Game extends Component {
       <h3>Previous history</h3>
       {
         prev.map((cards, i)=>{
-          return <FlashcardRound key={'round-' + i}
-            {...props} cards={cards} round={i} />
+          const round = i + 1;
+          return <FlashcardRound key={'round-' + round}
+            {...props} cards={cards} round={round} />
         })
       }
       </div>

@@ -5,8 +5,10 @@ import './styles.less';
 class Card extends Component {
   onClick(ev) {
     const props = this.props;
-    this.setState({revealed: true});
-    props.dispatch( props.actionTypes.REVEAL_FLASHCARD );
+    if ( !props.isSelected ) {
+      props.dispatch( Object.assign( {}, props.actionTypes.REVEAL_FLASHCARD,
+        { character: props.character, index: props.index } ) );
+    }
   };
   wrong(ev) {
     const props = this.props;
@@ -43,6 +45,8 @@ class Card extends Component {
     let dLevel = props.difficultyLevel;
     const isEasy = dLevel < 0 ? true : false;
     const isKnown = dLevel < -4;
+    const isSelected = props.isSelected;
+    const isFrozen = props.isFrozen;
 
     if ( isEasy ) {
       dLevel = -dLevel;
@@ -54,6 +58,7 @@ class Card extends Component {
     if ( props.isHighlighted ) {
       className += ' card-highlighted';
     }
+
     return (
       <div className={className} onClick={this.onClick.bind(this)}>
           <div className={"difficulty-bar"}>
@@ -64,11 +69,11 @@ class Card extends Component {
           <div key='char' className="char">
           {props.character}
           </div>
-          <div key='lang' className='english' style={state.revealed ? {} : hidden}>{props.english}</div>
+          <div key='lang' className='english' style={isSelected ? {} : hidden}>{props.english}</div>
           <div key='tick' className='tick button' onClick={this.tick.bind(this)}
-            style={state.revealed && !state.done && !isKnown ? {} : hidden}>✅</div>
+            style={isSelected && !state.done && !isKnown && !isFrozen ? {} : hidden}>✅</div>
           <div key='wrong' className='wrong button' onClick={this.wrong.bind(this)}
-            style={state.revealed && !state.done && !isKnown ? {} : hidden}>❌</div>
+            style={isSelected && !state.done && !isKnown && !isFrozen ? {} : hidden}>❌</div>
           <div key="pinyin" className="pinyin button" onClick={this.requestPidgin.bind(this)}>🔊</div>
       </div>
     );

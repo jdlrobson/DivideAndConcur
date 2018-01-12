@@ -71,9 +71,10 @@ function actionAnswerCard( state, action ) {
   } );
 }
 
-function mapCard( character, isHighlighted ) {
+function mapCard( character, isHighlighted, index ) {
   return {
     character,
+    index,
     isHighlighted,
     difficultyLevel: memory.getDifficulty(character),
     english: dict.toEnglish(character)
@@ -84,7 +85,7 @@ function mapCard( character, isHighlighted ) {
  * sorted by difficulty level
  */
 function dealCards( state ) {
-  const cards = dealer.deal().map((char)=>mapCard(char, state.highlighted.indexOf(char) > -1));
+  const cards = dealer.deal().map((char, i)=>mapCard(char, state.highlighted.indexOf(char) > -1, i));
   const level = dealer.getLevel();
   const previous = dealer.getHistory().map((round) => round.map((char)=>mapCard(char, state.highlighted.indexOf(char) > -1)));
   const wordSize = dealer.currentWordSize;
@@ -103,7 +104,6 @@ function dealCards( state ) {
   } else {
     // if all have been answered lets deal again..
     return Object.assign( {}, state, {
-      round: state.round + 1,
       answered: 0,
       knownWordCount: memory.knownWordCount(),
       wordSize, difficulty, level, cards, previous
@@ -116,13 +116,23 @@ function setGame( state, action ) {
     game: action ? action.game : FLIP_CARDS,
     highlighted: [],
     maxSize: dict.maxSize(),
-    answered: 0,
-    round: 0
+    answered: 0
   };
+}
+
+function revealedFlashcard( state, action ) {
+  return Object.assign( {}, state, {
+    cards: state.cards.map((card, i) => {
+      return action.character === card.character && action.index === i ?
+        Object.assign( {}, card,  { isSelected: true } ) : card;
+    } )
+  } );
 }
 
 export default ( state, action ) => {
   switch ( action.type ) {
+    case actionTypes.REVEAL_FLASHCARD.type:
+      return revealedFlashcard( state, action );
     case actionTypes.SWITCH_GAME.type:
       return setGame( state, action );
     case actionTypes.START_ROUND.type:
