@@ -26,14 +26,13 @@ class Card extends Component {
     } );
     ev.stopPropagation();
   };
-  onClickGlyph(ev) {
+  requestPidgin(ev) {
     const props = this.props;
-    if ( this.state.revealed && props ) {
-      props.dispatch( {
-        type: props.actionTypes.REVEAL_FLASHCARD_PRONOUNCIATION.type,
-        char: props.character
-      } );
-    }
+
+    props.dispatch( {
+      type: props.actionTypes.REQUEST_PINYIN_START.type,
+      char: props.character
+    } );
     ev.stopPropagation();
   };
   render() {
@@ -63,13 +62,14 @@ class Card extends Component {
           }
           </div>
           <div key='char' className="char">
-            <a onClick={this.onClickGlyph.bind(this)}>{props.character}</a>
+          {props.character}
           </div>
           <div key='lang' className='english' style={state.revealed ? {} : hidden}>{props.english}</div>
           <div key='tick' className='tick button' onClick={this.tick.bind(this)}
             style={state.revealed && !state.done && !isKnown ? {} : hidden}>✅</div>
           <div key='wrong' className='wrong button' onClick={this.wrong.bind(this)}
             style={state.revealed && !state.done && !isKnown ? {} : hidden}>❌</div>
+          <div key="pinyin" className="pinyin button" onClick={this.requestPidgin.bind(this)}>🔊</div>
       </div>
     );
   }

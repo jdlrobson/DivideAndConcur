@@ -112,7 +112,7 @@ export default ( state, action ) => {
     case actionTypes.GUESS_FLASHCARD_WRONG.type:
     case actionTypes.GUESS_FLASHCARD_RIGHT.type:
       return actionAnswerCard( state, action );
-    case actionTypes.REVEAL_FLASHCARD_PRONOUNCIATION.type:
+    case actionTypes.REQUEST_PINYIN_START.type:
       return actionRevealPronounciation( state, action.char );
     // reset on boot
     case actionTypes.CLICK_ROOT_NODE.type:
