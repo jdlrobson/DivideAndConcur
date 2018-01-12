@@ -18,13 +18,13 @@ function loadMemoryData() {
 }
 
 function saveMemoryData(newMemory) {
-  localStorage.setItem('memory', JSON.stringify(newMemory));
+  localStorage.setItem('memory', JSON.stringify( memory.toJSON() ));
 }
 
 // Setups state with the required globals for managing a game
 function actionBoot() {
   dict = new Dictionary();
-  memory = new Memory(loadMemoryData(), saveMemoryData);
+  memory = new Memory(loadMemoryData());
   dealer = new Dealer( dict, memory );
   dealer.load(0, 0);
 
@@ -96,6 +96,7 @@ function dealCards( state ) {
   const difficulty = cards.length ? dealer.currentDifficultyLevel
     : dealer.currentDifficultyLevel + 1;
 
+  saveMemoryData();
   // The current deck was depleted so let's get a new deck
   if ( !cards.length ) {
     dealer.load( wordSize, difficulty );

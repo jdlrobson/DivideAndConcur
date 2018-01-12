@@ -17,13 +17,6 @@ import 'preact/devtools'
 
 
 (function () {
-  let memory = localStorage.getItem('memory');
-  memory = memory ? JSON.parse( memory ) : false;
-
-  function saveMemory(newMemory) {
-    localStorage.setItem('memory', JSON.stringify(newMemory));
-  }
-
   /**
    *******************************************
    * SUBSCRIBERS to all state changes
@@ -32,7 +25,7 @@ import 'preact/devtools'
   const renderGame = () => {
     document.getElementById('container').innerHTML = '';
     render(
-      <Game initialMemory={memory} saveMemory={saveMemory}
+      <Game
         store={store}
         dispatch={store.dispatch}
         actionTypes={actionTypes}

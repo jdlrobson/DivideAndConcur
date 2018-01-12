@@ -3,7 +3,7 @@ const SCORE_CORRECT_ANSWER = 1
 const ROUNDS_BEFORE_KNOWN = 1
 
 export default class Memory {
-  constructor(initialMemory, saveFunction) {
+  constructor(initialMemory) {
     if ( initialMemory ) {
       this.answers = initialMemory.answers || {};
       this.stack = initialMemory.stack || false;
@@ -11,8 +11,10 @@ export default class Memory {
       this.answers = {};
       this.stack = false;
     }
-    this.saveFunction = saveFunction;
     this.score = this.getScore();
+  }
+  toJSON() {
+    return { answers: this.answers }
   }
   /**
    * Check if the user knows all the words
@@ -32,18 +34,12 @@ export default class Memory {
       return knowsWord(word) && accumulator;
     }, true );
   }
-  saveMemory() {
-    if ( this.saveFunction ) {
-      this.saveFunction({ answers: this.answers });
-    }
-  }
   markAsDifficult( char ) {
     if ( !this.answers[char] ) {
       this.answers[char] = 0;
     }
     this.answers[char]++;
     this.score += SCORE_INCORRECT_ANSWER;
-    this.saveMemory();
   }
   getScore() {
     if ( this.score ) {
@@ -69,6 +65,5 @@ export default class Memory {
     }
     this.score += SCORE_CORRECT_ANSWER;
     this.answers[char]--;
-    this.saveMemory();
   }
 }
