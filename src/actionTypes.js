@@ -42,11 +42,16 @@ const END_ROUND = {
   type: 'END_ROUND'
 };
 
+const SWITCH_GAME = {
+  type: 'SWITCH_GAME'
+};
+
 export default {
   BOOT,
   CLICK_ROOT_NODE,
   START_ROUND,
   END_ROUND,
+  SWITCH_GAME,
   GUESS_FLASHCARD_RIGHT,
   GUESS_FLASHCARD_WRONG,
   REVEAL_FLASHCARD,

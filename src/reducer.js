@@ -7,6 +7,7 @@ import Dealer from './Dealer'
 import Dictionary from './Dictionary'
 
 import CharacterPreviewOverlay from './ui/CharacterPreviewOverlay'
+import { FLIP_CARDS } from './ui/GameChooser'
 
 let memory;
 let dealer;
@@ -28,12 +29,7 @@ function actionBoot() {
   dealer = new Dealer( dict, memory );
   dealer.load(0, 0);
 
-  return {
-    highlighted: [],
-    maxSize: dict.maxSize(),
-    answered: 0,
-    round: 0
-  };
+  return setGame();
 }
 
 // updates state to add the character preview overlay overlay
@@ -115,8 +111,20 @@ function dealCards( state ) {
   }
 }
 
+function setGame( state, action ) {
+  return {
+    game: action ? action.game : FLIP_CARDS,
+    highlighted: [],
+    maxSize: dict.maxSize(),
+    answered: 0,
+    round: 0
+  };
+}
+
 export default ( state, action ) => {
   switch ( action.type ) {
+    case actionTypes.SWITCH_GAME.type:
+      return setGame( state, action );
     case actionTypes.START_ROUND.type:
       return dealCards( state );
     case actionTypes.GUESS_FLASHCARD_WRONG.type:

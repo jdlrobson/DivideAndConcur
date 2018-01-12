@@ -1,7 +1,7 @@
 import { h, render, Component } from 'preact';
 import { createStore } from 'redux'
 
-import Game from './ui/Game'
+import GameChooser from './ui/GameChooser'
 
 import reducer from './reducer'
 import { checkIfEndOfRound, checkIfPinyinNeeded } from './subscribers';
@@ -25,7 +25,7 @@ import 'preact/devtools'
   const renderGame = () => {
     document.getElementById('container').innerHTML = '';
     render(
-      <Game
+      <GameChooser
         store={store}
         dispatch={store.dispatch}
         actionTypes={actionTypes}
