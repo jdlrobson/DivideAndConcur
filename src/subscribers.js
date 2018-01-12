@@ -8,9 +8,10 @@ import mcs from './mcs'
 export function checkIfEndOfRound( store ) {
   return () => {
     const state = store.getState();
-    const cards = state.cards;
+    const cards = state.cards || [];
+    const answeredCards = cards.filter((card) => card.isAnswered);
 
-    if ( cards && cards.length && state.answered === cards.length ) {
+    if ( cards && cards.length && answeredCards.length === cards.length ) {
       store.dispatch( actionTypes.END_ROUND );
     }
   };

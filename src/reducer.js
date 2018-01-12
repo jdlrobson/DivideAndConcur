@@ -70,8 +70,7 @@ function actionAnswerCard( state, action ) {
 
   return Object.assign( {}, state, {
     cards: updateCardInCards( state.cards, action, { isAnswered, isKnown } ),
-    highlighted: dict.toRadicals( char ),
-    answered: state.answered + 1
+    highlighted: dict.toRadicals( char )
   } );
 }
 
@@ -112,7 +111,6 @@ function dealCards( state ) {
   } else {
     // if all have been answered lets deal again..
     return Object.assign( {}, state, {
-      answered: 0,
       knownWordCount: memory.knownWordCount(),
       wordSize, difficulty, level, cards, previous
     })
@@ -123,8 +121,7 @@ function setGame( state, action ) {
   return {
     game: action ? action.game : FLIP_CARDS,
     highlighted: [],
-    maxSize: dict.maxSize(),
-    answered: 0
+    maxSize: dict.maxSize()
   };
 }
 
