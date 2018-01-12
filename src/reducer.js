@@ -159,6 +159,22 @@ function deselectUnansweredCards( cards ) {
   } );
 }
 
+function pausePlay( state ) {
+  return Object.assign( {}, state, { isPaused: true } );
+}
+
+function queueDeselectOfUnansweredCards( state ) {
+  return Object.assign( {}, state, { isPaused: true,
+    timedAction: actionTypes.DESELECT_ALL_UNANSWERED_CARDS.type } );
+}
+
+function actionDeselectUnansweredCards( state ) {
+  return Object.assign( {}, state, {
+    isPaused: false,
+    cards: deselectUnansweredCards( state.cards )
+  } );
+}
+
 function revealedFlashcardPairGame(state, action) {
   state = revealCardInAction(state, action);
   let selectedCards = state.cards.filter((card)=>card.isSelected && !card.isAnswered);
@@ -169,7 +185,7 @@ function revealedFlashcardPairGame(state, action) {
       memory.markAsEasy( action.character );
       cards = markCardsAsAnswered( state.cards, action.character, true );
     } else {
-      cards = deselectUnansweredCards( state.cards );
+      return queueDeselectOfUnansweredCards( pausePlay( state ) );
     }
     return Object.assign( {}, state, { cards } );
   }
@@ -224,8 +240,12 @@ function newRound(state) {
 
 export default ( state, action ) => {
   switch ( action.type ) {
+    case actionTypes.DESELECT_ALL_UNANSWERED_CARDS.type:
+      return actionDeselectUnansweredCards( state, action );
+    case actionTypes.CLEAR_TIMED_ACTION.type:
+      return Object.assign({}, state, { timedAction: undefined } );
     case actionTypes.REVEAL_FLASHCARD.type:
-      return revealedFlashcard( state, action );
+      return state.isPaused ? state : revealedFlashcard( state, action );
     case actionTypes.SWITCH_GAME.type:
       return setGame( state, action );
     case actionTypes.END_ROUND.type:

@@ -1,6 +1,20 @@
 import actionTypes from './actionTypes'
 import mcs from './mcs'
 
+export function checkForTimedAction( store ) {
+  return () => {
+    const state = store.getState();
+    const timedAction = state && state.timedAction;
+
+    if ( timedAction ) {
+      window.setTimeout(() => {
+        store.dispatch( { type: timedAction } );
+      }, 2000 );
+      store.dispatch( actionTypes.CLEAR_TIMED_ACTION );
+    }
+  };
+}
+
 /**
  * Return a subscriber bound to the Redux store that
  * listens to game progress and decides whether to end the round or not.
