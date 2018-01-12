@@ -3,19 +3,24 @@ require('isomorphic-fetch');
 /**
  * Extract the pinyin from the HTML assuming a few things
  * about the structure - the node containing the pinyin is
- * the link after the link to pinyin.
+ * the link after the link to pinyin or is a link inside
+ * .pinyin-ts-form-of
  */
 function extractPinyin(text) {
   let textContent;
   const node = document.createElement( 'div' );
   node.innerHTML = text;
 
+  // e.g. https://en.wiktionary.org/wiki/%E8%89%B9
+  const pinyinNode = node.querySelector( '.pinyin-ts-form-of a:first-child' );
+  if ( pinyinNode ) {
+    return pinyinNode.textContent;
+  }
+  // else do it the harder way...
   const nodes = node.querySelectorAll( 'a' );
   Array.from( nodes ).forEach( ( anchor, i ) => {
     if (anchor.textContent.toLowerCase() === 'pinyin' ) {
-      if ( nodes[i+1] ) {
-        textContent = nodes[i+1].textContent;
-      }
+      textContent = nodes[i+1].textContent;
     }
   } );
   return textContent || text;
