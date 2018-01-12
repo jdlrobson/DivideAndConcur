@@ -36,10 +36,18 @@ function actionBoot() {
 }
 
 // updates state to add the character preview overlay overlay
-function actionRevealPronounciation( state, char ) {
+function actionRevealPronounciation( state, action ) {
+  let charWithoutPinyin;
+  const char = action.char;
+
+  if ( action.pinyin === undefined ) {
+    charWithoutPinyin = char;
+  }
   return Object.assign( {}, state, {
-    overlay: <CharacterPreviewOverlay char={char} />
+    charWithoutPinyin,
+    overlay: <CharacterPreviewOverlay char={char} pinyin={action.pinyin} />
   } );
+  
 }
 
 // clears the current overlay
@@ -113,7 +121,8 @@ export default ( state, action ) => {
     case actionTypes.GUESS_FLASHCARD_RIGHT.type:
       return actionAnswerCard( state, action );
     case actionTypes.REQUEST_PINYIN_START.type:
-      return actionRevealPronounciation( state, action.char );
+    case actionTypes.REQUEST_PINYIN_END.type:
+      return actionRevealPronounciation( state, action );
     // reset on boot
     case actionTypes.CLICK_ROOT_NODE.type:
       return clearOverlay( state );

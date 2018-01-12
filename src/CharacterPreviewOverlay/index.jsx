@@ -2,19 +2,13 @@
 import { Component, h } from 'preact';
 import './styles.less';
 
-import mcs from './../../mcs'
-
 export default class CharacterPreview extends Component {
-  componentDidMount() {
-    mcs.getPronounciation( this.props.char )
-      .then(( text ) => this.setState( { text } ));
-  }
   stopPropagation(ev) {
     ev.stopPropagation();
   }
   render() {
     const props = this.props;
-    let content = this.state.text;
+    let content = props.pinyin;
     if ( content === undefined ) {
       content = 'Loading...';
     } else if ( !content ) {

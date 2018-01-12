@@ -12,6 +12,10 @@ const REQUEST_PINYIN_START = {
   type: 'REQUEST_PINYIN_START'
 };
 
+const REQUEST_PINYIN_END = {
+  type: 'REQUEST_PINYIN_END'
+};
+
 const REVEAL_FLASHCARD = {
   type: 'REVEAL-FLASHCARD',
   text: 'A flashcard was clicked'
@@ -47,5 +51,6 @@ export default {
   GUESS_FLASHCARD_WRONG,
   REVEAL_FLASHCARD,
   REQUEST_PINYIN_START,
+  REQUEST_PINYIN_END,
   SAVE_PROGRESS
 };

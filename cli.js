@@ -1,6 +1,6 @@
 var util = require('util');
 var dict = require('./data/dictionary');
-const mcs = require('./mcs');
+const mcs = require('./src/mcs');
 
 const htmlToText = require('html-to-text');
 const chalk = require('chalk');

@@ -4,7 +4,7 @@ import { createStore } from 'redux'
 import Game from './Game'
 
 import reducer from './reducer'
-import { checkIfEndOfRound } from './subscribers';
+import { checkIfEndOfRound, checkIfPinyinNeeded } from './subscribers';
 
 import actionTypes from './actionTypes'
 
@@ -43,6 +43,7 @@ import 'preact/devtools'
 
   // setup subscribers
   store.subscribe( checkIfEndOfRound( store ) );
+  store.subscribe( checkIfPinyinNeeded( store ) );
 
   /**
    *******************************************
