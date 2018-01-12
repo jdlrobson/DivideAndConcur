@@ -35,7 +35,7 @@ function actionBoot() {
 // updates state to add the character preview overlay overlay
 function actionRevealPronounciation( state, action ) {
   let charWithoutPinyin;
-  const char = action.char;
+  const char = action.character;
 
   if ( action.pinyin === undefined ) {
     charWithoutPinyin = char;
@@ -56,27 +56,32 @@ function clearOverlay( state ) {
 
 // Reducer for when a card is answered
 function actionAnswerCard( state, action ) {
-  const char = action.char;
+  const char = action.character;
+  const isAnswered = true;
+  let isKnown = true;
 
   switch ( action.type ) {
     case actionTypes.GUESS_FLASHCARD_WRONG.type:
       memory.markAsDifficult( char );
+      isKnown = false;
     case actionTypes.GUESS_FLASHCARD_RIGHT.type:
       memory.markAsEasy( char );
   }
 
   return Object.assign( {}, state, {
+    cards: updateCardInCards( state.cards, action, { isAnswered, isKnown } ),
     highlighted: dict.toRadicals( char ),
     answered: state.answered + 1
   } );
 }
 
 function mapCard( character, isHighlighted, index ) {
+  const difficultyLevel = memory.getDifficulty(character);
   return {
     character,
     index,
     isHighlighted,
-    difficultyLevel: memory.getDifficulty(character),
+    difficultyLevel,
     english: dict.toEnglish(character)
   };
 }
@@ -120,12 +125,16 @@ function setGame( state, action ) {
   };
 }
 
+function updateCardInCards( cards, action, props ) {
+  return cards.map((card, i) => {
+    return action.character === card.character && action.index === i ?
+      Object.assign( {}, card,  props ) : card;
+  } );
+}
+
 function revealedFlashcard( state, action ) {
   return Object.assign( {}, state, {
-    cards: state.cards.map((card, i) => {
-      return action.character === card.character && action.index === i ?
-        Object.assign( {}, card,  { isSelected: true } ) : card;
-    } )
+    cards: updateCardInCards( state.cards, action, { isSelected: true } )
   } );
 }
 

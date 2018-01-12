@@ -12,19 +12,19 @@ class Card extends Component {
   };
   wrong(ev) {
     const props = this.props;
-    this.setState({done: true});
     props.dispatch( {
       type: props.actionTypes.GUESS_FLASHCARD_WRONG.type,
-      char: props.character
+      char: props.character,
+      index: props.index
     } );
     ev.stopPropagation();
   };
   tick(ev) {
     const props = this.props;
-    this.setState({done: true, knew: true});
     props.dispatch( {
       type: props.actionTypes.GUESS_FLASHCARD_RIGHT.type,
-      char: props.character
+      character: props.character,
+      index: props.index
     } );
     ev.stopPropagation();
   };
@@ -33,27 +33,26 @@ class Card extends Component {
 
     props.dispatch( {
       type: props.actionTypes.REQUEST_PINYIN_START.type,
-      char: props.character
+      character: props.character
     } );
     ev.stopPropagation();
   };
-  render() {
+  render(props) {
     const hidden = { display: 'none' };
-    const state = this.state;
     let className = 'card';
-    const props = this.props;
     let dLevel = props.difficultyLevel;
     const isEasy = dLevel < 0 ? true : false;
     const isKnown = dLevel < -4;
     const isSelected = props.isSelected;
     const isFrozen = props.isFrozen;
+    let done = props.isAnswered;
 
     if ( isEasy ) {
       dLevel = -dLevel;
     }
 
-    if ( state.done ) {
-      className += state.knew ? ' card-known' : ' card-unknown';
+    if ( done ) {
+      className += props.isKnown ? ' card-known' : ' card-unknown';
     }
     if ( props.isHighlighted ) {
       className += ' card-highlighted';
@@ -71,9 +70,9 @@ class Card extends Component {
           </div>
           <div key='lang' className='english' style={isSelected ? {} : hidden}>{props.english}</div>
           <div key='tick' className='tick button' onClick={this.tick.bind(this)}
-            style={isSelected && !state.done && !isKnown && !isFrozen ? {} : hidden}>✅</div>
+            style={isSelected && !done && !isKnown && !isFrozen ? {} : hidden}>✅</div>
           <div key='wrong' className='wrong button' onClick={this.wrong.bind(this)}
-            style={isSelected && !state.done && !isKnown && !isFrozen ? {} : hidden}>❌</div>
+            style={isSelected && !done && !isKnown && !isFrozen ? {} : hidden}>❌</div>
           <div key="pinyin" className="pinyin button" onClick={this.requestPidgin.bind(this)}>🔊</div>
       </div>
     );
