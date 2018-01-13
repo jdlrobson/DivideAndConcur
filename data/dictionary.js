@@ -21,7 +21,6 @@ function getDifficultyRating(word) {
 
 function rateWord(word, rating) {
 	difficulty[word] = rating;
-	return save();
 }
 
 /**
@@ -84,11 +83,7 @@ function saveWord( chinese, english ) {
 	return new Promise((resolve) => {
 		if ( chinese && english ) {
 			words[chinese] = english;
-			if ( !english || english === '?' ) {
-				rateWord(chinese, 2).then(() => resolve());
-			} else {
-				resolve();
-			}
+			resolve();
 		} else {
 			resolve();
 		}

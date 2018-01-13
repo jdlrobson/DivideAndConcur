@@ -94,14 +94,19 @@ DictionaryUtils.prototype = {
     var parts = [];
     Array.from(word).forEach((radical) => {
       var decomp = decompositions[radical];
+      // if a word was accidentally decomposed as itself
       if ( !decomp ) {
         // no decompositions possible, have reached smallest unit
         parts.push(radical);
       } else {
         // this radical itself is composed of different parts
         Array.from( decomp ).forEach((decomposedRadical) => {
-          var _decomposition = decompose( decomposedRadical );
-          parts = parts.concat( decompose( decomposedRadical ) );
+          if ( decomposedRadical !== word ) {
+            var _decomposition = decompose( decomposedRadical );
+            parts = parts.concat( decompose( decomposedRadical ) );
+          } else {
+            console.log('warning ' + word + ' decomposes to nothing or itself')
+          }
         });
       }
     });

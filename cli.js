@@ -4,6 +4,7 @@ const mcs = require('./src/mcs');
 const htmlToText = require('html-to-text');
 const chalk = require('chalk');
 var fs = require('fs');
+const strokeCount = require('./strokeCount' );
 
 function addDictionaryItem() {
 	return new Promise( ( resolve ) => {
@@ -21,7 +22,8 @@ function addDictionaryItem() {
 function rateWord() {
 	return getUserInput('What is the Chinese word you want to rate?').then((word) => {
 		return getUserInput('How difficult is that? (1+)').then((rating) => {
-			return dict.rateWord(word, parseInt(rating, 10));
+			dict.rateWord(word, parseInt(rating, 10));
+			return dict.save();
 		});
 	});
 }
@@ -106,7 +108,8 @@ function menu() {
 		'10: Expand a word',
 		'11: Missing definitions',
 		'12: Lookup word difficulty',
-		'13: Delete word'
+		'13: Delete word',
+		'14: Auto-assign difficulty'
 	];
 	getUserInput( '**********************\n' + options.join('\n') + '\n**********************' )
 		.then( ( val ) => {
@@ -156,14 +159,14 @@ function menu() {
 				case 11:
 					const missing = dict.missing();
 					console.log( `There are ${missing.length} words missing definitions without decompositions` );
-					missing.slice( 0, 10 ).forEach((char)=>console.log(char));
+					missing.sort(()=>Math.random() > 0.5 ? -1 : 1 ).slice( 0, 10 ).forEach((char)=>console.log(char));
 					menu();
 					break;
 				case 9:
 					getUserInput('Enter chinese character to increase difficulty for').then((word) => {
 						const diff = dict.getDifficultyRating(word) || 0;
 						dict.rateWord(word, diff + 1);
-						return menu()
+						return dict.save().then(()=>menu());
 					} );
 					break;
 				case 13:
@@ -172,6 +175,11 @@ function menu() {
 						return menu()
 					} );
 					break;
+				case 14:
+					getUserInput('Enter chinese character to count strokes for').then((word) => {
+						return rateWordsDifficultyByStrokeCount([word]).then(()=> menu());
+					} );
+					break
 				default:
 					feedback('Huh?');
 					menu();
@@ -179,17 +187,30 @@ function menu() {
 		});
 }
 
+function rateWordsDifficultyByStrokeCount(words) {
+	return new Promise((resolve) => {
+		strokeCount(words).then((counts) => {
+			Object.keys(counts).forEach((key) => {
+				if ( !dict.getDifficultyRating(key) ) {
+					dict.rateWord(key, counts[key]);
+				}
+			});
+			resolve();
+		});
+	});
+}
 if ( process.argv[2] ) {
 	fs.readFile(process.argv[2], 'utf-8', ( err, data ) => {
 		const json = JSON.parse( data );
 		let promises = [];
 		dict.load().then(() => {
 			json.forEach((word) => {
-				if ( !dict.getWord( word ) && !word.match( /[\—\:\+\─\：]/ ) ) {
+				if ( !dict.getWord( word ) && !word.match( /[\—\:\+\─\：\%\·\；\》\《\<\=\>\?\~\@\!\_\の\よ\う\な\だ\め\…\／\#\！\‧\　\’\‘\•]/ ) ) {
 					promises.push( dict.saveWord( word, '?' ) );
 				}
 			})
-			console.log('Imported', promises.length, 'words');
+			console.log( 'Added', promises.length, 'words');
+			promises.push( rateWordsDifficultyByStrokeCount( json ) );
 			Promise.all(promises).then(()=>dict.save());
 		});
 	} );
