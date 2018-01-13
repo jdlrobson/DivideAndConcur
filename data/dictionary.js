@@ -97,7 +97,12 @@ function getDecompositions() {
 	return utils.getDecompositions();
 }
 
+function missing() {
+	return utils.missing();
+}
+
 module.exports = {
+	missing,
 	getDecompositions: getDecompositions,
 	decompose: decompose,
 	rateWord: rateWord,

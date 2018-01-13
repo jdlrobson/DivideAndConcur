@@ -103,7 +103,8 @@ function menu() {
 		'7: Translate',
 		'8: Report difficulty of word',
 		'9: Lookup word difficulty',
-		'10: Expand a word'
+		'10: Expand a word',
+		'11: Missing definitions'
 	];
 	getUserInput( '**********************\n' + options.join('\n') + '\n**********************' )
 		.then( ( val ) => {
@@ -149,6 +150,12 @@ function menu() {
 					break;
 				case 10:
 					viewDecomposition().then(() => menu());
+					break;
+				case 11:
+					const missing = dict.missing();
+					console.log( `There are ${missing.length} words missing definitions without decompositions` );
+					missing.slice( 0, 10 ).forEach((char)=>console.log(char));
+					menu();
 					break;
 				default:
 					feedback('Huh?');

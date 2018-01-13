@@ -7,6 +7,10 @@ DictionaryUtils.prototype = {
   getDecompositions: function () {
     return this.decompositions;
   },
+  missing: function () {
+    return Object.keys( this.words )
+      .filter((word) => this.words[word] === '?' || !this.words[word] && !this.decompositions[word]);
+  },
   getWord: function ( word ) {
     return this.words[word];
   },
