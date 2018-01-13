@@ -9,7 +9,7 @@ DictionaryUtils.prototype = {
   },
   missing: function () {
     return Object.keys( this.words )
-      .filter((word) => this.words[word] === '?' || !this.words[word] && !this.decompositions[word]);
+      .filter((word) => (this.words[word] === '?' || !this.words[word] ) && !this.decompositions[word]);
   },
   getWord: function ( word ) {
     return this.words[word];

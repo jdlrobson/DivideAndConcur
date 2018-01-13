@@ -77,7 +77,11 @@ function saveWord( chinese, english ) {
 	return new Promise((resolve) => {
 		if ( chinese && english ) {
 			words[chinese] = english;
-			save().then(() => resolve());
+			if ( !english || english === '?' ) {
+				rateWord(chinese, 2).then(() => resolve());
+			} else {
+				resolve();
+			}
 		} else {
 			resolve();
 		}
