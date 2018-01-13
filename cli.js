@@ -102,9 +102,11 @@ function menu() {
 		'6: Decompose chinese word',
 		'7: Translate',
 		'8: Report difficulty of word',
-		'9: Lookup word difficulty',
+		'9: Increase difficulty of word',
 		'10: Expand a word',
-		'11: Missing definitions'
+		'11: Missing definitions',
+		'12: Lookup word difficulty',
+		'13: Delete word'
 	];
 	getUserInput( '**********************\n' + options.join('\n') + '\n**********************' )
 		.then( ( val ) => {
@@ -142,7 +144,7 @@ function menu() {
 				case 8:
 					rateWord().then(() => menu());
 					break;
-				case 9:
+				case 12:
 					getUserInput('Enter chinese character').then((msg) => {
 						feedback( dict.getDifficultyRating(msg) )
 						return menu()
@@ -157,6 +159,19 @@ function menu() {
 					missing.slice( 0, 10 ).forEach((char)=>console.log(char));
 					menu();
 					break;
+				case 9:
+					getUserInput('Enter chinese character to increase difficulty for').then((word) => {
+						const diff = dict.getDifficultyRating(word) || 0;
+						dict.rateWord(word, diff + 1);
+						return menu()
+					} );
+					break;
+				case 13:
+					getUserInput('Enter chinese character to remove').then((word) => {
+						dict.removeWord(word);
+						return menu()
+					} );
+					break;
 				default:
 					feedback('Huh?');
 					menu();
@@ -170,7 +185,7 @@ if ( process.argv[2] ) {
 		let promises = [];
 		dict.load().then(() => {
 			json.forEach((word) => {
-				if ( !dict.getWord( word ) && !word.match( /[\—\:\+\─]/ ) ) {
+				if ( !dict.getWord( word ) && !word.match( /[\—\:\+\─\：]/ ) ) {
 					promises.push( dict.saveWord( word, '?' ) );
 				}
 			})

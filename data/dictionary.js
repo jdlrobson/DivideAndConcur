@@ -73,6 +73,13 @@ function save() {
 	});
 }
 
+function removeWord( chinese ) {
+	delete words[chinese];
+	delete difficulty[chinese];
+	delete decompositions[chinese];
+	save();
+}
+
 function saveWord( chinese, english ) {
 	return new Promise((resolve) => {
 		if ( chinese && english ) {
@@ -107,6 +114,7 @@ function missing() {
 
 module.exports = {
 	missing,
+	removeWord,
 	getDecompositions: getDecompositions,
 	decompose: decompose,
 	rateWord: rateWord,
