@@ -114,7 +114,7 @@ function dealCards( state ) {
 
     return Object.assign( {},
       dealCards( state ),
-      { difficulty }
+      { difficulty: dealer.currentDifficultyLevel }
     );
   } else if ( cards.length < NUM_CARDS_PER_LEVEL ) {
       dealer.load( wordSize, difficulty + 1 );
