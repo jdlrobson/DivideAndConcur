@@ -34,13 +34,13 @@ DictionaryUtils.prototype = {
       Array.from( decomp ).forEach((radical) => {
         if ( words[radical] ) {
           // can it be decomposed further?
-          if ( decompositions[radical] ) {
+          if ( radical && decompositions[radical] ) {
             c.push( translate( radical ) );
           } else {
             c.push( words[radical] );
           }
         } else {
-          if ( decompositions[radical] ) {
+          if ( radical && decompositions[radical] ) {
             c.push( translate(radical) );
           } else {
             c.push( '?' );
