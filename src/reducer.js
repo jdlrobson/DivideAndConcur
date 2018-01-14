@@ -3,12 +3,12 @@ import { Component, h } from 'preact';
 
 import actionTypes from './actionTypes';
 import Memory from './Memory'
-import Dealer, { NUM_CARDS_PER_LEVEL } from './Dealer'
 import Dictionary from './Dictionary'
 
 import CharacterPreviewOverlay from './ui/CharacterPreviewOverlay'
 import { FLIP_CARDS, MATCH_PAIRS } from './ui/GameChooser'
 
+const NUM_CARDS_PER_LEVEL = 10;
 let memory;
 let dealer;
 let dict;
@@ -18,16 +18,10 @@ function loadMemoryData() {
   return memory ? JSON.parse( memory ) : false;
 }
 
-function saveMemoryData(newMemory) {
-  localStorage.setItem('memory', JSON.stringify( memory.toJSON() ));
-}
-
 // Setups state with the required globals for managing a game
 function actionBoot() {
   dict = new Dictionary();
   memory = new Memory(loadMemoryData());
-  dealer = new Dealer( dict, memory );
-  dealer.load(0, 0);
 
   return setGame();
 }
@@ -77,22 +71,60 @@ function actionAnswerCard( state, action ) {
 function mapCard( character, isHighlighted ) {
   const difficultyLevel = memory.getDifficulty(character);
   return {
+    isKnown: memory.knowsWord( character ),
     character,
     isHighlighted,
     difficultyLevel,
-    english: dict.toEnglish(character)
+    english: dict.utils.getWord(character)
   };
 }
 
 function addKnownWordCount(state) {
   const prev = state.previous;
   const cards = state.cards;
-  let knownWordCount = cards.filter((card)=>card.isKnown).length;
+  const knownWordCount = cards.filter((card)=>card.isKnown).length + prev.length;
 
-  prev.forEach((round) => {
-    knownWordCount += round.length
-  })
   return Object.assign({}, state, { knownWordCount } );
+}
+
+function makeCardsFromCharacters(state, chars) {
+  return chars.map((char) => mapCard(char, state.highlighted.indexOf(char) > -1));
+}
+
+function findPackStartPosition( pack ) {
+  let i = 0;
+  while( memory.knowsWord( pack[i] ) ) {
+    i += 1;
+  }
+  return i;
+}
+
+function fastForwardToPackPosition( state ) {
+  const difficulty = state.difficulty;
+  const wordSize = state.wordSize;
+  const pack = dict.utils.getWords(wordSize, difficulty);
+  const packPosition = findPackStartPosition(pack);
+  const previous = state.previous || [];
+
+
+  if ( pack.length === 0 ) {
+    // we ran out on this difficulty
+    throw 'ow end of radicals';
+  } else if ( packPosition >= pack.length ) {
+    return fastForwardToPackPosition( {
+      wordSize,
+      previous: pack.concat( previous ),
+      difficulty: difficulty + 1
+    } )
+  } else {
+    return {
+      pack,
+      previous,
+      packPosition,
+      wordSize,
+      difficulty
+    };
+  }
 }
 
 /**
@@ -100,33 +132,20 @@ function addKnownWordCount(state) {
  * sorted by difficulty level
  */
 function dealCards( state ) {
-  const cards = dealer.deal().map((char, i)=>mapCard(char, state.highlighted.indexOf(char) > -1));
-  const level = dealer.getLevel();
-  const previous = dealer.getHistory().map((round) => round.map((char)=>mapCard(char, state.highlighted.indexOf(char) > -1)));
-  const wordSize = dealer.currentWordSize;
-  const difficulty = cards.length ? dealer.currentDifficultyLevel
-    : dealer.currentDifficultyLevel + 1;
+  const position = fastForwardToPackPosition(Object.assign({}, state,
+    { difficulty: 0, wordSize: 0, previous: [] } ));
+  const pack = position.pack;
+  const packPosition = position.packPosition;
+  const cards = makeCardsFromCharacters( state, pack.slice( packPosition, packPosition + NUM_CARDS_PER_LEVEL ) );
+  const answeredCardsInCurrentPack = pack.slice( 0, packPosition );
+  const previous = makeCardsFromCharacters( state, answeredCardsInCurrentPack.concat( position.previous ) );
 
-  saveMemoryData();
-  // The current deck was depleted so let's get a new deck
-  if ( !cards.length ) {
-    dealer.load( wordSize, difficulty );
-
-    return Object.assign( {},
-      dealCards( state ),
-      { difficulty: dealer.currentDifficultyLevel }
-    );
-  } else if ( cards.length < NUM_CARDS_PER_LEVEL ) {
-      dealer.load( wordSize, difficulty + 1 );
-      return Object.assign( {}, dealCards( state ), { difficulty: difficulty + 1 } );
-  } else {
-    // if all have been answered lets deal again..
-    return addKnownWordCount(
-      Object.assign( {}, state, {
-        wordSize, difficulty, level, cards, previous
-      })
-    );
-  }
+  // if all have been answered lets deal again..
+  return addKnownWordCount(
+    Object.assign( {}, state, position, {
+      cards, previous
+    })
+  );
 }
 
 function setGame( state, action ) {
@@ -230,16 +249,27 @@ function addIndexToCards(state) {
     cards: state.cards.map((card, i) => Object.assign({}, card, { index: i } ))
   } )
 }
+
+function requestSave(state) {
+  // @todo: Move to subscriber when Memory class has been moved into state
+  localStorage.setItem('memory', JSON.stringify( memory.toJSON() ));
+  return Object.assign({}, state, { isDirty: true } );
+}
+function saveDone(state) {
+  return Object.assign({}, state, { isDirty: false } );
+}
 function newRound(state) {
   if ( state.game === MATCH_PAIRS ) {
-    return addIndexToCards(shuffleCards( freezeCards( cloneCards( dealCards( state ) ) ) ));
+    return requestSave( addIndexToCards(shuffleCards( freezeCards( cloneCards( dealCards( state ) ) ) ) ) );
   } else {
-    return addIndexToCards(dealCards( state ));
+    return requestSave( addIndexToCards(dealCards( state )) );
   }
 }
 
 export default ( state, action ) => {
   switch ( action.type ) {
+    case actionTypes.SAVE_COMPLETE.type:
+      return saveDone(state);
     case actionTypes.DESELECT_ALL_UNANSWERED_CARDS.type:
       return actionDeselectUnansweredCards( state, action );
     case actionTypes.CLEAR_TIMED_ACTION.type:

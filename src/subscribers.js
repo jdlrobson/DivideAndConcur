@@ -17,6 +17,20 @@ export function checkForTimedAction( store ) {
 
 /**
  * Return a subscriber bound to the Redux store that
+ * listens for a request to save and saves when needed.
+ */
+export function checkForSave( store ) {
+  return () => {
+    const state = store.getState();
+
+    if ( state.isDirty ) {
+      store.dispatch( actionTypes.SAVE_COMPLETE );
+    }
+  };
+}
+
+/**
+ * Return a subscriber bound to the Redux store that
  * listens to game progress and decides whether to end the round or not.
  */
 export function checkIfEndOfRound( store ) {

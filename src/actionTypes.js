@@ -54,8 +54,13 @@ const SWITCH_GAME = {
   type: 'SWITCH_GAME'
 };
 
+const SAVE_COMPLETE = {
+  type: 'SAVE_COMPLETE'
+};
+
 export default {
   BOOT,
+  SAVE_COMPLETE,
   CLEAR_TIMED_ACTION,
   CLICK_ROOT_NODE,
   DESELECT_ALL_UNANSWERED_CARDS,

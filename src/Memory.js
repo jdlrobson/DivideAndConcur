@@ -14,18 +14,18 @@ export default class Memory {
     return { answers: this.answers }
   }
   /**
+   * @param {String} words
+   */
+  knowsWord( word ) {
+    return this.answers[word] <= -ROUNDS_BEFORE_KNOWN;
+  }
+  /**
    * Check if the user knows all the words
    * @param {Array} words
    * @return {Boolean}
    */
   knowsWords(words) {
-    var answers = this.answers;
-    /**
-     * @param {String} words
-     */
-    function knowsWord(word) {
-      return answers[word] <= -ROUNDS_BEFORE_KNOWN;
-    }
+    var knowsWord = this.knowsWord.bind( this );
 
     return words.reduce((accumulator, word)=> {
       return knowsWord(word) && accumulator;

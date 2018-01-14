@@ -24,13 +24,8 @@ export default class Game extends Component {
        [word size = {props.wordSize} difficultyLevel {props.difficulty}]</div>
       {cards || loader }
       <h3>Previous history</h3>
-      {
-        prev.map((cards, i)=>{
-          const round = i + 1;
-          return <FlashcardRound key={'round-' + round}
-            {...props} cards={cards} round={round} />
-        })
-      }
+      <FlashcardRound key={'round-past'}
+          {...props} cards={props.previous} round={1} />
       </div>
     );
   }

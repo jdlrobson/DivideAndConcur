@@ -4,7 +4,7 @@ import { createStore } from 'redux'
 import GameChooser from './ui/GameChooser'
 
 import reducer from './reducer'
-import { checkIfEndOfRound,
+import { checkIfEndOfRound, checkForSave,
   checkIfPinyinNeeded, checkForTimedAction } from './subscribers';
 
 import actionTypes from './actionTypes'
@@ -39,6 +39,7 @@ import 'preact/devtools'
   store.subscribe( checkIfEndOfRound( store ) );
   store.subscribe( checkIfPinyinNeeded( store ) );
   store.subscribe( checkForTimedAction( store ) );
+  store.subscribe( checkForSave( store ) );
 
   /**
    *******************************************
