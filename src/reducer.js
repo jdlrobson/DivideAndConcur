@@ -108,8 +108,13 @@ function fastForwardToPackPosition( state ) {
 
 
   if ( pack.length === 0 ) {
-    // we ran out on this difficulty
-    throw 'ow end of radicals';
+    // we ran out on this difficulty (there may be more but they are unreachable with current words)
+    // given assumption every difficulty has at least one word
+    return fastForwardToPackPosition( {
+      wordSize: wordSize + 1,
+      previous: pack.concat( previous ),
+      difficulty: 0
+    } );
   } else if ( packPosition >= pack.length ) {
     return fastForwardToPackPosition( {
       wordSize,
