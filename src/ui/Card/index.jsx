@@ -14,7 +14,7 @@ class Card extends Component {
     const props = this.props;
     props.dispatch( {
       type: props.actionTypes.GUESS_FLASHCARD_WRONG.type,
-      char: props.character,
+      character: props.character,
       index: props.index
     } );
     ev.stopPropagation();
