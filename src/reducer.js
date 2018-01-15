@@ -6,7 +6,7 @@ import Memory from './Memory'
 import Dictionary from './Dictionary'
 
 import CharacterPreviewOverlay from './ui/CharacterPreviewOverlay'
-import { FLIP_CARDS, MATCH_PAIRS } from './ui/GameChooser'
+import { FLIP_CARDS, MATCH_PAIRS, REVISE } from './ui/GameChooser'
 
 const NUM_CARDS_PER_LEVEL = 10;
 let memory;
@@ -132,6 +132,11 @@ function fastForwardToPackPosition( state ) {
   }
 }
 
+function dealKnownCards(state, total) {
+  const known = dict.utils.all().filter((char)=> memory.knowsWord( char ));
+  const cards = makeCardsFromCharacters(state, known);
+  return Object.assign({}, state, { cards, previous: [] } );
+}
 /**
  * Deal ten cards from the dictionary that the user is unfamiliar with
  * sorted by difficulty level
@@ -154,12 +159,13 @@ function dealCards( state ) {
 }
 
 function setGame( state, action ) {
-  return {
+  return newRound({
     game: action ? action.game : FLIP_CARDS,
     highlighted: [],
+    previous: [],
     cards: [],
     maxSize: dict.maxSize()
-  };
+  } );
 }
 
 function updateCardInCards( cards, action, props ) {
@@ -268,6 +274,11 @@ function saveDone(state) {
   return Object.assign({}, state, { isDirty: false } );
 }
 
+function cutCardDeck(state, total) {
+  const cards = state.cards.slice(0,total);
+  return Object.assign({}, state, { cards })
+}
+
 function newRound(state) {
   if ( state.game === MATCH_PAIRS ) {
     return requestSave(
@@ -276,8 +287,12 @@ function newRound(state) {
         actionTypes.FLIP_CARDS.type
       )
     );
-  } else {
+  } else if (state.game === FLIP_CARDS ) {
     return requestSave( addIndexToCards(dealCards( state )) );
+  } else if (state.game === REVISE ) {
+    return requestSave( addIndexToCards( cutCardDeck( shuffleCards( dealKnownCards(state) ), 10 ) ) );
+  } else {
+    throw 'unknown game';
   }
 }
 function flipCards(state) {
@@ -295,26 +310,35 @@ export default ( state, action ) => {
       return actionDeselectUnansweredCards( state, action );
     case actionTypes.CLEAR_TIMED_ACTION.type:
       return Object.assign({}, state, { timedAction: undefined } );
-    case actionTypes.REVEAL_FLASHCARD.type:
-      return state.isPaused ? state : revealedFlashcard( state, action );
-    case actionTypes.SWITCH_GAME.type:
-      return setGame( state, action );
     case actionTypes.END_ROUND.type:
     case actionTypes.START_ROUND.type:
       return newRound(state);
     case actionTypes.GUESS_FLASHCARD_WRONG.type:
     case actionTypes.GUESS_FLASHCARD_RIGHT.type:
       return actionAnswerCard( state, action );
-    case actionTypes.REQUEST_PINYIN_START.type:
     case actionTypes.REQUEST_PINYIN_END.type:
       return actionRevealPronounciation( state, action );
     // reset on boot
-    case actionTypes.CLICK_ROOT_NODE.type:
-      return clearOverlay( state );
-    // reset on boot
     case actionTypes.BOOT.type:
       return actionBoot();
-    default:
-      return state;
   }
+  // All these actions are user driven and will not work if paused.
+  if ( !action.isPaused ) {
+    switch ( action.type ) {
+      case actionTypes.REVEAL_FLASHCARD.type:
+        return state.isPaused ? state : revealedFlashcard( state, action );
+      case actionTypes.SWITCH_GAME.type:
+        return setGame( state, action );
+      case actionTypes.GUESS_FLASHCARD_WRONG.type:
+      case actionTypes.GUESS_FLASHCARD_RIGHT.type:
+        return actionAnswerCard( state, action );
+      case actionTypes.REQUEST_PINYIN_START.type:
+        return actionRevealPronounciation( state, action );
+      // reset on boot
+      case actionTypes.CLICK_ROOT_NODE.type:
+        return clearOverlay( state );
+    }
+  }
+  return state;
 };
+

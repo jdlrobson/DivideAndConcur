@@ -6,6 +6,7 @@ import ProgressBar from './ProgressBar'
 
 export const MATCH_PAIRS = 'pairs';
 export const FLIP_CARDS = 'flip';
+export const REVISE = 'revise';
 
 export default class GameChooser extends Component {
   refresh() {
@@ -31,8 +32,9 @@ export default class GameChooser extends Component {
         <div>
           <button disabled={game === FLIP_CARDS} onClick={(ev)=>this.setGame( FLIP_CARDS )}>Flip</button>
           <button disabled={game === MATCH_PAIRS} onClick={(ev)=>this.setGame( MATCH_PAIRS )}>Pairs</button>
+          <button disabled={game === REVISE} onClick={(ev)=>this.setGame( REVISE )}>Revise</button>
         </div>
-        { game === FLIP_CARDS && <Game {...props} {...state} /> }
+        { ( game === FLIP_CARDS || game === REVISE ) && <Game {...props} {...state} /> }
         { game === MATCH_PAIRS && <GameMatchPairs {...props} {...state} /> }
       </div>
     );

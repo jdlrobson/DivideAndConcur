@@ -23,7 +23,7 @@ export default class Game extends Component {
       <div className="debug-tools">Level {props.level}&nbsp;
        [word size = {props.wordSize} difficultyLevel {props.difficulty}]</div>
       {cards || loader }
-      <h3>Previous history</h3>
+      {props.previous && props.previous.length && <h3>Previous history</h3>}
       <FlashcardRound key={'round-past'}
           {...props} cards={props.previous} round={1} />
       </div>
