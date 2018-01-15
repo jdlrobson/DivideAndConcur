@@ -135,7 +135,7 @@ function fastForwardToPackPosition( state ) {
 function dealKnownCards(state, total) {
   const known = dict.utils.all().filter((char)=> memory.knowsWord( char ));
   const cards = makeCardsFromCharacters(state, known);
-  return Object.assign({}, state, { cards, previous: [] } );
+  return addKnownWordCount( Object.assign({}, state, { cards, previous: [] } ) );
 }
 /**
  * Deal ten cards from the dictionary that the user is unfamiliar with
