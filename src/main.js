@@ -1,6 +1,6 @@
 import { h, render, Component } from 'preact';
 import { createStore } from 'redux'
-
+import { Provider } from 'preact-redux'
 import GameChooser from './ui/GameChooser'
 
 import reducer from './reducer'
@@ -26,13 +26,11 @@ import 'preact/devtools'
   const renderGame = () => {
     document.getElementById('container').innerHTML = '';
     render(
-      <GameChooser
-        store={store}
-        dispatch={store.dispatch}
-        actionTypes={actionTypes}
-      />,
+      <Provider store={store}>
+        <GameChooser actionTypes={actionTypes} />,
+       </Provider>,
       document.getElementById('container')
-    );
+   );
   }
 
   // setup subscribers

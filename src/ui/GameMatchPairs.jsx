@@ -1,10 +1,11 @@
 /** @jsx h */
 import { Component, h } from 'preact';
+import { connect } from 'preact-redux';
 import Card from './Card'
 
-export default class GameMatchPairs extends Component {
+class GameMatchPairs extends Component {
   componentDidMount() {
-    this.props.dispatch( this.props.actionTypes.START_ROUND );
+    this.props.onStart();
   }
   render(props) {
     const cards = props.cards;
@@ -18,3 +19,13 @@ export default class GameMatchPairs extends Component {
     )
   }
 }
+
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    onStart: () => {
+      dispatch(props.actionTypes.START_ROUND)
+    }
+  };
+};
+
+export default connect( null, mapDispatchToProps )(GameMatchPairs);

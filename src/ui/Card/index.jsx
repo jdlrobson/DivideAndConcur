@@ -1,40 +1,29 @@
 /** @jsx h */
 import { Component, h } from 'preact';
+import { connect } from 'preact-redux';
 import './styles.less';
 
 class Card extends Component {
   onClick(ev) {
     const props = this.props;
     if ( !props.isSelected ) {
-      props.dispatch( Object.assign( {}, props.actionTypes.REVEAL_FLASHCARD,
-        { character: props.character, index: props.index } ) );
+      props.onSelect( props.character, props.index );
     }
   };
   wrong(ev) {
     const props = this.props;
-    props.dispatch( {
-      type: props.actionTypes.GUESS_FLASHCARD_WRONG.type,
-      character: props.character,
-      index: props.index
-    } );
+    props.onAnswered( props.character, props.index, false );
     ev.stopPropagation();
   };
   tick(ev) {
     const props = this.props;
-    props.dispatch( {
-      type: props.actionTypes.GUESS_FLASHCARD_RIGHT.type,
-      character: props.character,
-      index: props.index
-    } );
+    props.onAnswered( props.character, props.index, true );
     ev.stopPropagation();
   };
   requestPidgin(ev) {
     const props = this.props;
 
-    props.dispatch( {
-      type: props.actionTypes.REQUEST_PINYIN_START.type,
-      character: props.character
-    } );
+    props.onClickListen( props.character );
     ev.stopPropagation();
   };
   render(props) {
@@ -85,4 +74,31 @@ class Card extends Component {
   }
 }
 
-export default Card;
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    onSelect: ( character, index ) => {
+      dispatch( Object.assign( {}, props.actionTypes.REVEAL_FLASHCARD,
+        { character, index } )
+      );
+    },
+    onClickListen: ( character ) => {
+      dispatch( {
+        type: props.actionTypes.REQUEST_PINYIN_START.type,
+        character
+      } );
+    },
+    onAnswered: ( character, index, isCorrect ) => {
+      const action = isCorrect ? props.actionTypes.GUESS_FLASHCARD_RIGHT
+        : props.actionTypes.GUESS_FLASHCARD_WRONG;
+
+      dispatch( {
+        type: action.type,
+        character,
+        index
+      } );
+    }
+  };
+};
+
+export default connect( null, mapDispatchToProps )(Card);
+

@@ -1,17 +1,15 @@
 /** @jsx h */
 import { Component, h } from 'preact';
+import { connect } from 'preact-redux';
 import Card from './Card'
 import FlashcardRound from './FlashcardRound'
 import './game.less'
 
 const NUM_CARDS_PER_LEVEL = 10;
 
-export default class Game extends Component {
+class Game extends Component {
   componentDidMount() {
-    this.props.dispatch( this.props.actionTypes.START_ROUND );
-  }
-  onGameClick() {
-    this.props.dispatch( this.props.actionTypes.CLICK_ROOT_NODE );
+    this.props.onStart();
   }
   render(props) {
     const cards = props.cards ? <FlashcardRound {...props} round={0} /> : false;
@@ -19,7 +17,7 @@ export default class Game extends Component {
     const prev = props.previous || [];
 
     return (
-      <div className="game" onClick={this.onGameClick.bind(this)}>
+      <div className="game" onClick={props.onCanvasClick}>
       <div className="debug-tools">Level {props.level}&nbsp;
        [word size = {props.wordSize} difficultyLevel {props.difficulty}]</div>
       {cards || loader }
@@ -30,3 +28,13 @@ export default class Game extends Component {
     );
   }
 }
+
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    onStart: () => {
+      dispatch(props.actionTypes.START_ROUND);
+    }
+  };
+};
+
+export default connect( null, mapDispatchToProps )(Game);
