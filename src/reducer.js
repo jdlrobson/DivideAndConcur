@@ -277,7 +277,7 @@ function newRound(state) {
 }
 function flipCards(state) {
   const cards = state.cards.map((card) => Object.assign({}, card, { isFlipped: true, isSelected: false }));
-  return Object.assign({}, state, { cards } );
+  return Object.assign({}, state, { cards, isPaused: false } );
 }
 
 export default ( state, action ) => {
