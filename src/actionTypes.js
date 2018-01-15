@@ -46,6 +46,10 @@ const CLEAR_TIMED_ACTION = {
   type: 'CLEAR_TIMED_ACTION'
 };
 
+const FLIP_CARDS = {
+  type: 'FLIP_CARDS'
+};
+
 const DESELECT_ALL_UNANSWERED_CARDS = {
   type: 'DESELECT_ALL_UNANSWERED_CARDS'
 };
@@ -60,6 +64,7 @@ const SAVE_COMPLETE = {
 
 export default {
   BOOT,
+  FLIP_CARDS,
   SAVE_COMPLETE,
   CLEAR_TIMED_ACTION,
   CLICK_ROOT_NODE,

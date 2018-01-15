@@ -182,9 +182,13 @@ function pausePlay( state ) {
   return Object.assign( {}, state, { isPaused: true } );
 }
 
-function queueDeselectOfUnansweredCards( state ) {
+function addTimedAction( state, timedAction ) {
   return Object.assign( {}, state, { isPaused: true,
-    timedAction: actionTypes.DESELECT_ALL_UNANSWERED_CARDS.type } );
+    timedAction } );
+}
+
+function queueDeselectOfUnansweredCards( state ) {
+  return addTimedAction( state, actionTypes.DESELECT_ALL_UNANSWERED_CARDS.type );
 }
 
 function actionDeselectUnansweredCards( state ) {
@@ -258,16 +262,28 @@ function requestSave(state) {
 function saveDone(state) {
   return Object.assign({}, state, { isDirty: false } );
 }
+
 function newRound(state) {
   if ( state.game === MATCH_PAIRS ) {
-    return requestSave( addIndexToCards(shuffleCards( freezeCards( cloneCards( dealCards( state ) ) ) ) ) );
+    return requestSave(
+      addTimedAction(
+        addIndexToCards( shuffleCards( freezeCards( cloneCards( dealCards( state ) ) ) ) ),
+        actionTypes.FLIP_CARDS.type
+      )
+    );
   } else {
     return requestSave( addIndexToCards(dealCards( state )) );
   }
 }
+function flipCards(state) {
+  const cards = state.cards.map((card) => Object.assign({}, card, { isFlipped: true, isSelected: false }));
+  return Object.assign({}, state, { cards } );
+}
 
 export default ( state, action ) => {
   switch ( action.type ) {
+    case actionTypes.FLIP_CARDS.type:
+      return flipCards(state);
     case actionTypes.SAVE_COMPLETE.type:
       return saveDone(state);
     case actionTypes.DESELECT_ALL_UNANSWERED_CARDS.type:

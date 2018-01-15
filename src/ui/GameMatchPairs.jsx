@@ -12,7 +12,7 @@ export default class GameMatchPairs extends Component {
     return (
       <div>
       {
-        cards.map((card) => <Card {...props} {...card} isFlipped={true} /> )
+        cards.map((card) => <Card isSelected={true} {...props} {...card}/> )
       }
       </div>
     )
