@@ -4,11 +4,14 @@ function DictionaryUtils( words, decompositions, difficulties ) {
   this.difficulties = difficulties;
 }
 DictionaryUtils.prototype = {
+  all: function () {
+    return Object.keys(this.words);
+  },
   getDecompositions: function () {
     return this.decompositions;
   },
   missing: function () {
-    return Object.keys( this.words )
+    return this.all()
       .filter((word) => ( ( !this.words[word] || this.words[word] === '?' ) || !this.words[word] ) && !this.decompositions[word]);
   },
   getWord: function ( word ) {
