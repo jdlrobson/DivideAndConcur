@@ -10,12 +10,10 @@ import { FLIP_CARDS, MATCH_PAIRS, REVISE } from './ui/GameChooser'
 
 const NUM_CARDS_PER_LEVEL = 10;
 let memory;
-let dealer;
-let dict;
+let dict = new Dictionary();
 
 // Setups state with the required globals for managing a game
 function actionBoot( state, action ) {
-  dict = new Dictionary();
   memory = new Memory(action.userData);
 
   return setGame();
