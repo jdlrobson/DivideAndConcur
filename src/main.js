@@ -16,6 +16,11 @@ const store = createStore( reducer,
 
 import 'preact/devtools'
 
+function action(actionType, data) {
+  return Object.assign( {}, {
+    type: typeof actionType === 'string' ? actionType : actionType.type
+  }, data );
+}
 
 (function () {
   /**
@@ -44,7 +49,10 @@ import 'preact/devtools'
    * DISPATCH initial event(s)
    *******************************************
    */
-  store.dispatch( actionTypes.BOOT );
+  const memory = localStorage.getItem('memory');
+  const userData = memory ? JSON.parse( memory ) : false;
+
+  store.dispatch( action( actionTypes.BOOT, { userData } ) );
   renderGame();
 }());
 

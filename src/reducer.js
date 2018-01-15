@@ -13,15 +13,10 @@ let memory;
 let dealer;
 let dict;
 
-function loadMemoryData() {
-  const memory = localStorage.getItem('memory');
-  return memory ? JSON.parse( memory ) : false;
-}
-
 // Setups state with the required globals for managing a game
-function actionBoot() {
+function actionBoot( state, action ) {
   dict = new Dictionary();
-  memory = new Memory(loadMemoryData());
+  memory = new Memory(action.userData);
 
   return setGame();
 }
@@ -266,12 +261,10 @@ function addIndexToCards(state) {
 }
 
 function requestSave(state) {
-  // @todo: Move to subscriber when Memory class has been moved into state
-  localStorage.setItem('memory', JSON.stringify( memory.toJSON() ));
-  return Object.assign({}, state, { isDirty: true } );
+  return Object.assign({}, state, { isDirty: true, dataToSave: memory.toJSON() } );
 }
 function saveDone(state) {
-  return Object.assign({}, state, { isDirty: false } );
+  return Object.assign({}, state, { isDirty: false, dataToSave: undefined } );
 }
 
 function cutCardDeck(state, total) {
@@ -320,7 +313,7 @@ export default ( state, action ) => {
       return actionRevealPronounciation( state, action );
     // reset on boot
     case actionTypes.BOOT.type:
-      return actionBoot();
+      return actionBoot( state, action );
   }
   // All these actions are user driven and will not work if paused.
   if ( !action.isPaused ) {

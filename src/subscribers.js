@@ -24,7 +24,12 @@ export function checkForSave( store ) {
     const state = store.getState();
 
     if ( state.isDirty ) {
-      store.dispatch( actionTypes.SAVE_COMPLETE );
+      if ( state.dataToSave ) {
+        localStorage.setItem('memory', JSON.stringify( state.dataToSave ));
+        store.dispatch( actionTypes.SAVE_COMPLETE );
+      } else {
+        throw 'An unexpected error occurred.'
+      }
     }
   };
 }
