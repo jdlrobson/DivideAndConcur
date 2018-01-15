@@ -159,7 +159,7 @@ function menu() {
 				case 11:
 					const missing = dict.missing();
 					console.log( `There are ${missing.length} words missing definitions without decompositions` );
-					missing.sort(()=>Math.random() > 0.5 ? -1 : 1 ).slice( 0, 10 ).forEach((char)=>console.log(char));
+					console.log( missing.sort(()=>Math.random() > 0.5 ? -1 : 1 ).join('   ' ) );
 					menu();
 					break;
 				case 9:
