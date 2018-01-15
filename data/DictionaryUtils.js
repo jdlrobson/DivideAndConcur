@@ -9,7 +9,7 @@ DictionaryUtils.prototype = {
   },
   missing: function () {
     return Object.keys( this.words )
-      .filter((word) => (this.words[word] === '?' || !this.words[word] ) && !this.decompositions[word]);
+      .filter((word) => ( ( !this.words[word] || this.words[word] === '?' ) || !this.words[word] ) && !this.decompositions[word]);
   },
   getWord: function ( word ) {
     return this.words[word];
@@ -41,7 +41,7 @@ DictionaryUtils.prototype = {
           }
         } else {
           if ( radical && decompositions[radical] ) {
-            c.push( translate(radical) );
+            c.push( translate(radical)  );
           } else {
             c.push( '?' );
           }
