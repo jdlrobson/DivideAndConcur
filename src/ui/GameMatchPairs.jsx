@@ -2,6 +2,7 @@
 import { Component, h } from 'preact';
 import { connect } from 'preact-redux';
 import Card from './Card'
+import actionTypes from './../actionTypes';
 
 class GameMatchPairs extends Component {
   componentDidMount() {
@@ -13,19 +14,25 @@ class GameMatchPairs extends Component {
     return (
       <div>
       {
-        cards.map((card) => <Card isSelected={true} {...props} {...card}/> )
+        cards.map((card) => <Card isSelected={true} {...card}/> )
       }
       </div>
     )
   }
 }
 
+const mapStateToProps = (state, props) => {
+  const { cards } = state;
+
+  return Object.assign( {}, props, { cards } );
+};
+
 const mapDispatchToProps = (dispatch, props) => {
   return {
     onStart: () => {
-      dispatch(props.actionTypes.START_ROUND)
+      dispatch(actionTypes.START_ROUND)
     }
   };
 };
 
-export default connect( null, mapDispatchToProps )(GameMatchPairs);
+export default connect( mapStateToProps, mapDispatchToProps )(GameMatchPairs);

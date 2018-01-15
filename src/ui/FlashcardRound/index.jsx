@@ -7,7 +7,7 @@ class FlashcardRound extends Component {
     return (
       <div className="round">{
         props.cards.map((cardProps) => {
-          return <Card {...props}
+          return <Card
             isSelected={props.round > 0}
             isFrozen={props.round > 0}
             {...cardProps}

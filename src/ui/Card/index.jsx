@@ -2,6 +2,7 @@
 import { Component, h } from 'preact';
 import { connect } from 'preact-redux';
 import './styles.less';
+import actionTypes from './../../actionTypes'
 
 class Card extends Component {
   onClick(ev) {
@@ -77,19 +78,19 @@ class Card extends Component {
 const mapDispatchToProps = (dispatch, props) => {
   return {
     onSelect: ( character, index ) => {
-      dispatch( Object.assign( {}, props.actionTypes.REVEAL_FLASHCARD,
+      dispatch( Object.assign( {}, actionTypes.REVEAL_FLASHCARD,
         { character, index } )
       );
     },
     onClickListen: ( character ) => {
       dispatch( {
-        type: props.actionTypes.REQUEST_PINYIN_START.type,
+        type: actionTypes.REQUEST_PINYIN_START.type,
         character
       } );
     },
     onAnswered: ( character, index, isCorrect ) => {
-      const action = isCorrect ? props.actionTypes.GUESS_FLASHCARD_RIGHT
-        : props.actionTypes.GUESS_FLASHCARD_WRONG;
+      const action = isCorrect ? actionTypes.GUESS_FLASHCARD_RIGHT
+        : actionTypes.GUESS_FLASHCARD_WRONG;
 
       dispatch( {
         type: action.type,
