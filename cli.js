@@ -19,15 +19,6 @@ function addDictionaryItem() {
 	} );
 }
 
-function rateWord() {
-	return getUserInput('What is the Chinese word you want to rate?').then((word) => {
-		return getUserInput('How difficult is that? (1+)').then((rating) => {
-			dict.rateWord(word, parseInt(rating, 10));
-			return dict.save();
-		});
-	});
-}
-
 function getUserInput( msg ) {
 	return new Promise( ( resolve, reject ) => {
 		feedback( msg, true );
@@ -93,6 +84,18 @@ function translate() {
 	});
 }
 
+function changeDifficulty(delta) {
+	return getUserInput('Enter chinese character(s) to change difficulty for (' + delta + ')')
+		.then((word) => {
+			Array.from(word).forEach((char) => {
+				const diff = dict.getDifficultyRating(char) || 0;
+				dict.rateWord(char, diff + delta);
+				console.log(`${char} difficulty level = ${diff+delta}`)
+			});
+		} ).then(()=> {
+			return dict.save();
+		} );
+}
 function menu() {
 	const options = [
 		'0: Lookup character',
@@ -103,8 +106,8 @@ function menu() {
 		'5: Add to dictionary',
 		'6: Decompose chinese word',
 		'7: Translate',
-		'8: Report difficulty of word',
-		'9: Increase difficulty of word',
+		'8: Decrease difficulty of word(s)',
+		'9: Increase difficulty of word(s)',
 		'10: Expand a word',
 		'11: Missing definitions',
 		'12: Lookup word difficulty',
@@ -145,7 +148,7 @@ function menu() {
 					translate().then(() => menu());
 					break;
 				case 8:
-					rateWord().then(() => menu());
+					changeDifficulty(-1).then(()=>menu());
 					break;
 				case 12:
 					getUserInput('Enter chinese character').then((msg) => {
@@ -163,11 +166,7 @@ function menu() {
 					menu();
 					break;
 				case 9:
-					getUserInput('Enter chinese character to increase difficulty for').then((word) => {
-						const diff = dict.getDifficultyRating(word) || 0;
-						dict.rateWord(word, diff + 1);
-						return dict.save().then(()=>menu());
-					} );
+					changeDifficulty(1).then(()=>menu());
 					break;
 				case 13:
 					getUserInput('Enter chinese character to remove').then((word) => {
