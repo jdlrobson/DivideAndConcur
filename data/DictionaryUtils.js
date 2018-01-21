@@ -13,7 +13,8 @@ DictionaryUtils.prototype = {
   },
   missing: function () {
     return this.all()
-      .filter((word) => ( ( !this.words[word] || this.words[word] === '?' ) || !this.words[word] ) && !this.decompositions[word]);
+      .filter((word) => ( ( !this.words[word] || this.words[word] === '?' ) || !this.words[word] ) &&
+         !this.decompositions[word] && !this.getPinyin(word));
   },
   getPinyin: function ( word ) {
     return this.pinyin[word];
