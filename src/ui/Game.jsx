@@ -34,6 +34,7 @@ const mapStateToProps = (state, props) => {
   const {
     previous,
     level,
+    wordSize,
     difficulty,
     cards
   } = state;
@@ -41,6 +42,7 @@ const mapStateToProps = (state, props) => {
   return Object.assign( {}, props, {
     previous,
     level,
+    wordSize,
     difficulty,
     cards
   } );
