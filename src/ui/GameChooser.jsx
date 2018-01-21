@@ -19,7 +19,7 @@ class GameChooser extends Component {
     const game = props.game;
 
     return (
-      <div className="game-chooser" onCanvasClick={props.onCanvasClick}>
+      <div className="game-chooser" onClick={props.onCanvasClick}>
         {props.overlay}
         <ProgressBar percent={(props.knownWordCount/props.maxSize) * 100}>
           {`${props.knownWordCount} of ${props.maxSize} words`}
