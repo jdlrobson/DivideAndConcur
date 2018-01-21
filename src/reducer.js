@@ -42,11 +42,20 @@ function clearOverlay( state ) {
   } );
 }
 
+function highlightCards( cards, highlighted ) {
+    return cards.map((card) => {
+        return Object.assign( {}, card, {
+            isHighlighted: highlighted.indexOf(card.character) > -1
+        });
+    });
+}
+
 // Reducer for when a card is answered
 function actionAnswerCard( state, action ) {
   const char = action.character;
   const isAnswered = true;
   let isKnown = true;
+  const decomps = dictUtils.decompose( char );
 
   switch ( action.type ) {
     case actionTypes.GUESS_FLASHCARD_WRONG.type:
@@ -57,17 +66,19 @@ function actionAnswerCard( state, action ) {
   }
 
   return Object.assign( {}, state, {
-    cards: updateCardInCards( state.cards, action, { isAnswered, isKnown } ),
-    highlighted: dictUtils.decompose( char )
+    cards: highlightCards(
+        updateCardInCards( state.cards, action, { isAnswered, isKnown } ),
+        decomps
+    ),
+    previous: highlightCards( state.previous, decomps )
   } );
 }
 
-function mapCard( character, isHighlighted ) {
+function mapCard( character ) {
   const difficultyLevel = memory.getDifficulty(character);
   return {
     isKnown: memory.knowsWord( character ),
     character,
-    isHighlighted,
     difficultyLevel,
     pinyin: dictUtils.getPinyin(character),
     english: dictUtils.getWord(character)
@@ -83,7 +94,7 @@ function addKnownWordCount(state) {
 }
 
 function makeCardsFromCharacters(state, chars) {
-  return chars.map((char) => mapCard(char, state.highlighted.indexOf(char) > -1));
+  return chars.map((char) => mapCard(char));
 }
 
 function findPackStartPosition( pack ) {
