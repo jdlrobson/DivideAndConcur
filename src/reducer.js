@@ -3,14 +3,15 @@ import { Component, h } from 'preact';
 
 import actionTypes from './actionTypes';
 import Memory from './Memory'
-import Dictionary from './Dictionary'
-
+import dictJson from './../data/dictionary.json'
+import DictionaryUtils from './../data/DictionaryUtils';
 import CharacterPreviewOverlay from './ui/CharacterPreviewOverlay'
 import { FLIP_CARDS, MATCH_PAIRS, REVISE } from './ui/GameChooser'
 
 const NUM_CARDS_PER_LEVEL = 10;
 let memory;
-let dict = new Dictionary();
+let dictUtils = new DictionaryUtils( dictJson.words,
+    dictJson.decompositions, dictJson.difficulty, dictJson.pinyin );
 
 // Setups state with the required globals for managing a game
 function actionBoot( state, action ) {
@@ -57,7 +58,7 @@ function actionAnswerCard( state, action ) {
 
   return Object.assign( {}, state, {
     cards: updateCardInCards( state.cards, action, { isAnswered, isKnown } ),
-    highlighted: dict.toRadicals( char )
+    highlighted: dictUtils.decompose( char )
   } );
 }
 
@@ -68,7 +69,7 @@ function mapCard( character, isHighlighted ) {
     character,
     isHighlighted,
     difficultyLevel,
-    english: dict.utils.getWord(character)
+    english: dictUtils.getWord(character)
   };
 }
 
@@ -95,7 +96,7 @@ function findPackStartPosition( pack ) {
 function fastForwardToPackPosition( state ) {
   const difficulty = state.difficulty;
   const wordSize = state.wordSize;
-  const pack = dict.utils.getWords(wordSize, difficulty);
+  const pack = dictUtils.getWords(wordSize, difficulty);
   const packPosition = findPackStartPosition(pack);
   const previous = state.previous || [];
 
@@ -126,7 +127,7 @@ function fastForwardToPackPosition( state ) {
 }
 
 function dealKnownCards(state, total) {
-  const known = dict.utils.all().filter((char)=> memory.knowsWord( char ));
+  const known = dictUtils.all().filter((char)=> memory.knowsWord( char ));
   const cards = makeCardsFromCharacters(state, known);
   return addKnownWordCount( Object.assign({}, state, { cards, previous: [] } ) );
 }
@@ -157,7 +158,7 @@ function setGame( state, action ) {
     highlighted: [],
     previous: [],
     cards: [],
-    maxSize: dict.maxSize()
+    maxSize: dictUtils.all().length
   } );
 }
 
