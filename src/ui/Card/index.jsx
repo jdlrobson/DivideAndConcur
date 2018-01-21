@@ -63,6 +63,7 @@ class Card extends Component {
           {props.character}
           </div>
           <div key='lang' className='english' style={isSelected ? {} : hidden}>{props.english}</div>
+          <div key='pinyin' className='pinyin' style={isSelected ? {} : hidden}>{props.pinyin}</div>
           <div key='tick' className='tick button' onClick={this.tick.bind(this)}
             style={isSelected && !done && !isKnown && !isFrozen ? {} : hidden}>✅</div>
           <div key='wrong' className='wrong button' onClick={this.wrong.bind(this)}

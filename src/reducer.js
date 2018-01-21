@@ -69,6 +69,7 @@ function mapCard( character, isHighlighted ) {
     character,
     isHighlighted,
     difficultyLevel,
+    pinyin: dictUtils.getPinyin(character),
     english: dictUtils.getWord(character)
   };
 }
