@@ -44,7 +44,7 @@ function deal(wordLength, max, _keys) {
 			deal( wordLength, max, _keys );
 		});
 	} else {
-		menu();
+		game();
 	}
 }
 
@@ -96,13 +96,45 @@ function changeDifficulty(delta) {
 			return dict.save();
 		} );
 }
-function menu() {
+
+function game() {
 	const options = [
-		'0: Lookup character',
+		'0: Back to menu',
 		'1: Deal radicals',
 		'2: Deal singles',
 		'3: Deal double cards',
-		'4: Deal triple cards',
+		'4: Deal triple cards'
+	];
+	return getUserInput( '**********************\n' + options.join('\n') + '\n**********************' )
+		.then( ( val ) => {
+			val = parseInt( val, 10 );
+			switch ( val ) {
+				case 0:
+					menu();
+					break;
+				case 1:
+					deal( 0 );
+					break;
+				case 2:
+					deal( 1 );
+					break;
+				case 3:
+					deal( 2 );
+					break;
+				case 4:
+					deal( 3 );
+					break;
+				default:
+					feedback('Huh?');
+					game();
+			}
+		});
+}
+
+function menu() {
+	const options = [
+		'0: Lookup character',
+		'1: Game',
 		'5: Add to dictionary',
 		'6: Decompose chinese word',
 		'7: Translate',
@@ -127,16 +159,7 @@ function menu() {
 					});
 					break;
 				case 1:
-					deal( 0 );
-					break;
-				case 2:
-					deal( 1 );
-					break;
-				case 3:
-					deal( 2 );
-					break;
-				case 4:
-					deal( 3 );
+					game();
 					break;
 				case 5:
 					addDictionaryItem().then(() => menu());
