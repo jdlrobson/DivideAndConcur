@@ -11,9 +11,26 @@ function addDictionaryItem() {
 		var chinese, english;
 		getUserInput( 'Enter Chinese:' ).then( ( chinese ) => {
 			getUserInput( 'Enter English:' ).then( ( english ) => {
-				dict.saveWord( chinese, english ).then(() => {
+				dict.saveWord( chinese, english )
+				.then(()=>dict.save())
+				.then(() => {
 					resolve();
 				});
+			} );
+		} );
+	} );
+}
+
+function addPinyinItem() {
+	return new Promise( ( resolve ) => {
+		var chinese, english;
+		getUserInput( 'Enter Chinese:' ).then( ( chinese ) => {
+			getUserInput( 'Enter Pinyin:' ).then( ( pinyin ) => {
+				dict.savePinyin( chinese, pinyin )
+					.then(()=>dict.save())
+					.then(() => {
+						resolve();
+					});
 			} );
 		} );
 	} );
@@ -135,6 +152,8 @@ function menu() {
 	const options = [
 		'0: Lookup character',
 		'1: Game',
+		'2: Add pinyin',
+		'3: Show pinyin',
 		'5: Add to dictionary',
 		'6: Decompose chinese word',
 		'7: Translate',
@@ -160,6 +179,14 @@ function menu() {
 					break;
 				case 1:
 					game();
+					break;
+				case 2:
+					addPinyinItem().then(() => menu());
+					break;
+				case 3:
+					getUserInput('Enter chinese character').then((char) => {
+						console.log(dict.getPinyin( char ));
+					}).then(() => menu());
 					break;
 				case 5:
 					addDictionaryItem().then(() => menu());

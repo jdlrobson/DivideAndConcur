@@ -1,7 +1,8 @@
-function DictionaryUtils( words, decompositions, difficulties ) {
+function DictionaryUtils( words, decompositions, difficulties, pinyin ) {
   this.words = words;
   this.decompositions = decompositions;
   this.difficulties = difficulties;
+  this.pinyin = pinyin;
 }
 DictionaryUtils.prototype = {
   all: function () {
@@ -13,6 +14,9 @@ DictionaryUtils.prototype = {
   missing: function () {
     return this.all()
       .filter((word) => ( ( !this.words[word] || this.words[word] === '?' ) || !this.words[word] ) && !this.decompositions[word]);
+  },
+  getPinyin: function ( word ) {
+    return this.pinyin[word];
   },
   getWord: function ( word ) {
     return this.words[word];

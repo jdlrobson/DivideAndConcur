@@ -1,6 +1,7 @@
 var fs = require('fs');
 
 var words = {};
+var allPinyin = {};
 var difficulty = {};
 var decompositions = {};
 const DICTIONARY_FILE = './data/dictionary.json';
@@ -36,6 +37,10 @@ function getWords(wordLength, difficultyLevel, max) {
 	return utils.getWords( wordLength, difficultyLevel, max );
 }
 
+function reload() {
+	utils = new DictionaryUtils( words, decompositions, difficulty, allPinyin );
+}
+
 function load() {
 	return new Promise((resolve) => {
 		fs.readFile(DICTIONARY_FILE, ( err, data ) => {
@@ -49,9 +54,10 @@ function load() {
 			} else {
 				words = data;
 			}
+			allPinyin = data.pinyin || {};
 			words._decompositions = decompositions;
 			words._difficulty = difficulty;
-			utils = new DictionaryUtils( words, decompositions, difficulty );
+			reload();
 			resolve(words);
 		} );
 	})
@@ -59,10 +65,10 @@ function load() {
 
 function save() {
 	return new Promise((resolve) => {
-    // update the utils
-		utils = new DictionaryUtils( words, decompositions, difficulty );
+		// update the utils
+		reload();
 		fs.writeFile(DICTIONARY_FILE,
-			JSON.stringify({ words: words, decompositions: decompositions, difficulty: difficulty }),
+			JSON.stringify({ words, decompositions, pinyin: allPinyin, difficulty }),
 			function( err ) {
 				if ( !err ) {
 					resolve();
@@ -79,6 +85,17 @@ function removeWord( chinese ) {
 	save();
 }
 
+function savePinyin( chinese, pinyin ) {
+	return new Promise((resolve) => {
+		if ( chinese && pinyin ) {
+			allPinyin[chinese.trim()] = pinyin.trim();
+			resolve();
+		} else {
+			resolve();
+		}
+	});
+}
+
 function saveWord( chinese, english ) {
 	return new Promise((resolve) => {
 		if ( chinese && english ) {
@@ -88,6 +105,10 @@ function saveWord( chinese, english ) {
 			resolve();
 		}
 	});
+}
+
+function getPinyin(word) {
+	return utils.getPinyin( word );
 }
 
 function getWord(word) {
@@ -109,6 +130,8 @@ function missing() {
 
 module.exports = {
 	missing,
+	getPinyin,
+	savePinyin,
 	removeWord,
 	getDecompositions: getDecompositions,
 	decompose: decompose,

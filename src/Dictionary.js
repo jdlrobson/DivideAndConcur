@@ -10,7 +10,7 @@ export default class Dictionary {
     this.data = {};
     this.keys = [];
     this.utils = new DictionaryUtils( dictJson.words,
-      dictJson.decompositions, dictJson.difficulty );
+      dictJson.decompositions, dictJson.difficulty, dictJson.pinyin );
   }
   size() {
     return Object.keys( this.data ).length;
