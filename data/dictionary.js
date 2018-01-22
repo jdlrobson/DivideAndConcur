@@ -128,8 +128,12 @@ function missing() {
 	return utils.missing();
 }
 
+function getWordLength(w) {
+	return utils.getWordLength(w);
+}
 module.exports = {
 	missing,
+	getWordLength,
 	getPinyin,
 	savePinyin,
 	removeWord,

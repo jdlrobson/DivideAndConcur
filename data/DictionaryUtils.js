@@ -62,6 +62,15 @@ DictionaryUtils.prototype = {
    getDifficultyRating: function (word) {
     return this.difficulties[word] || 0;
   },
+  getWordLength: function ( word ) {
+    var strLen = word.length;
+    if ( strLen === 1 ) {
+      // returning 1 nearly all the time
+      return !this.decompositions[word] ? 0 : this.decompose(word).length;
+    } else {
+      return Array.from(word).reduce((acc, char) => this.getWordLength(char) + acc + strLen);
+    }
+  },
   /**
    * @param {Number} wordLength (character length) to restrict words to. If word length is zero
    * it will be assumed you want to obtain radicals.
@@ -73,7 +82,7 @@ DictionaryUtils.prototype = {
    */
   getWords: function (wordLength, difficultyLevel, max) {
     var words = this.words;
-    var decompose = this.decompose.bind( this );
+    var getWordLength = this.getWordLength.bind( this );
     var decompositions = this.decompositions;
     var getDifficultyRating = this.getDifficultyRating.bind( this );
 
@@ -81,17 +90,7 @@ DictionaryUtils.prototype = {
       return difficultyLevel === undefined || getDifficultyRating(w) === difficultyLevel
     }
     var keys = Object.keys( words ).filter((w) => {
-        // 1 character long cannot be decomposed
-        if ( wordLength === 0 && w.length === 1 ) {
-          // only return words without known decompositions (radicals)
-          return !decompositions[w] && matchesDifficultyLevel(w);
-        // one character long can be decomposed to two parts
-        } else if ( wordLength === 1 && w.length === 1 ) {
-          // only return words of length 1 if they have decompositions
-          return decompose(w).length === 2 && matchesDifficultyLevel(w);
-        } else {
-          return w.length === wordLength && matchesDifficultyLevel(w);
-        }
+        return getWordLength(w) === wordLength && matchesDifficultyLevel(w);
       } );
     return keys.slice( 0, max );
   },

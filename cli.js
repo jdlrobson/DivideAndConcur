@@ -161,7 +161,7 @@ function menu() {
 		'9: Increase difficulty of word(s)',
 		'10: Expand a word',
 		'11: Missing definitions',
-		'12: Lookup word difficulty',
+		'12: Lookup word',
 		'13: Delete word',
 		'14: Auto-assign difficulty'
 	];
@@ -202,7 +202,7 @@ function menu() {
 					break;
 				case 12:
 					getUserInput('Enter chinese character').then((msg) => {
-						feedback( dict.getDifficultyRating(msg) )
+						feedback( `rating=${dict.getDifficultyRating(msg)} and length=${dict.getWordLength(msg)}` )
 						return menu()
 					} );
 					break;
