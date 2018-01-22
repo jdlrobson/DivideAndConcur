@@ -154,6 +154,7 @@ function menu() {
 		'1: Game',
 		'2: Add pinyin',
 		'3: Show pinyin',
+		'4: Batch decompose',
 		'5: Add to dictionary',
 		'6: Decompose chinese word',
 		'7: Translate',
@@ -186,6 +187,15 @@ function menu() {
 				case 3:
 					getUserInput('Enter chinese character').then((char) => {
 						console.log(dict.getPinyin( char ));
+					}).then(() => menu());
+					break;
+				case 4:
+					getUserInput('Enter the common radical element').then((decomp) => {
+						return getUserInput('Paste characters using this element').then((chars) => {
+							Array.from(chars.replace(/ /g, '')).forEach((char) => {
+								dict.addDecomposition( char, [ decomp, '?' ] );
+							});
+						} );
 					}).then(() => menu());
 					break;
 				case 5:
