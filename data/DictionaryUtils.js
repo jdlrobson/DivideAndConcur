@@ -59,8 +59,14 @@ DictionaryUtils.prototype = {
     }
     return translation + composition;
   },
+  /**
+   * Difficulty is the difficulty of the word + the combined difficulties of the radicals
+   * @param {String} word
+   * @return {Number}
+   */
    getDifficultyRating: function (word) {
-    return this.difficulties[word] || 0;
+    return ( this.difficulties[word] || 0 ) + this.decompose(word)
+      .reduce((acc, word) => acc + ( this.difficulties[word] || 0), 0 );
   },
   getWordLength: function ( word ) {
     var strLen = word.length;

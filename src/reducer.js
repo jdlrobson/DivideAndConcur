@@ -9,6 +9,7 @@ import CharacterPreviewOverlay from './ui/CharacterPreviewOverlay'
 import { FLIP_CARDS, MATCH_PAIRS, REVISE } from './ui/GameChooser'
 
 const NUM_CARDS_PER_LEVEL = 10;
+const MAX_DIFFICULTY = 18;
 let memory;
 let dictUtils = new DictionaryUtils( dictJson.words,
     dictJson.decompositions, dictJson.difficulty, dictJson.pinyin );
@@ -80,6 +81,7 @@ function mapCard( character ) {
     isKnown: memory.knowsWord( character ),
     character,
     difficultyLevel,
+    level: `${dictUtils.getWordLength(character)}.${dictUtils.getDifficultyRating(character)}`,
     pinyin: dictUtils.getPinyin(character),
     english: dictUtils.getWord(character)
   };
@@ -112,8 +114,7 @@ function fastForwardToPackPosition( state ) {
   const packPosition = findPackStartPosition(pack);
   const previous = state.previous || [];
 
-
-  if ( pack.length === 0 ) {
+  if ( pack.length === 0 && difficulty > MAX_DIFFICULTY ) {
     // we ran out on this difficulty (there may be more but they are unreachable with current words)
     // given assumption every difficulty has at least one word
     return fastForwardToPackPosition( {

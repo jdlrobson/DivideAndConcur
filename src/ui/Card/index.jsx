@@ -58,6 +58,7 @@ class Card extends Component {
           {
             new Array(dLevel).fill((<div className={isEasy ? 'easy' : ''} />))
           }
+          { props.level }
           </div>
           <div key='char' className="char">
           {props.character}
