@@ -8,9 +8,7 @@ const SAVE_PROGRESS = {
   text: 'Save progress in the game'
 }
 
-const REQUEST_PINYIN_START = {
-  type: 'REQUEST_PINYIN_START'
-};
+const REQUEST_PINYIN_START = 'REQUEST_PINYIN_START';
 
 const REQUEST_PINYIN_END = {
   type: 'REQUEST_PINYIN_END'

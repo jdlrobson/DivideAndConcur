@@ -23,14 +23,12 @@ function actionBoot( state, action ) {
 
 // updates state to add the character preview overlay overlay
 function actionRevealPronounciation( state, action ) {
-  let charWithoutPinyin;
   const char = action.character;
+  const characterRequested = action.type === actionTypes.REQUEST_PINYIN_START ?
+    char : undefined;
 
-  if ( action.pinyin === undefined ) {
-    charWithoutPinyin = char;
-  }
   return Object.assign( {}, state, {
-    charWithoutPinyin,
+    characterRequested,
     overlay: <CharacterPreviewOverlay char={char} pinyin={action.pinyin} />
   } );
   
@@ -337,7 +335,7 @@ export default ( state, action ) => {
       case actionTypes.GUESS_FLASHCARD_WRONG.type:
       case actionTypes.GUESS_FLASHCARD_RIGHT.type:
         return actionAnswerCard( state, action );
-      case actionTypes.REQUEST_PINYIN_START.type:
+      case actionTypes.REQUEST_PINYIN_START:
         return actionRevealPronounciation( state, action );
       // reset on boot
       case actionTypes.CLICK_ROOT_NODE.type:

@@ -2,6 +2,7 @@
 import { Component, h } from 'preact';
 import { connect } from 'preact-redux';
 import './styles.less';
+import { requestPinyin } from './../../actions'
 import actionTypes from './../../actionTypes'
 
 class Card extends Component {
@@ -85,10 +86,7 @@ const mapDispatchToProps = (dispatch, props) => {
       );
     },
     onClickListen: ( character ) => {
-      dispatch( {
-        type: actionTypes.REQUEST_PINYIN_START.type,
-        character
-      } );
+      dispatch( requestPinyin( character ) );
     },
     onAnswered: ( character, index, isCorrect ) => {
       const action = isCorrect ? actionTypes.GUESS_FLASHCARD_RIGHT

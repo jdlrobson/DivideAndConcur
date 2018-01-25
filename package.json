@@ -23,6 +23,7 @@
   "dependencies": {
     "chalk": "^1.1.3",
     "isomorphic-fetch": "^2.2.1",
-    "preact": "^8.2.6"
+    "preact": "^8.2.6",
+    "redux-thunk": "^2.2.0"
   }
 }

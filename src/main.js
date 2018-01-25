@@ -1,5 +1,6 @@
 import { h, render, Component } from 'preact';
-import { createStore } from 'redux'
+import thunkMiddleware from 'redux-thunk'
+import { createStore, applyMiddleware, compose } from 'redux'
 import { Provider } from 'preact-redux'
 import GameChooser from './ui/GameChooser'
 
@@ -11,8 +12,13 @@ import actionTypes from './actionTypes'
 
 // Tell Babel to transform JSX into h() calls:
 /** @jsx h */
+
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore( reducer,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__() );
+  composeEnhancers(
+    applyMiddleware( thunkMiddleware )
+  )
+);
 
 import 'preact/devtools'
 
@@ -40,7 +46,6 @@ function action(actionType, data) {
 
   // setup subscribers
   store.subscribe( checkIfEndOfRound( store ) );
-  store.subscribe( checkIfPinyinNeeded( store ) );
   store.subscribe( checkForTimedAction( store ) );
   store.subscribe( checkForSave( store ) );
 
