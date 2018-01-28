@@ -78,13 +78,15 @@ function decomposeWord() {
 		var components = [];
 		getUserInput('What is the Chinese word you want to decompose?').then((answer) => {
 
-			getUserInput('What is component 1?').then((radical) => {
-				components.push(radical);
-				getUserInput('What is component 2?').then((radical) => {
-					components.push(radical);
+			getUserInput('What are the components (up to 2)?').then((radicals) => {
+				const components = Array.from(radicals.trim().replace(/ /g, ''));
+				if ( components.length && components.length <= 2 ) {
 					dict.addDecomposition( answer, components );
 					dict.save().then(()=>resolve());
-				});
+				} else {
+					console.log('No more than 2 radicals please.');
+					resolve();
+				}
 			});
 		});
 	} );
@@ -150,27 +152,24 @@ function game() {
 
 function menu() {
 	const options = [
-		'0: Lookup character',
 		'1: Game',
-		'2: Add pinyin',
-		'3: Show pinyin',
-		'4: Batch decompose',
+		'2: Lookup word',
+		'3: Add pinyin',
+		'4: Lookup character',
 		'5: Add to dictionary',
-		'6: Decompose chinese word',
-		'7: Translate',
+		'6: Batch decompose',
+		'7: Decompose chinese word',
 		'8: Decrease difficulty of word(s)',
 		'9: Increase difficulty of word(s)',
-		'10: Expand a word',
-		'11: Missing definitions',
-		'12: Lookup word',
-		'13: Delete word',
-		'14: Auto-assign difficulty'
+		'10: Missing definitions',
+		'11: Delete word',
+		'12: Auto-assign difficulty'
 	];
 	getUserInput( '**********************\n' + options.join('\n') + '\n**********************' )
 		.then( ( val ) => {
 			val = parseInt( val, 10 );
 			switch ( val ) {
-				case 0:
+				case 4:
 					getUserInput('Enter chinese character').then((msg) => {
 						return mcs.getDefinition( msg )
 					}).then((text)=> {
@@ -181,15 +180,10 @@ function menu() {
 				case 1:
 					game();
 					break;
-				case 2:
+				case 3:
 					addPinyinItem().then(() => menu());
 					break;
-				case 3:
-					getUserInput('Enter chinese character').then((char) => {
-						console.log(dict.getPinyin( char ));
-					}).then(() => menu());
-					break;
-				case 4:
+				case 6:
 					getUserInput('Enter the common radical element').then((decomp) => {
 						return getUserInput('Paste characters using this element').then((chars) => {
 							Array.from(chars.replace(/ /g, '')).forEach((char) => {
@@ -201,25 +195,26 @@ function menu() {
 				case 5:
 					addDictionaryItem().then(() => menu());
 					break;
-				case 6:
-					decomposeWord().then(() => menu());
-					break;
 				case 7:
-					translate().then(() => menu());
+					decomposeWord().then(() => menu());
 					break;
 				case 8:
 					changeDifficulty(-1).then(()=>menu());
 					break;
-				case 12:
-					getUserInput('Enter chinese character').then((msg) => {
-						feedback( `rating=${dict.getDifficultyRating(msg)} and length=${dict.getWordLength(msg)}` )
-						return menu()
-					} );
+				case 2:
+					getUserInput('Enter chinese character').then((char) => {
+						feedback( `Character: ${char}` );
+						feedback( `English: ${dict.getWord( char )}`)
+						feedback( `Pinyin: ${dict.getPinyin( char )}`);
+						feedback( `${dict.decompose( char ).join('+')}` );
+						feedback( dict.translate(char) );
+						feedback( `Standalone Difficulty=${dict.getDifficultyRating(char, true)}` );
+						feedback( `True difficulty=${dict.getDifficultyRating(char)}` );
+						feedback( `Length=${dict.getWordLength(char)}` );
+					} ).then(() => menu());
+					break;
 					break;
 				case 10:
-					viewDecomposition().then(() => menu());
-					break;
-				case 11:
 					const missing = dict.missing();
 					console.log( `There are ${missing.length} words missing definitions without decompositions` );
 					console.log( missing.sort(()=>Math.random() > 0.5 ? -1 : 1 ).join('   ' ) );
@@ -228,13 +223,13 @@ function menu() {
 				case 9:
 					changeDifficulty(1).then(()=>menu());
 					break;
-				case 13:
+				case 11:
 					getUserInput('Enter chinese character to remove').then((word) => {
 						dict.removeWord(word);
 						return menu()
 					} );
 					break;
-				case 14:
+				case 12:
 					getUserInput('Enter chinese character to count strokes for').then((word) => {
 						return rateWordsDifficultyByStrokeCount([word]).then(()=> menu());
 					} );
