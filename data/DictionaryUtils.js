@@ -67,8 +67,8 @@ DictionaryUtils.prototype = {
    */
    getDifficultyRating: function (word, forWordAlone) {
     var thisWord = ( this.difficulties[word] || 0 );
-    return forWordAlone ? thisWord : thisWord + this.decompose(word)
-      .reduce((acc, word) => acc + ( this.difficulties[word] || 0), 0 );
+    return forWordAlone ? thisWord : this.decompose(word)
+      .reduce((acc, word) => acc + thisWord, 0 );
   },
   getWordLength: function ( word ) {
     var strLen = word.length;
