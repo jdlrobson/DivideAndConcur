@@ -16,8 +16,8 @@ function translate(word) {
 	return utils.translate( word );
 }
 
-function getDifficultyRating(word) {
-	return utils.getDifficultyRating( word );
+function getDifficultyRating(word, forWordAlone) {
+	return utils.getDifficultyRating( word, forWordAlone );
 }
 
 function rateWord(word, rating) {

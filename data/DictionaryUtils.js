@@ -62,10 +62,12 @@ DictionaryUtils.prototype = {
   /**
    * Difficulty is the difficulty of the word + the combined difficulties of the radicals
    * @param {String} word
+   * @param {Boolean} forWordAlone whether we should consult the difficulties of the composing radicals
    * @return {Number}
    */
-   getDifficultyRating: function (word) {
-    return ( this.difficulties[word] || 0 ) + this.decompose(word)
+   getDifficultyRating: function (word, forWordAlone) {
+    var thisWord = ( this.difficulties[word] || 0 );
+    return forWordAlone ? thisWord : thisWord + this.decompose(word)
       .reduce((acc, word) => acc + ( this.difficulties[word] || 0), 0 );
   },
   getWordLength: function ( word ) {

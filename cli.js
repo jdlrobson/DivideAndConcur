@@ -105,7 +105,7 @@ function changeDifficulty(delta) {
 	return getUserInput('Enter chinese character(s) to change difficulty for (' + delta + ')')
 		.then((word) => {
 			Array.from(word).forEach((char) => {
-				const diff = dict.getDifficultyRating(char) || 0;
+				const diff = dict.getDifficultyRating(char, true) || 0;
 				dict.rateWord(char, diff + delta);
 				console.log(`${char} difficulty level = ${diff+delta}`)
 			});
