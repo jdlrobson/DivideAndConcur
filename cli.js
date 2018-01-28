@@ -41,7 +41,7 @@ function getUserInput( msg ) {
 		feedback( msg, true );
 		process.stdin.setEncoding('utf8');
 		process.stdin.once('data', function (text) {
-			resolve( util.inspect(text).replace( /'([^\n]*)'/g, '$1' ).replace( '\\n', '' ) );
+			resolve( util.inspect(text).replace( /'([^\n]*)'/g, '$1' ).replace( '\\n', '' ).trim() );
 		});
 	})
 }
