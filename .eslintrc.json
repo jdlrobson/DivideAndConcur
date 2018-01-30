@@ -1,0 +1,21 @@
+{
+  "extends": [ "eslint-config-node-services", "eslint-config-standard-jsx" ],
+  "globals": {
+    "document": true,
+    "window": true,
+    "fetch": true,
+    "localStorage": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "rules": {
+    "multiline-ternary": 0,
+    "react/jsx-indent": 0,
+    "no-use-before-define": 0
+  }
+}
