@@ -5,6 +5,8 @@ const htmlToText = require('html-to-text');
 const chalk = require('chalk');
 var fs = require('fs');
 const strokeCount = require('./strokeCount' );
+var hanzi = require("hanzi");
+var hanziLoaded = false;
 
 function addDictionaryItem() {
 	return new Promise( ( resolve ) => {
@@ -135,10 +137,31 @@ function game() {
 		});
 }
 
+function batchAutoDecompose(words) {
+	if ( !hanziLoaded ) {
+		hanzi.start();
+		hanziLoaded = true;
+	}
+	words.filter((char) => char.length === 1).forEach((char) => {
+		const decomps = hanzi.decompose(char);
+		const components = decomps.components1.filter((comp) =>
+			comp !== 'No glyph available' );
+
+		if ( ( components.length === 1 && components[0] !== char ) || components.length > 1 ) {
+			const existingDecomps = dict.getDecompositions()[char] || [];
+			if ( existingDecomps.length <= components.length ) {
+				console.log('Add', char, components );
+				dict.addDecomposition( char, components );
+			}
+		}
+	})
+}
+
 function menu() {
 	const options = [
 		'1: Game',
 		'2: Lookup word',
+		'3: auto decompose difficulty level',
 		'4: Lookup character',
 		'5: Add to dictionary',
 		'6: Batch decompose',
@@ -164,14 +187,19 @@ function menu() {
 				case 1:
 					game();
 					break;
+				case 3:
+					getUserInput('Enter difficulty level').then((msg) => {
+						var words = dict.getWords(2,parseInt(msg, 10));
+						batchAutoDecompose(words);
+						return dict.save().then(() => menu());
+					});
+					break;
 				case 6:
-					getUserInput('Enter the common radical element').then((decomp) => {
-						return getUserInput('Paste characters using this element').then((chars) => {
-							Array.from(chars.replace(/ /g, '')).forEach((char) => {
-								dict.addDecomposition( char, [ decomp, '?' ] );
-							});
-						} );
-					}).then(() => menu());
+					getUserInput('Enter chinese character(s)').then((msg) => {
+						var words = Array.from(msg.trim().replace(/ /g, ''))
+						batchAutoDecompose(words);
+						return dict.save().then(() => menu());
+					});
 					break;
 				case 5:
 					addDictionaryItem().then(() => menu());
