@@ -9,7 +9,7 @@ import dictJson from './../data/dictionary.json';
 import { h } from 'preact';
 
 const NUM_CARDS_PER_LEVEL = 10;
-const MAX_DIFFICULTY = 18;
+const MAX_DIFFICULTY = 11;
 let memory;
 const dictUtils = new DictionaryUtils(dictJson.words,
     dictJson.decompositions, dictJson.difficulty, dictJson.pinyin);
@@ -110,11 +110,15 @@ function findPackStartPosition(pack) {
 }
 
 function fastForwardToPackPosition(state) {
-    const difficulty = state.difficulty;
-    const wordSize = state.wordSize;
+    let difficulty = state.difficulty;
+    let wordSize = state.wordSize;
     const pack = dictUtils.getWords(wordSize, difficulty);
     const packPosition = findPackStartPosition(pack);
     const previous = state.previous || [];
+    if (difficulty >= MAX_DIFFICULTY * (wordSize + 1)) {
+        wordSize = 1;
+        difficulty = 0;
+    }
 
     if (pack.length === 0 && difficulty > MAX_DIFFICULTY) {
     // we ran out on this difficulty (there may be more but they are unreachable with current words)
@@ -150,13 +154,13 @@ function dealKnownCards(state, total) {
  * Deal ten cards from the dictionary that the user is unfamiliar with
  * sorted by difficulty level
  */
-function dealCards(state) {
+function dealCards(state, total = NUM_CARDS_PER_LEVEL) {
     const position = fastForwardToPackPosition(Object.assign({}, state,
         { difficulty: 0, wordSize: 0, previous: [] }));
     const pack = position.pack;
     const packPosition = position.packPosition;
     const cards = makeCardsFromCharacters(
-        state, pack.slice(packPosition, packPosition + NUM_CARDS_PER_LEVEL)
+        state, pack.slice(packPosition, packPosition + total)
     );
     const answeredCardsInCurrentPack = pack.slice(0, packPosition);
     const previous = makeCardsFromCharacters(state,
@@ -206,13 +210,14 @@ function pausePlay(state) {
     return Object.assign({}, state, { isPaused: true });
 }
 
-function addTimedAction(state, timedAction) {
+function addTimedAction(state, timedAction, timedActionDuration) {
     return Object.assign({}, state, { isPaused: true,
-        timedAction });
+        timedAction,
+        timedActionDuration });
 }
 
 function queueDeselectOfUnansweredCards(state) {
-    return addTimedAction(state, actionTypes.DESELECT_ALL_UNANSWERED_CARDS.type);
+    return addTimedAction(state, actionTypes.DESELECT_ALL_UNANSWERED_CARDS.type, 2000);
 }
 
 function actionDeselectUnansweredCards(state) {
@@ -294,8 +299,9 @@ function newRound(state) {
     if (state.game === MATCH_PAIRS) {
         return requestSave(
             addTimedAction(
-                addIndexToCards(shuffleCards(freezeCards(cloneCards(dealCards(state))))),
-                actionTypes.FLIP_CARDS.type
+                addIndexToCards(shuffleCards(freezeCards(cloneCards(dealCards(state, 6))))),
+                actionTypes.FLIP_CARDS.type,
+                5000
             )
         );
     } else if (state.game === FLIP_CARDS) {
@@ -321,7 +327,8 @@ export default (state, action) => {
         case actionTypes.DESELECT_ALL_UNANSWERED_CARDS.type:
             return actionDeselectUnansweredCards(state, action);
         case actionTypes.CLEAR_TIMED_ACTION.type:
-            return Object.assign({}, state, { timedAction: undefined });
+            return Object.assign({}, state, { timedAction: undefined,
+                timedActionDuration: undefined });
         case actionTypes.END_ROUND.type:
         case actionTypes.START_ROUND.type:
             return newRound(state);

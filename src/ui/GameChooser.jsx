@@ -10,6 +10,7 @@ import actionTypes from './../actionTypes';
 export const MATCH_PAIRS = 'pairs';
 export const FLIP_CARDS = 'flip';
 export const REVISE = 'revise';
+export const PAUSED = 'paused';
 
 class GameChooser extends Component {
   setGame( game ) {
@@ -17,6 +18,7 @@ class GameChooser extends Component {
   }
   render(props) {
     const game = props.game;
+    const switcherDisabled = props.switcherDisabled;
 
     return (
       <div className="game-chooser" onClick={props.onCanvasClick}>
@@ -25,9 +27,12 @@ class GameChooser extends Component {
           {`${props.knownWordCount} of ${props.maxSize} words`}
         </ProgressBar>
         <div>
-          <button disabled={game === FLIP_CARDS} onClick={(ev)=>this.setGame( FLIP_CARDS )}>Flip</button>
-          <button disabled={game === MATCH_PAIRS} onClick={(ev)=>this.setGame( MATCH_PAIRS )}>Pairs</button>
-          <button disabled={game === REVISE} onClick={(ev)=>this.setGame( REVISE )}>Revise</button>
+          <button disabled={game === FLIP_CARDS || switcherDisabled}
+              onClick={(ev)=>this.setGame( FLIP_CARDS )}>Flip</button>
+          <button disabled={game === MATCH_PAIRS || switcherDisabled}
+            onClick={(ev)=>this.setGame( MATCH_PAIRS )}>Pairs</button>
+          <button disabled={game === REVISE || switcherDisabled}
+            onClick={(ev)=>this.setGame( REVISE )}>Revise</button>
         </div>
         { ( game === FLIP_CARDS || game === REVISE ) && <Game /> }
         { game === MATCH_PAIRS && <GameMatchPairs /> }
@@ -53,13 +58,16 @@ const mapDispatchToProps = (dispatch, props) => {
 
 const mapStateToProps = (state, props) => {
   const {
+    isPaused,
     game,
     overlay,
     knownWordCount,
     maxSize
   } = state;
 
-  return Object.assign( {}, props, { game, overlay, knownWordCount, maxSize } );
+  return Object.assign( {}, props, {
+      switcherDisabled: isPaused, game,
+      overlay, knownWordCount, maxSize } );
 };
 
 export default connect( mapStateToProps, mapDispatchToProps )(GameChooser);

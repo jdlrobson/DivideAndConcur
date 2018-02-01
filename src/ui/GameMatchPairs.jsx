@@ -12,7 +12,7 @@ class GameMatchPairs extends Component {
     const cards = props.cards;
 
     return (
-      <div>
+      <div className="game-match-pairs">
       {
         cards.map((card) => <Card isSelected={true} {...card}/> )
       }

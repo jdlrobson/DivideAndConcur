@@ -8,7 +8,7 @@ export function checkForTimedAction(store) {
         if (timedAction) {
             window.setTimeout(() => {
                 store.dispatch({ type: timedAction });
-            }, 5000);
+            }, state.timedActionDuration || 5000);
             store.dispatch(actionTypes.CLEAR_TIMED_ACTION);
         }
     };

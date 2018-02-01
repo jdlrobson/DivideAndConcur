@@ -40,7 +40,8 @@ const mapStateToProps = (state, props) => {
   } = state;
 
   return Object.assign( {}, props, {
-    previous,
+    // limit to last 50 so we dont render too much on DOM
+    previous: previous.slice( 0, 50 ),
     level,
     wordSize,
     difficulty,
