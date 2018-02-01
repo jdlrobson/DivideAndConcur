@@ -1,0 +1,7 @@
+{
+  "extends": [ "eslint-config-node-services", "eslint-config-standard-jsx" ],
+  "globals": {
+    "it": true,
+    "describe": true
+  }
+}

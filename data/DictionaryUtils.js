@@ -68,14 +68,15 @@ DictionaryUtils.prototype = {
    */
    getDifficultyRating: function (word, forWordAlone) {
     var thisWord = ( this.difficulties[word] || 0 );
-    return forWordAlone ? thisWord : this.decompose(word)
-      .reduce((acc, word) => acc + thisWord, 0 );
+    var combinedDifficulties = this.decompose(word)
+      .reduce((acc, component) => acc + this.difficulties[component] || 0, 0 );
+    return forWordAlone ? thisWord : Math.max( thisWord, combinedDifficulties );
   },
   getWordLength: function ( word ) {
     var strLen = word.length;
     if ( strLen === 1 ) {
       // returning 1 nearly all the time
-      return !this.decompositions[word] ? 0 : this.decompose(word).length;
+      return !this.decompositions[word] ? 0 : this.decompose(word, true).length;
     } else {
       return Array.from(word).reduce((acc, char) => this.getWordLength(char) + acc + strLen);
     }
@@ -103,7 +104,7 @@ DictionaryUtils.prototype = {
       } );
     return keys.slice( 0, max );
   },
-  decompose: function( word ) {
+  decompose: function( word, isRecursive ) {
     var decompose = this.decompose.bind( this );
     var words = this.words;
     var decompositions = this.decompositions;
@@ -114,7 +115,7 @@ DictionaryUtils.prototype = {
       if ( !decomp ) {
         // no decompositions possible, have reached smallest unit
         parts.push(radical);
-      } else {
+      } else if ( isRecursive ) {
         // this radical itself is composed of different parts
         Array.from( decomp ).forEach((decomposedRadical) => {
           if ( decomposedRadical !== word ) {
@@ -124,6 +125,8 @@ DictionaryUtils.prototype = {
             console.log('warning ' + word + ' decomposes to nothing or itself')
           }
         });
+      } else {
+        parts = Array.from( decomp );
       }
     });
     return parts;
