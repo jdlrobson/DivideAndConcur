@@ -1,7 +1,6 @@
 var fs = require('fs');
 
 var words = {};
-var allPinyin = {};
 var difficulty = {};
 var decompositions = {};
 const DICTIONARY_FILE = './data/dictionary.json';
@@ -38,7 +37,7 @@ function getWords(wordLength, difficultyLevel, max) {
 }
 
 function reload() {
-	utils = new DictionaryUtils( words, decompositions, difficulty, allPinyin );
+	utils = new DictionaryUtils( words, decompositions, difficulty );
 }
 
 function load() {
@@ -54,7 +53,6 @@ function load() {
 			} else {
 				words = data;
 			}
-			allPinyin = data.pinyin || {};
 			words._decompositions = decompositions;
 			words._difficulty = difficulty;
 			reload();
@@ -68,7 +66,7 @@ function save() {
 		// update the utils
 		reload();
 		fs.writeFile(DICTIONARY_FILE,
-			JSON.stringify({ words, decompositions, pinyin: allPinyin, difficulty }),
+			JSON.stringify({ words, decompositions, difficulty }),
 			function( err ) {
 				if ( !err ) {
 					resolve();
@@ -83,17 +81,6 @@ function removeWord( chinese ) {
 	delete difficulty[chinese];
 	delete decompositions[chinese];
 	save();
-}
-
-function savePinyin( chinese, pinyin ) {
-	return new Promise((resolve) => {
-		if ( chinese && pinyin ) {
-			allPinyin[chinese.trim()] = pinyin.trim();
-			resolve();
-		} else {
-			resolve();
-		}
-	});
 }
 
 function saveWord( chinese, english ) {
@@ -135,7 +122,6 @@ module.exports = {
 	missing,
 	getWordLength,
 	getPinyin,
-	savePinyin,
 	removeWord,
 	getDecompositions: getDecompositions,
 	decompose: decompose,

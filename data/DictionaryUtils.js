@@ -1,8 +1,9 @@
-function DictionaryUtils( words, decompositions, difficulties, pinyin ) {
+var pinyin = require( 'chinese-to-pinyin' );
+
+function DictionaryUtils( words, decompositions, difficulties ) {
   this.words = words;
   this.decompositions = decompositions;
   this.difficulties = difficulties;
-  this.pinyin = pinyin;
 }
 DictionaryUtils.prototype = {
   all: function () {
@@ -14,10 +15,10 @@ DictionaryUtils.prototype = {
   missing: function () {
     return this.all()
       .filter((word) => ( ( !this.words[word] || this.words[word] === '?' ) || !this.words[word] ) &&
-         !this.decompositions[word] && !this.getPinyin(word));
+         !this.decompositions[word]);
   },
   getPinyin: function ( word ) {
-    return this.pinyin[word];
+    return pinyin(word);
   },
   getWord: function ( word ) {
     return this.words[word];

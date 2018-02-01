@@ -21,21 +21,6 @@ function addDictionaryItem() {
 	} );
 }
 
-function addPinyinItem() {
-	return new Promise( ( resolve ) => {
-		var chinese, english;
-		getUserInput( 'Enter Chinese:' ).then( ( chinese ) => {
-			getUserInput( 'Enter Pinyin:' ).then( ( pinyin ) => {
-				dict.savePinyin( chinese, pinyin )
-					.then(()=>dict.save())
-					.then(() => {
-						resolve();
-					});
-			} );
-		} );
-	} );
-}
-
 function getUserInput( msg ) {
 	return new Promise( ( resolve, reject ) => {
 		feedback( msg, true );
@@ -154,7 +139,6 @@ function menu() {
 	const options = [
 		'1: Game',
 		'2: Lookup word',
-		'3: Add pinyin',
 		'4: Lookup character',
 		'5: Add to dictionary',
 		'6: Batch decompose',
@@ -179,9 +163,6 @@ function menu() {
 					break;
 				case 1:
 					game();
-					break;
-				case 3:
-					addPinyinItem().then(() => menu());
 					break;
 				case 6:
 					getUserInput('Enter the common radical element').then((decomp) => {
