@@ -20,11 +20,11 @@ class Game extends Component {
 
     return (
       <div className="game" onClick={props.onCanvasClick}>
-      <div className="debug-tools">Level {props.level}&nbsp;
-       [word size = {props.wordSize} difficultyLevel {props.difficulty}]</div>
-      {cards || loader }
-      {props.previous && props.previous.length && <h3>Previous history</h3>}
-      <FlashcardRound key={'round-past'} cards={props.previous} round={1} />
+        <div className="game__debug-tools">Level {props.level}&nbsp;
+         [word size = {props.wordSize} difficultyLevel {props.difficulty}]</div>
+        {cards || loader }
+        {props.previous && props.previous.length && <h3 className="game__history-header">Previous history</h3>}
+        <FlashcardRound key={'round-past'} cards={props.previous} round={1} />
       </div>
     );
   }

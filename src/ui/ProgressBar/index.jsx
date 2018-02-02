@@ -10,8 +10,8 @@ export default class ProgressBar extends Component {
 
     return (
       <div className="progress-bar">
-        <div><div style={style} /></div>
-        <label>{props.children}</label>
+        <div className="progress-bar__bar"><div style={style} /></div>
+        <label className="progress-bar__label">{props.children}</label>
       </div>
     );
   }
