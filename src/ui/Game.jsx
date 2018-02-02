@@ -5,7 +5,7 @@ import Card from './Card'
 import FlashcardRound from './FlashcardRound'
 import './game.less'
 
-import actionTypes from './../actionTypes';
+import { startRound } from './../actions'
 
 const NUM_CARDS_PER_LEVEL = 10;
 
@@ -52,7 +52,7 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = (dispatch, props) => {
   return {
     onStart: () => {
-      dispatch(actionTypes.START_ROUND);
+      dispatch(startRound());
     }
   };
 };

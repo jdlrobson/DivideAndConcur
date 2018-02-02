@@ -2,8 +2,7 @@
 import { Component, h } from 'preact';
 import { connect } from 'preact-redux';
 import './styles.less';
-import { requestPinyin } from './../../actions'
-import actionTypes from './../../actionTypes'
+import { requestPinyin, revealFlashcard, answerFlashcard } from './../../actions'
 
 function className( block, element, modifiers=[] ) {
     let blockElement = block;
@@ -91,7 +90,6 @@ class Card extends Component {
     } else {
         components = translations.concat( buttons );
     }
-
     return (
       <div className={className(blockName, false, modifiers)} onClick={this.onClick.bind(this)}>
       <div className={className(blockName, 'front')}>
@@ -108,22 +106,13 @@ class Card extends Component {
 const mapDispatchToProps = (dispatch, props) => {
   return {
     onSelect: ( character, index ) => {
-      dispatch( Object.assign( {}, actionTypes.REVEAL_FLASHCARD,
-        { character, index } )
-      );
+      dispatch( revealFlashcard( character, index ) );
     },
     onClickListen: ( character ) => {
       dispatch( requestPinyin( character ) );
     },
     onAnswered: ( character, index, isCorrect ) => {
-      const action = isCorrect ? actionTypes.GUESS_FLASHCARD_RIGHT
-        : actionTypes.GUESS_FLASHCARD_WRONG;
-
-      dispatch( {
-        type: action.type,
-        character,
-        index
-      } );
+      dispatch( answerFlashcard( isCorrect, character, index ) );
     }
   };
 };

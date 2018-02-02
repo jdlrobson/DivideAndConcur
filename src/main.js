@@ -7,7 +7,7 @@ import { h, render } from 'preact';
 
 import GameChooser from './ui/GameChooser';
 import { Provider } from 'preact-redux';
-import actionTypes from './actionTypes';
+import { boot } from './actions';
 import reducer from './reducer';
 import thunkMiddleware from 'redux-thunk';
 
@@ -21,12 +21,6 @@ const store = createStore(reducer,
     )
 );
 
-function action(actionType, data) {
-    return Object.assign({}, {
-        type: typeof actionType === 'string' ? actionType : actionType.type
-    }, data);
-}
-
 (function() {
     /**
    *******************************************
@@ -37,7 +31,7 @@ function action(actionType, data) {
         document.getElementById('container').innerHTML = '';
         const provider = (
             <Provider store={store}>
-                <GameChooser actionTypes={actionTypes} />
+                <GameChooser />
             </Provider>
         );
         render(
@@ -59,7 +53,7 @@ function action(actionType, data) {
     const memory = localStorage.getItem('memory');
     const userData = memory ? JSON.parse(memory) : false;
 
-    store.dispatch(action(actionTypes.BOOT, { userData }));
+    store.dispatch(boot(userData));
     renderGame();
 }());
 

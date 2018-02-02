@@ -5,7 +5,7 @@ import { connect } from 'preact-redux';
 import Card from './Card'
 import GameMatchPairs from './GameMatchPairs'
 import ProgressBar from './ProgressBar'
-import actionTypes from './../actionTypes';
+import { clickRootNode, switchGame } from './../actions'
 
 export const MATCH_PAIRS = 'pairs';
 export const FLIP_CARDS = 'flip';
@@ -19,7 +19,6 @@ class GameChooser extends Component {
   render(props) {
     const game = props.game;
     const switcherDisabled = props.switcherDisabled;
-    console.log('GameChooser', switcherDisabled)
 
     return (
       <div className="game-chooser" onClick={props.onCanvasClick}>
@@ -63,10 +62,10 @@ GameChooser.defaultProps = {
 const mapDispatchToProps = (dispatch, props) => {
   return {
     onCanvasClick: () => {
-      dispatch( actionTypes.CLICK_ROOT_NODE );
+      dispatch(clickRootNode());
     },
     setGame: ( game ) => {
-      dispatch({ type: actionTypes.SWITCH_GAME.type, game });
+      dispatch(switchGame(game));
     }
   };
 };

@@ -51,11 +51,11 @@ function actionAnswerCard(state, action) {
     const highlighted = dictUtils.decompose(char);
 
     switch (action.type) {
-        case actionTypes.GUESS_FLASHCARD_WRONG.type:
+        case actionTypes.GUESS_FLASHCARD_WRONG:
             memory.markAsDifficult(char);
             isKnown = false;
             break;
-        case actionTypes.GUESS_FLASHCARD_RIGHT.type:
+        case actionTypes.GUESS_FLASHCARD_RIGHT:
             memory.markAsEasy(char);
             break;
         default:
@@ -214,7 +214,7 @@ function addTimedAction(state, timedAction, timedActionDuration) {
 }
 
 function queueDeselectOfUnansweredCards(state) {
-    return addTimedAction(state, actionTypes.DESELECT_ALL_UNANSWERED_CARDS.type, 2000);
+    return addTimedAction(state, actionTypes.DESELECT_ALL_UNANSWERED_CARDS, 2000);
 }
 
 function actionDeselectUnansweredCards(state) {
@@ -322,23 +322,23 @@ export default (state, action) => {
             return pausePlay(flipCardStart(state, action));
         case actionTypes.FLIP_CARDS_END:
             return resumePlay(flipCards(state));
-        case actionTypes.SAVE_COMPLETE.type:
+        case actionTypes.SAVE_COMPLETE:
             return saveDone(state);
-        case actionTypes.DESELECT_ALL_UNANSWERED_CARDS.type:
+        case actionTypes.DESELECT_ALL_UNANSWERED_CARDS:
             return actionDeselectUnansweredCards(state, action);
-        case actionTypes.CLEAR_TIMED_ACTION.type:
+        case actionTypes.CLEAR_TIMED_ACTION:
             return Object.assign({}, state, { timedAction: undefined,
                 timedActionDuration: undefined });
-        case actionTypes.END_ROUND.type:
-        case actionTypes.START_ROUND.type:
+        case actionTypes.END_ROUND:
+        case actionTypes.START_ROUND:
             return newRound(state);
-        case actionTypes.GUESS_FLASHCARD_WRONG.type:
-        case actionTypes.GUESS_FLASHCARD_RIGHT.type:
+        case actionTypes.GUESS_FLASHCARD_WRONG:
+        case actionTypes.GUESS_FLASHCARD_RIGHT:
             return actionAnswerCard(state, action);
-        case actionTypes.REQUEST_PINYIN_END.type:
+        case actionTypes.REQUEST_PINYIN_END:
             return actionRevealPronounciation(state, action);
             // reset on boot
-        case actionTypes.BOOT.type:
+        case actionTypes.BOOT:
             return actionBoot(state, action);
         default:
             break;
@@ -346,17 +346,17 @@ export default (state, action) => {
     // All these actions are user driven and will not work if paused.
     if (!action.isPaused) {
         switch (action.type) {
-            case actionTypes.REVEAL_FLASHCARD.type:
+            case actionTypes.REVEAL_FLASHCARD:
                 return state.isPaused ? state : revealedFlashcard(state, action);
-            case actionTypes.SWITCH_GAME.type:
+            case actionTypes.SWITCH_GAME:
                 return setGame(state, action);
-            case actionTypes.GUESS_FLASHCARD_WRONG.type:
-            case actionTypes.GUESS_FLASHCARD_RIGHT.type:
+            case actionTypes.GUESS_FLASHCARD_WRONG:
+            case actionTypes.GUESS_FLASHCARD_RIGHT:
                 return actionAnswerCard(state, action);
             case actionTypes.REQUEST_PINYIN_START:
                 return actionRevealPronounciation(state, action);
                 // reset on boot
-            case actionTypes.CLICK_ROOT_NODE.type:
+            case actionTypes.CLICK_ROOT_NODE:
                 return clearOverlay(state);
             default:
                 break;

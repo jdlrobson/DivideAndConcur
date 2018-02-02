@@ -1,15 +1,14 @@
-import actionTypes from './actionTypes';
+import { endRound, saveComplete, timedAction } from './actions';
 
 export function checkForTimedAction(store) {
     return () => {
         const state = store.getState();
-        const timedAction = state && state.timedAction;
+        const queuedTimedAction = state && state.timedAction;
 
-        if (timedAction) {
-            window.setTimeout(() => {
-                store.dispatch({ type: timedAction });
-            }, state.timedActionDuration || 5000);
-            store.dispatch(actionTypes.CLEAR_TIMED_ACTION);
+        if (queuedTimedAction) {
+            store.dispatch(
+                timedAction(queuedTimedAction, state.timedActionDuration || 5000)
+            );
         }
     };
 }
@@ -25,7 +24,7 @@ export function checkForSave(store) {
         if (state.isDirty) {
             if (state.dataToSave) {
                 localStorage.setItem('memory', JSON.stringify(state.dataToSave));
-                store.dispatch(actionTypes.SAVE_COMPLETE);
+                store.dispatch(saveComplete());
             } else {
                 throw new Error('An unexpected error occurred.');
             }
@@ -44,7 +43,7 @@ export function checkIfEndOfRound(store) {
         const answeredCards = cards.filter(card => card.isAnswered);
 
         if (cards && cards.length && answeredCards.length === cards.length) {
-            store.dispatch(actionTypes.END_ROUND);
+            store.dispatch(endRound());
         }
     };
 }

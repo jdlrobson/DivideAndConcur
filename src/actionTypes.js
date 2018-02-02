@@ -1,64 +1,34 @@
-const BOOT = {
-    type: 'BOOT',
-    text: 'Load the game'
-};
+const BOOT = 'BOOT';
 
-const SAVE_PROGRESS = {
-    type: 'SAVE-PROGRESS',
-    text: 'Save progress in the game'
-};
+const SAVE_PROGRESS = 'SAVE-PROGRESS';
 
 const REQUEST_PINYIN_START = 'REQUEST_PINYIN_START';
 
-const REQUEST_PINYIN_END = {
-    type: 'REQUEST_PINYIN_END'
-};
+const REQUEST_PINYIN_END = 'REQUEST_PINYIN_END';
 
-const REVEAL_FLASHCARD = {
-    type: 'REVEAL-FLASHCARD',
-    text: 'A flashcard was clicked'
-};
+const REVEAL_FLASHCARD = 'REVEAL-FLASHCARD';
 
-const CLICK_ROOT_NODE = {
-    type: 'CLICK-ROOT-NODE',
-    text: 'Clicked the root node'
-};
+const CLICK_ROOT_NODE = 'CLICK-ROOT-NODE';
 
-const GUESS_FLASHCARD_RIGHT = {
-    type: 'GUESS_FLASHCARD_RIGHT'
-};
+const GUESS_FLASHCARD_RIGHT = 'GUESS_FLASHCARD_RIGHT';
 
-const GUESS_FLASHCARD_WRONG = {
-    type: 'GUESS_FLASHCARD_WRONG'
-};
+const GUESS_FLASHCARD_WRONG = 'GUESS_FLASHCARD_WRONG';
 
-const START_ROUND = {
-    type: 'START_ROUND'
-};
+const START_ROUND = 'START_ROUND';
 
-const END_ROUND = {
-    type: 'END_ROUND'
-};
+const END_ROUND = 'END_ROUND';
 
-const CLEAR_TIMED_ACTION = {
-    type: 'CLEAR_TIMED_ACTION'
-};
+const CLEAR_TIMED_ACTION = 'CLEAR_TIMED_ACTION';
 
 const FLIP_CARDS_END = 'FLIP_CARDS_END';
 
 const FLIP_CARDS_START = 'FLIP_CARDS_START';
 
-const DESELECT_ALL_UNANSWERED_CARDS = {
-    type: 'DESELECT_ALL_UNANSWERED_CARDS'
-};
+const DESELECT_ALL_UNANSWERED_CARDS = 'DESELECT_ALL_UNANSWERED_CARDS';
 
-const SWITCH_GAME = {
-    type: 'SWITCH_GAME'
-};
+const SWITCH_GAME = 'SWITCH_GAME';
 
-const SAVE_COMPLETE = {
-    type: 'SAVE_COMPLETE'
-};
+const SAVE_COMPLETE = 'SAVE_COMPLETE';
 
 export default {
     BOOT,

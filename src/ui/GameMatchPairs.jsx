@@ -3,11 +3,10 @@ import { Component, h } from 'preact';
 import { connect } from 'preact-redux';
 import Card from './Card'
 import { flipCardsAfter } from './../actions'
-import actionTypes from './../actionTypes';
+import { startRound } from './../actions'
 
 class GameMatchPairs extends Component {
   componentDidMount() {
-    console.log('GameMatchPairs mounted');
     this.props.onStart();
   }
   render(props) {
@@ -32,7 +31,7 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = (dispatch, props) => {
   return {
     onStart: () => {
-      dispatch(actionTypes.START_ROUND);
+      dispatch(startRound());
       dispatch(flipCardsAfter(5000));
     }
   };
