@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "parcel index.html",
-    "lint": "eslint src/ tests/",
+    "lint": "eslint src/ tests/**",
     "fixlint": "eslint src/ tests/ --fix",
-    "test": "npm run lint && mocha --compilers js:babel-core/register tests/"
+    "test": "npm run lint && mocha --compilers js:babel-core/register tests/**"
   },
   "author": "",
   "license": "ISC",

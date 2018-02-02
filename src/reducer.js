@@ -1,13 +1,13 @@
 /** @jsx h */
 import { FLIP_CARDS, MATCH_PAIRS, REVISE } from './constants';
+import { getDifficultyRating, knowsWord } from './helpers/difficulty-ratings';
+import { markWordAsDifficult, markWordAsEasy } from './reducers/difficulty-ratings';
 import DictionaryUtils from './../data/DictionaryUtils';
-import Memory from './Memory';
 import actionTypes from './actionTypes';
 import dictJson from './../data/dictionary.json';
 
 const NUM_CARDS_PER_LEVEL = 10;
 const MAX_DIFFICULTY = 11;
-let memory;
 const dictUtils = new DictionaryUtils(dictJson.words,
     dictJson.decompositions, dictJson.difficulty, dictJson.pinyin);
 
@@ -15,9 +15,7 @@ const ALL_WORDS = dictUtils.all();
 
 // Setups state with the required globals for managing a game
 function actionBoot(state, action) {
-    memory = new Memory(action.userData);
-
-    return setGame();
+    return setGame({ answers: action.userData.answers || {} }, { game: FLIP_CARDS });
 }
 
 // clears the current overlay
@@ -32,15 +30,16 @@ function actionAnswerCard(state, action) {
     const char = action.character;
     const isAnswered = true;
     let isKnown = true;
+    let answers;
     const highlighted = dictUtils.decompose(char);
 
     switch (action.type) {
         case actionTypes.GUESS_FLASHCARD_WRONG:
-            memory.markAsDifficult(char);
+            answers = markWordAsDifficult(state.answers, char);
             isKnown = false;
             break;
         case actionTypes.GUESS_FLASHCARD_RIGHT:
-            memory.markAsEasy(char);
+            answers = markWordAsEasy(state.answers, char);
             break;
         default:
             break;
@@ -48,15 +47,16 @@ function actionAnswerCard(state, action) {
 
     return Object.assign({}, state, {
         highlighted,
+        answers,
         cards: updateCardInCards(state.cards, action, { isAnswered, isKnown }),
         previous: state.previous
     });
 }
 
-function mapCard(character) {
-    const difficultyLevel = memory.getDifficulty(character);
+function mapCard(state, character) {
+    const difficultyLevel = getDifficultyRating(state.answers, character);
     return {
-        isKnown: memory.knowsWord(character),
+        isKnown: knowsWord(state.answers, character),
         character,
         difficultyLevel,
         level: `${dictUtils.getWordLength(character)}.${dictUtils.getDifficultyRating(character)}`,
@@ -74,12 +74,12 @@ function addKnownWordCount(state) {
 }
 
 function makeCardsFromCharacters(state, chars) {
-    return chars.map(char => mapCard(char));
+    return chars.map(char => mapCard(state, char));
 }
 
-function findPackStartPosition(pack) {
+function findPackStartPosition(answers, pack) {
     let i = 0;
-    while (memory.knowsWord(pack[i])) {
+    while (knowsWord(answers, pack[i])) {
         i += 1;
     }
     return i;
@@ -89,7 +89,7 @@ function fastForwardToPackPosition(state) {
     let difficulty = state.difficulty;
     let wordSize = state.wordSize;
     const pack = dictUtils.getWords(wordSize, difficulty);
-    const packPosition = findPackStartPosition(pack);
+    const packPosition = findPackStartPosition(state.answers, pack);
     const previous = state.previous || [];
     if (difficulty >= MAX_DIFFICULTY * (wordSize + 1)) {
         wordSize = 1;
@@ -99,30 +99,30 @@ function fastForwardToPackPosition(state) {
     if (pack.length === 0 && difficulty > MAX_DIFFICULTY) {
     // we ran out on this difficulty (there may be more but they are unreachable with current words)
     // given assumption every difficulty has at least one word
-        return fastForwardToPackPosition({
+        return fastForwardToPackPosition(Object.assign({}, state, {
             wordSize: wordSize + 1,
             previous: pack.concat(previous),
             difficulty: 0
-        });
+        }));
     } else if (packPosition >= pack.length) {
-        return fastForwardToPackPosition({
+        return fastForwardToPackPosition(Object.assign({}, state, {
             wordSize,
             previous: pack.concat(previous),
             difficulty: difficulty + 1
-        });
+        }));
     } else {
-        return {
+        return Object.assign({}, state, {
             pack,
             previous,
             packPosition,
             wordSize,
             difficulty
-        };
+        });
     }
 }
 
 function dealKnownCards(state, total) {
-    const known = ALL_WORDS.filter(char => memory.knowsWord(char));
+    const known = ALL_WORDS.filter(char => knowsWord(state.answers, char));
     const cards = makeCardsFromCharacters(state, known);
     return addKnownWordCount(Object.assign({}, state, { cards, previous: [] }));
 }
@@ -151,13 +151,13 @@ function dealCards(state, total = NUM_CARDS_PER_LEVEL) {
 }
 
 function setGame(state, action) {
-    return newRound({
+    return newRound(Object.assign({}, state, {
         game: action ? action.game : FLIP_CARDS,
         highlighted: [],
         previous: [],
         cards: [],
         maxSize: ALL_WORDS.length
-    });
+    }));
 }
 
 function updateCardInCards(cards, action, props) {
@@ -221,10 +221,10 @@ function revealedFlashcardPairGame(state, action) {
     if (selectedCards.length === 2) {
         if (selectedCards[0].character === selectedCards[1].character) {
             const char = action.character;
-            memory.markAsEasy(char);
+            const answers = markWordAsEasy(state.answers, char);
             const cards = markCardsAsAnswered(state.cards, char, true);
             const highlighted = dictUtils.decompose(char);
-            return Object.assign({}, state, { cards, highlighted });
+            return Object.assign({}, state, { cards, highlighted, answers });
         } else {
             return queueDeselectOfUnansweredCards(pausePlay(state));
         }
@@ -266,10 +266,10 @@ function addIndexToCards(state) {
 }
 
 function requestSave(state) {
-    return Object.assign({}, state, { isDirty: true, dataToSave: memory.toJSON() });
+    return Object.assign({}, state, { isDirty: true });
 }
 function saveDone(state) {
-    return Object.assign({}, state, { isDirty: false, dataToSave: undefined });
+    return Object.assign({}, state, { isDirty: false });
 }
 
 function cutCardDeck(state, total) {

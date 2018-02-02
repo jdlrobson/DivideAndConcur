@@ -22,12 +22,10 @@ export function checkForSave(store) {
         const state = store.getState();
 
         if (state.isDirty) {
-            if (state.dataToSave) {
-                localStorage.setItem('memory', JSON.stringify(state.dataToSave));
-                store.dispatch(saveComplete());
-            } else {
-                throw new Error('An unexpected error occurred.');
-            }
+            localStorage.setItem('memory', JSON.stringify({
+                answers: state.answers
+            }));
+            store.dispatch(saveComplete());
         }
     };
 }
