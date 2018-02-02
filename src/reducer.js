@@ -1,6 +1,6 @@
 /** @jsx h */
 import { FLIP_CARDS, MATCH_PAIRS, REVISE } from './constants';
-import { getDifficultyRating, knowsWord } from './helpers/difficulty-ratings';
+import { getDifficultyRating, getKnownWordCount, knowsWord } from './helpers/difficulty-ratings';
 import { markWordAsDifficult, markWordAsEasy } from './reducers/difficulty-ratings';
 import DictionaryUtils from './../data/DictionaryUtils';
 import actionTypes from './actionTypes';
@@ -66,10 +66,7 @@ function mapCard(state, character) {
 }
 
 function addKnownWordCount(state) {
-    const prev = state.previous;
-    const cards = state.cards;
-    const knownWordCount = cards.filter(card => card.isKnown).length + prev.length;
-
+    const knownWordCount = getKnownWordCount(state.answers);
     return Object.assign({}, state, { knownWordCount });
 }
 
