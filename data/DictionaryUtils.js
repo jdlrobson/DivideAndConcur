@@ -86,7 +86,7 @@ DictionaryUtils.prototype = {
       // returning 1 nearly all the time
       return !this.decompositions[word] ? 0 : this.decompose(word, true).length;
     } else {
-      return Array.from(word).reduce((acc, char) => this.getWordLength(char) + acc + strLen);
+      return Array.from(word).reduce((acc, char) => this.getWordLength(char) + acc + strLen );
     }
   },
   /**
