@@ -19,6 +19,7 @@ class GameChooser extends Component {
   render(props) {
     const game = props.game;
     const switcherDisabled = props.switcherDisabled;
+    console.log('GameChooser', switcherDisabled)
 
     return (
       <div className="game-chooser" onClick={props.onCanvasClick}>

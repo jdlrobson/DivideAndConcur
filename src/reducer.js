@@ -198,14 +198,19 @@ function deselectUnansweredCards(cards) {
     });
 }
 
+function resumePlay(state) {
+    return Object.assign({}, state, { isPaused: false });
+}
+
 function pausePlay(state) {
     return Object.assign({}, state, { isPaused: true });
 }
 
 function addTimedAction(state, timedAction, timedActionDuration) {
-    return Object.assign({}, state, { isPaused: true,
+    return pausePlay(Object.assign({}, state, {
         timedAction,
-        timedActionDuration });
+        timedActionDuration })
+    );
 }
 
 function queueDeselectOfUnansweredCards(state) {
@@ -213,10 +218,11 @@ function queueDeselectOfUnansweredCards(state) {
 }
 
 function actionDeselectUnansweredCards(state) {
-    return Object.assign({}, state, {
-        isPaused: false,
-        cards: deselectUnansweredCards(state.cards)
-    });
+    return resumePlay(
+        Object.assign({}, state, {
+            cards: deselectUnansweredCards(state.cards)
+        })
+    );
 }
 
 function revealCardInAction(state, action) {
@@ -290,11 +296,7 @@ function cutCardDeck(state, total) {
 function newRound(state) {
     if (state.game === MATCH_PAIRS) {
         return requestSave(
-            addTimedAction(
-                addIndexToCards(shuffleCards(freezeCards(cloneCards(dealCards(state, 6))))),
-                actionTypes.FLIP_CARDS.type,
-                5000
-            )
+            addIndexToCards(shuffleCards(freezeCards(cloneCards(dealCards(state, 6)))))
         );
     } else if (state.game === FLIP_CARDS) {
         return requestSave(addIndexToCards(dealCards(state)));
@@ -307,13 +309,19 @@ function newRound(state) {
 function flipCards(state) {
     const cards = state.cards.map(card => Object.assign({}, card,
         { isFlipped: true, isSelected: false }));
-    return Object.assign({}, state, { cards, isPaused: false });
+    return Object.assign({}, state, { cards });
+}
+
+function flipCardStart(state, action) {
+    return Object.assign({}, state);
 }
 
 export default (state, action) => {
     switch (action.type) {
-        case actionTypes.FLIP_CARDS.type:
-            return flipCards(state);
+        case actionTypes.FLIP_CARDS_START:
+            return pausePlay(flipCardStart(state, action));
+        case actionTypes.FLIP_CARDS_END:
+            return resumePlay(flipCards(state));
         case actionTypes.SAVE_COMPLETE.type:
             return saveDone(state);
         case actionTypes.DESELECT_ALL_UNANSWERED_CARDS.type:

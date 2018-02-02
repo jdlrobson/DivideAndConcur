@@ -5,6 +5,15 @@ function requestPinyinStart(character) {
     return { type: actionTypes.REQUEST_PINYIN_START, character };
 }
 
+export function flipCardsAfter(milliseconds) {
+    return (dispatch, getState) => {
+        setTimeout(() => {
+            dispatch({ type: actionTypes.FLIP_CARDS_END });
+        }, milliseconds);
+        dispatch({ type: actionTypes.FLIP_CARDS_START });
+    };
+}
+
 export function requestPinyin(character) {
     return (dispatch, getState) => {
         if (getState().characterRequested !== character) {
