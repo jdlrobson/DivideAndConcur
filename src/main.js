@@ -5,7 +5,7 @@ import { checkForSave,
     checkForTimedAction, checkIfEndOfRound } from './subscribers';
 import { h, render } from 'preact';
 
-import GameChooser from './ui/GameChooser';
+import App from './ui/App';
 import { Provider } from 'preact-redux';
 import { boot } from './actions';
 import reducer from './reducer';
@@ -31,7 +31,7 @@ const store = createStore(reducer,
         document.getElementById('container').innerHTML = '';
         const provider = (
             <Provider store={store}>
-                <GameChooser />
+                <App />
             </Provider>
         );
         render(

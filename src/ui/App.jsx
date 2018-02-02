@@ -8,7 +8,7 @@ import ProgressBar from './ProgressBar'
 import { clickRootNode, switchGame, dismountCurrentGame } from './../actions'
 import { MATCH_PAIRS, FLIP_CARDS, REVISE } from './../constants'
 
-class GameChooser extends Component {
+class App extends Component {
   setGame( game ) {
     this.props.setGame( game );
   }
@@ -21,40 +21,40 @@ class GameChooser extends Component {
 
     if ( game ) {
       workflow = (
-          <div className="game-chooser__content">
+          <div className="app__content">
           { ( game === FLIP_CARDS || game === REVISE ) && <Game description={gameDescription} /> }
           { game === MATCH_PAIRS && <GameMatchPairs /> }
           </div>
       );
     } else {
       workflow = (
-        <div className="game-chooser__menu">
+        <div className="app__menu">
           <p>Which game do you want to play today?</p>
           <button disabled={game === FLIP_CARDS}
-              className="game-chooser__menu__button"
+              className="app__menu__button"
               onClick={(ev)=>this.setGame( FLIP_CARDS )}>Flip</button>
           <button disabled={game === MATCH_PAIRS}
-            className="game-chooser__menu__button"
+            className="app__menu__button"
             onClick={(ev)=>this.setGame( MATCH_PAIRS )}>Pairs</button>
           <button disabled={game === REVISE}
-            className="game-chooser__menu__button"
+            className="app__menu__button"
             onClick={(ev)=>this.setGame( REVISE )}>Revise</button>
         </div>
       );
     }
     return (
-      <div className="game-chooser" onClick={props.onCanvasClick}>
+      <div className="app" onClick={props.onCanvasClick}>
         {props.overlay}
-        <div className="game-chooser__header">
-          <div className="game-chooser__component--floated">
+        <div className="app__header">
+          <div className="app__component--floated">
             <button onClick={props.onHomeClick} disabled={props.switcherDisabled}>Home</button>
           </div>
-          <div className="game-chooser__component--floated">
+          <div className="app__component--floated">
             <ProgressBar percent={(props.knownWordCount/props.maxSize) * 100}>
               {`${props.knownWordCount} of ${props.maxSize} words`}
             </ProgressBar>
           </div>
-          <div className="game-chooser__component--floated">
+          <div className="app__component--floated">
             {
               props.highlighted.map((props) => {
                 return <Card {...props} isHighlighted={true}
@@ -69,9 +69,7 @@ class GameChooser extends Component {
   }
 }
 
-GameChooser.defaultProps = {
-  game: FLIP_CARDS
-}
+App.defaultProps = {};
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
@@ -103,4 +101,4 @@ const mapStateToProps = (state, props) => {
       overlay, knownWordCount, maxSize } );
 };
 
-export default connect( mapStateToProps, mapDispatchToProps )(GameChooser);
+export default connect( mapStateToProps, mapDispatchToProps )(App);
