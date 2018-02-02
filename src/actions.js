@@ -1,9 +1,4 @@
 import actionTypes from './actionTypes';
-import mcs from './mcs';
-
-function requestPinyinStart(character) {
-    return { type: actionTypes.REQUEST_PINYIN_START, character };
-}
 
 export function boot(userData) {
     return { type: actionTypes.BOOT, userData };
@@ -47,12 +42,6 @@ export function saveComplete() {
     return { type: actionTypes.SAVE_COMPLETE };
 }
 
-function requestPinyinEnd(character, pinyin) {
-    return { type: actionTypes.REQUEST_PINYIN_END,
-        character,
-        pinyin };
-}
-
 export function revealFlashcard(character, index) {
     return { type: actionTypes.REVEAL_FLASHCARD,
         character,
@@ -67,19 +56,5 @@ export function answerFlashcard(isCorrect, character, index) {
         type,
         character,
         index
-    };
-}
-
-export function requestPinyin(character) {
-    return (dispatch, getState) => {
-        if (getState().characterRequested !== character) {
-            dispatch(requestPinyinStart(character));
-            return mcs.getPronounciation(character)
-        .then((pinyin) => {
-            if (getState().characterRequested === character) {
-                dispatch(requestPinyinEnd(character, pinyin));
-            }
-        });
-        }
     };
 }

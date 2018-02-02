@@ -6,11 +6,7 @@ import Card from './Card'
 import GameMatchPairs from './GameMatchPairs'
 import ProgressBar from './ProgressBar'
 import { clickRootNode, switchGame } from './../actions'
-
-export const MATCH_PAIRS = 'pairs';
-export const FLIP_CARDS = 'flip';
-export const REVISE = 'revise';
-export const PAUSED = 'paused';
+import { MATCH_PAIRS, FLIP_CARDS, REVISE } from './../constants'
 
 class GameChooser extends Component {
   setGame( game ) {

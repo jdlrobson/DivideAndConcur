@@ -1,12 +1,9 @@
 /** @jsx h */
-import { FLIP_CARDS, MATCH_PAIRS, REVISE } from './ui/GameChooser';
-
-import CharacterPreviewOverlay from './ui/CharacterPreviewOverlay';
+import { FLIP_CARDS, MATCH_PAIRS, REVISE } from './constants';
 import DictionaryUtils from './../data/DictionaryUtils';
 import Memory from './Memory';
 import actionTypes from './actionTypes';
 import dictJson from './../data/dictionary.json';
-import { h } from 'preact';
 
 const NUM_CARDS_PER_LEVEL = 10;
 const MAX_DIFFICULTY = 11;
@@ -21,19 +18,6 @@ function actionBoot(state, action) {
     memory = new Memory(action.userData);
 
     return setGame();
-}
-
-// updates state to add the character preview overlay overlay
-function actionRevealPronounciation(state, action) {
-    const char = action.character;
-    const characterRequested = action.type === actionTypes.REQUEST_PINYIN_START ?
-        char : undefined;
-
-    return Object.assign({}, state, {
-        characterRequested,
-        overlay: <CharacterPreviewOverlay char={char} pinyin={action.pinyin} />
-    });
-
 }
 
 // clears the current overlay
@@ -335,9 +319,6 @@ export default (state, action) => {
         case actionTypes.GUESS_FLASHCARD_WRONG:
         case actionTypes.GUESS_FLASHCARD_RIGHT:
             return actionAnswerCard(state, action);
-        case actionTypes.REQUEST_PINYIN_END:
-            return actionRevealPronounciation(state, action);
-            // reset on boot
         case actionTypes.BOOT:
             return actionBoot(state, action);
         default:
@@ -353,9 +334,6 @@ export default (state, action) => {
             case actionTypes.GUESS_FLASHCARD_WRONG:
             case actionTypes.GUESS_FLASHCARD_RIGHT:
                 return actionAnswerCard(state, action);
-            case actionTypes.REQUEST_PINYIN_START:
-                return actionRevealPronounciation(state, action);
-                // reset on boot
             case actionTypes.CLICK_ROOT_NODE:
                 return clearOverlay(state);
             default:

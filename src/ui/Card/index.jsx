@@ -2,7 +2,7 @@
 import { Component, h } from 'preact';
 import { connect } from 'preact-redux';
 import './styles.less';
-import { requestPinyin, revealFlashcard, answerFlashcard } from './../../actions'
+import { revealFlashcard, answerFlashcard } from './../../actions'
 
 function className( block, element, modifiers=[] ) {
     let blockElement = block;
@@ -29,12 +29,6 @@ class Card extends Component {
   tick(ev) {
     const props = this.props;
     props.onAnswered( props.character, props.index, true );
-    ev.stopPropagation();
-  };
-  requestPidgin(ev) {
-    const props = this.props;
-
-    props.onClickListen( props.character );
     ev.stopPropagation();
   };
   render(props) {
@@ -81,8 +75,7 @@ class Card extends Component {
         <div key='tick' className='tick button' onClick={this.tick.bind(this)}
           style={isSelected && !done && !isKnown && !isFrozen ? {} : hidden}>✅</div>,
         <div key='wrong' className='wrong button' onClick={this.wrong.bind(this)}
-          style={isSelected && !done && !isKnown && !isFrozen ? {} : hidden}>❌</div>,
-        <div key="pinyin" className="pinyin button" onClick={this.requestPidgin.bind(this)}>🔊</div>
+          style={isSelected && !done && !isKnown && !isFrozen ? {} : hidden}>❌</div>
     ];
 
     if ( props.isSmall ) {
@@ -107,9 +100,6 @@ const mapDispatchToProps = (dispatch, props) => {
   return {
     onSelect: ( character, index ) => {
       dispatch( revealFlashcard( character, index ) );
-    },
-    onClickListen: ( character ) => {
-      dispatch( requestPinyin( character ) );
     },
     onAnswered: ( character, index, isCorrect ) => {
       dispatch( answerFlashcard( isCorrect, character, index ) );
