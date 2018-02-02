@@ -14,6 +14,8 @@ let memory;
 const dictUtils = new DictionaryUtils(dictJson.words,
     dictJson.decompositions, dictJson.difficulty, dictJson.pinyin);
 
+const ALL_WORDS = dictUtils.all();
+
 // Setups state with the required globals for managing a game
 function actionBoot(state, action) {
     memory = new Memory(action.userData);
@@ -136,7 +138,7 @@ function fastForwardToPackPosition(state) {
 }
 
 function dealKnownCards(state, total) {
-    const known = dictUtils.all().filter(char => memory.knowsWord(char));
+    const known = ALL_WORDS.filter(char => memory.knowsWord(char));
     const cards = makeCardsFromCharacters(state, known);
     return addKnownWordCount(Object.assign({}, state, { cards, previous: [] }));
 }
@@ -170,7 +172,7 @@ function setGame(state, action) {
         highlighted: [],
         previous: [],
         cards: [],
-        maxSize: dictUtils.all().length
+        maxSize: ALL_WORDS.length
     });
 }
 
