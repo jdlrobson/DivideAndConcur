@@ -4,6 +4,8 @@ function DictionaryUtils( words, decompositions, difficulties ) {
   this.words = words;
   this.decompositions = decompositions;
   this.difficulties = difficulties;
+  this.pinyin = {};
+  this.levelCache = {};
 }
 DictionaryUtils.prototype = {
   all: function () {
@@ -18,7 +20,13 @@ DictionaryUtils.prototype = {
          !this.decompositions[word]);
   },
   getPinyin: function ( word ) {
-    return pinyin(word);
+    if ( this.pinyin[word] ) {
+      return this.pinyin[word];
+    } else {
+      const _pinyin = pinyin(word);
+      this.pinyin[word] = _pinyin;
+      return _pinyin;
+    }
   },
   getWord: function ( word ) {
     return this.words[word];
@@ -91,6 +99,13 @@ DictionaryUtils.prototype = {
    * @param {Number} [max] if defined results will be limited to this amount of results.
    */
   getWords: function (wordLength, difficultyLevel, max) {
+    var cacheKey = `${wordLength}.${difficultyLevel}`;
+    if ( !this.levelCache[cacheKey] ) {
+      this.levelCache[cacheKey] = this.getWordsWithoutCache( wordLength, difficultyLevel );
+    }
+    return this.levelCache[cacheKey].slice( 0, max );
+  },
+  getWordsWithoutCache: function (wordLength, difficultyLevel) {
     var words = this.words;
     var getWordLength = this.getWordLength.bind( this );
     var decompositions = this.decompositions;
@@ -99,10 +114,9 @@ DictionaryUtils.prototype = {
     function matchesDifficultyLevel(w) {
       return difficultyLevel === undefined || getDifficultyRating(w) === difficultyLevel
     }
-    var keys = Object.keys( words ).filter((w) => {
+    return Object.keys( words ).filter((w) => {
         return getWordLength(w) === wordLength && matchesDifficultyLevel(w);
       } );
-    return keys.slice( 0, max );
   },
   decompose: function( word, isRecursive ) {
     var decompose = this.decompose.bind( this );
