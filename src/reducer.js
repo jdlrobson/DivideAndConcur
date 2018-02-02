@@ -16,7 +16,7 @@ const ALL_WORDS = dictUtils.all();
 
 // Setups state with the required globals for managing a game
 function actionBoot(state, action) {
-    return setGame({ answers: action.userData.answers || {} }, { game: FLIP_CARDS });
+    return setGame({ answers: action.userData.answers || {} }, { game: false });
 }
 
 // clears the current overlay
@@ -131,7 +131,7 @@ function fastForwardToPackPosition(state) {
 function dealKnownCards(state, total) {
     const known = ALL_WORDS.filter(char => knowsWord(getDifficultyRatings(state), char));
     const cards = makeCardsFromCharacters(state, known);
-    return addKnownWordCount(Object.assign({}, state, { cards, previous: [] }));
+    return Object.assign({}, state, { cards, previous: [] });
 }
 
 /**
@@ -155,11 +155,9 @@ function dealCards(state, total = NUM_CARDS_PER_LEVEL) {
         answeredCardsInCurrentPack.concat(position.previous));
 
     // if all have been answered lets deal again..
-    return addKnownWordCount(
-        Object.assign({}, state, position, {
+    return Object.assign({}, state, position, {
             cards, previous
-        })
-    );
+        });
 }
 
 function setGame(state, action) {
@@ -289,6 +287,7 @@ function cutCardDeck(state, total) {
 }
 
 function newRound(state) {
+    state = addKnownWordCount(state);
     if (state.game === MATCH_PAIRS) {
         return requestSave(
             addIndexToCards(shuffleCards(freezeCards(cloneCards(dealCards(state, 6)))))
