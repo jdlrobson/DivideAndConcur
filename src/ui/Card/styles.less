@@ -1,5 +1,6 @@
 @cardBorder: 3px;
-@cardSize: 115px;
+@cardSize: 95px;
+@cardSizeSmall: 60px;
 
 .card {
   transition: 0.6s;
@@ -12,6 +13,7 @@
   margin-right: 10px;
   text-align: center;
   position: relative;
+  font-size: 0.8em;
   border: solid @cardBorder transparent;
 }
 
@@ -56,13 +58,10 @@
 }
 
 .card--small {
-  width: 60px;
-  height: 60px;
+  width: @cardSizeSmall;
+  height: @cardSizeSmall;
   margin-right: 5px;
-
-  .card__char {
-    font-size: 30px;
-  }
+  font-size: 0.7em;
 }
 
 .card__difficulty-bar {
@@ -110,6 +109,19 @@
 }
 
 .card__char {
-  font-size: 40px;
+  font-size: 2.5em;
   font-weight: bold;
+}
+
+@media all and ( min-width: 500px ) {
+  .card {
+    width: @cardSize + 50;
+    height: @cardSize + 30;
+    font-size: 1em;
+  }
+  .card--small {
+    font-size: 0.7em;
+    width: @cardSizeSmall;
+    height: @cardSizeSmall;
+  }
 }

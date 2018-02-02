@@ -284,9 +284,9 @@ function newRound(state) {
             addIndexToCards(shuffleCards(freezeCards(cloneCards(dealCards(state, 6)))))
         );
     } else if (state.game === FLIP_CARDS) {
-        return requestSave(addIndexToCards(dealCards(state)));
+        return requestSave(addIndexToCards(dealCards(state, 9)));
     } else if (state.game === REVISE) {
-        return requestSave(addIndexToCards(cutCardDeck(shuffleCards(dealKnownCards(state)), 10)));
+        return requestSave(addIndexToCards(cutCardDeck(shuffleCards(dealKnownCards(state)), 9)));
     } else {
         throw new Error('unknown game');
     }
