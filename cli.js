@@ -157,6 +157,40 @@ function batchAutoDecompose(words) {
 	})
 }
 
+function clean() {
+	var mapper = {
+		'⺮': '𥫗'
+	};
+
+	// Remove things that decompose to itself.
+	const decomp = dict.getDecompositions();
+	Object.keys(decomp).forEach((key) => {
+		var parts = decomp[key];
+		if ( parts.indexOf(key) > -1 ) {
+			console.log(`${key} decomposes to itself`);
+			parts.splice( parts.indexOf(key), 1 );
+			decomp[key] = parts;
+		}
+		if ( Object.keys(mapper).indexOf(key) > -1 ) {
+			console.log(`${key} is duplicated by ${mapper[key]}`);
+			decomp[key] = [];
+		}
+		Object.keys(mapper).forEach((dupeKey) => {
+			if ( parts.indexOf(dupeKey) > -1 ) {
+				console.log(`Substituting ${dupeKey} with ${mapper[dupeKey]}`)
+				parts[parts.indexOf(dupeKey)] = mapper[dupeKey];
+			}
+		})
+	});
+	Object.keys(decomp).forEach((key) => {
+		var parts = decomp[key];
+		if ( parts.length === 0 ) {
+			console.log(`Empty decomposition for ${key}`);
+			delete decomp[key];
+		}
+	});
+}
+
 function menu() {
 	const options = [
 		'1: Game',
@@ -170,7 +204,8 @@ function menu() {
 		'9: Increase difficulty of word(s)',
 		'10: Missing definitions',
 		'11: Delete word',
-		'12: Auto-assign difficulty'
+		'12: Auto-assign difficulty',
+		'13: Clean'
 	];
 	getUserInput( '**********************\n' + options.join('\n') + '\n**********************' )
 		.then( ( val ) => {
@@ -186,6 +221,10 @@ function menu() {
 					break;
 				case 1:
 					game();
+					break;
+				case 13:
+					clean();
+					return dict.save().then(() => menu());
 					break;
 				case 3:
 					getUserInput('Enter difficulty level').then((msg) => {
