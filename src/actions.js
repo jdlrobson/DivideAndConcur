@@ -4,6 +4,10 @@ export function boot(userData) {
     return { type: actionTypes.BOOT, userData };
 }
 
+export function dismountCurrentGame() {
+    return { type: actionTypes.DISMOUNT_GAME };
+}
+
 export function switchGame(game) {
     return { type: actionTypes.SWITCH_GAME, game };
 }

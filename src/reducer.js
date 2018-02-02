@@ -164,7 +164,7 @@ function dealCards(state, total = NUM_CARDS_PER_LEVEL) {
 
 function setGame(state, action) {
     return newRound(Object.assign({}, state, {
-        game: action ? action.game : FLIP_CARDS,
+        game: action.game,
         highlighted: [],
         previous: [],
         cards: [],
@@ -298,7 +298,7 @@ function newRound(state) {
     } else if (state.game === REVISE) {
         return requestSave(addIndexToCards(cutCardDeck(shuffleCards(dealKnownCards(state)), 9)));
     } else {
-        throw new Error('unknown game');
+        return state;
     }
 }
 function flipCards(state) {
@@ -338,6 +338,8 @@ export default (state, action) => {
     // All these actions are user driven and will not work if paused.
     if (!action.isPaused) {
         switch (action.type) {
+            case actionTypes.DISMOUNT_GAME:
+                return Object.assign({}, state, { game: false });
             case actionTypes.REVEAL_FLASHCARD:
                 return state.isPaused ? state : revealedFlashcard(state, action);
             case actionTypes.SWITCH_GAME:

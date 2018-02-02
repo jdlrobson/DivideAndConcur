@@ -6,6 +6,10 @@
 }
 
 /* GameChooser */
+.game-chooser {
+  max-width: 500px
+}
+
 .game-chooser__component--floated {
   float: left;
   margin: 0 10px 10px 0;
@@ -13,9 +17,19 @@
 
 .game-chooser__menu {
   clear: both;
+  > * {
+    margin-bottom: 10px;
+  }
+}
+
+.game-chooser__menu__button {
+  width: 100%;
+  display: block;
+  height: 50px;
 }
 
 .game-chooser__content {
+  clear: both;
   .card {
     margin-top: 10px;
   }
