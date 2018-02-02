@@ -4,6 +4,7 @@ import Game from './Game'
 import { connect } from 'preact-redux';
 import Card from './Card'
 import GameMatchPairs from './GameMatchPairs'
+import GameSelection from './GameSelection'
 import ProgressBar from './ProgressBar'
 import { clickRootNode, switchGame, dismountCurrentGame } from './../actions'
 import { MATCH_PAIRS, FLIP_CARDS, REVISE } from './../constants'
@@ -27,20 +28,7 @@ class App extends Component {
           </div>
       );
     } else {
-      workflow = (
-        <div className="app__menu">
-          <p>Which game do you want to play today?</p>
-          <button disabled={game === FLIP_CARDS}
-              className="app__menu__button"
-              onClick={(ev)=>this.setGame( FLIP_CARDS )}>Flip</button>
-          <button disabled={game === MATCH_PAIRS}
-            className="app__menu__button"
-            onClick={(ev)=>this.setGame( MATCH_PAIRS )}>Pairs</button>
-          <button disabled={game === REVISE}
-            className="app__menu__button"
-            onClick={(ev)=>this.setGame( REVISE )}>Revise</button>
-        </div>
-      );
+      workflow = <GameSelection />
     }
     return (
       <div className="app" onClick={props.onCanvasClick}>
