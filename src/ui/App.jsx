@@ -35,7 +35,7 @@ class App extends Component {
         {props.overlay}
         <div className="app__header">
           <div className="app__component--floated">
-            <button onClick={props.onHomeClick} disabled={props.switcherDisabled}>Home</button>
+            <button onClick={props.onHomeClick} disabled={props.switcherDisabled || !game}>Home</button>
           </div>
           <div className="app__component--floated">
             <ProgressBar percent={(props.knownWordCount/props.maxSize) * 100}>
