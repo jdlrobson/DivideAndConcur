@@ -30,9 +30,9 @@ class GameChooser extends Component {
           </div>
           <div className="game-chooser__component--floated">
             {
-              props.highlighted.map((char) => {
-                return <Card isHighlighted={true}
-                  key={'card-highlighted-' + char} character={char} isSmall={true} />;
+              props.highlighted.map((props) => {
+                return <Card {...props} isHighlighted={true}
+                  key={'card-highlighted-' + props.character} isSmall={true} />;
               })
             }
           </div>

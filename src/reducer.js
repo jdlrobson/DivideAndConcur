@@ -25,13 +25,19 @@ function clearOverlay(state) {
     });
 }
 
+function addHighlightedCards(state, char) {
+    const highlighted = makeCardsFromCharacters(state, dictUtils.decompose(char));
+    return Object.assign({}, state, {
+        highlighted
+    });
+}
+
 // Reducer for when a card is answered
 function actionAnswerCard(state, action) {
     const char = action.character;
     const isAnswered = true;
     let isKnown = true;
     let answers;
-    const highlighted = dictUtils.decompose(char);
 
     switch (action.type) {
         case actionTypes.GUESS_FLASHCARD_WRONG:
@@ -45,12 +51,11 @@ function actionAnswerCard(state, action) {
             break;
     }
 
-    return Object.assign({}, state, {
-        highlighted,
+    return addHighlightedCards(Object.assign({}, state, {
         answers,
         cards: updateCardInCards(state.cards, action, { isAnswered, isKnown }),
         previous: state.previous
-    });
+    }), char);
 }
 
 function mapCard(state, character) {
@@ -220,8 +225,7 @@ function revealedFlashcardPairGame(state, action) {
             const char = action.character;
             const answers = markWordAsEasy(state.answers, char);
             const cards = markCardsAsAnswered(state.cards, char, true);
-            const highlighted = dictUtils.decompose(char);
-            return Object.assign({}, state, { cards, highlighted, answers });
+            return addHighlightedCards(Object.assign({}, state, { cards, answers }), char);
         } else {
             return queueDeselectOfUnansweredCards(pausePlay(state));
         }
