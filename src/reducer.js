@@ -1,5 +1,5 @@
 /** @jsx h */
-import { FLIP_CARDS, MATCH_PAIRS, REVISE } from './constants';
+import { FLIP_CARDS, MATCH_PAIRS, REVISE, MATCH_PAIRS_REVISE } from './constants';
 import { getDifficultyRating, getKnownWordCount, knowsWord } from './helpers/difficulty-ratings';
 import { markWordAsDifficult, markWordAsEasy } from './reducers/difficulty-ratings';
 import DictionaryUtils from './../data/DictionaryUtils';
@@ -288,17 +288,29 @@ function cutCardDeck(state, total) {
 
 function newRound(state) {
     state = addKnownWordCount(state);
+    let cards;
+
     if (state.game === MATCH_PAIRS) {
-        return requestSave(
-            addIndexToCards(shuffleCards(freezeCards(cloneCards(dealCards(state, 6)))))
-        );
+        state = dealCards(state, 6);
+    } else if ( state.game === MATCH_PAIRS_REVISE ) {
+        state = cutCardDeck(shuffleCards(dealKnownCards(state)), 6);
     } else if (state.game === FLIP_CARDS) {
-        return requestSave(addIndexToCards(dealCards(state, 9)));
+        state = dealCards(state, 9);
     } else if (state.game === REVISE) {
-        return requestSave(addIndexToCards(cutCardDeck(shuffleCards(dealKnownCards(state)), 9)));
-    } else {
-        return state;
+        state = cutCardDeck(shuffleCards(dealKnownCards(state)), 9);
     }
+
+    switch (state.game) {
+        case MATCH_PAIRS:
+        case MATCH_PAIRS_REVISE:
+            state = shuffleCards(freezeCards(cloneCards(state)));
+            break;
+        default:
+            break;
+    }
+
+    console.log(state);
+    return requestSave(addIndexToCards(state));
 }
 function flipCards(state) {
     const cards = state.cards.map(card => Object.assign({}, card,

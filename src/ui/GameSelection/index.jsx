@@ -2,7 +2,7 @@
 import { Component, h } from 'preact';
 import { connect } from 'preact-redux';
 import { switchGame } from './../../actions'
-import { MATCH_PAIRS, FLIP_CARDS, REVISE } from './../../constants'
+import { MATCH_PAIRS, FLIP_CARDS, REVISE, MATCH_PAIRS_REVISE } from './../../constants'
 import './styles.less'
 
 class GameSelection extends Component {
@@ -13,16 +13,21 @@ class GameSelection extends Component {
     const game = props.game;
     return (
         <div className="game-selection">
-          <p>Which game do you want to play today?</p>
+          <p>How would you like to play today?</p>
+          <h2>Learn new words</h2>
           <button disabled={game === FLIP_CARDS}
               className="game-selection__button"
               onClick={(ev)=>this.setGame( FLIP_CARDS )}>Flip</button>
           <button disabled={game === MATCH_PAIRS}
             className="game-selection__button"
             onClick={(ev)=>this.setGame( MATCH_PAIRS )}>Pairs</button>
+          <h2>Remember old words</h2>
           <button disabled={game === REVISE}
             className="game-selection__button"
-            onClick={(ev)=>this.setGame( REVISE )}>Revise</button>
+            onClick={(ev)=>this.setGame( REVISE )}>Flip</button>
+          <button disabled={game === MATCH_PAIRS_REVISE}
+            className="game-selection__button"
+            onClick={(ev)=>this.setGame( MATCH_PAIRS_REVISE )}>Pairs</button>
         </div>
       );
   }

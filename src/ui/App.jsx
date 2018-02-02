@@ -7,7 +7,7 @@ import GameMatchPairs from './GameMatchPairs'
 import GameSelection from './GameSelection'
 import ProgressBar from './ProgressBar'
 import { clickRootNode, switchGame, dismountCurrentGame } from './../actions'
-import { MATCH_PAIRS, FLIP_CARDS, REVISE } from './../constants'
+import { MATCH_PAIRS, FLIP_CARDS, REVISE, MATCH_PAIRS_REVISE } from './../constants'
 
 class App extends Component {
   setGame( game ) {
@@ -24,7 +24,7 @@ class App extends Component {
       workflow = (
           <div className="app__content">
           { ( game === FLIP_CARDS || game === REVISE ) && <Game description={gameDescription} /> }
-          { game === MATCH_PAIRS && <GameMatchPairs /> }
+          { ( game === MATCH_PAIRS || game === MATCH_PAIRS_REVISE ) && <GameMatchPairs /> }
           </div>
       );
     } else {
