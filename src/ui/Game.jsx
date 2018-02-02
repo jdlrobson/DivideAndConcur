@@ -21,11 +21,9 @@ class Game extends Component {
 
     return (
       <div className="game" onClick={props.onCanvasClick}>
-        <div className="game__debug-tools">Level {props.level}&nbsp;
-         [word size = {props.wordSize} difficultyLevel {props.difficulty}]</div>
         <GameDescription>{props.description}</GameDescription>
         {cards || loader }
-        {props.previous && props.previous.length && <h3 className="game__history-header">Previous history</h3>}
+        {props.previous && props.previous.length > 0 && <h3 className="game__history-header">Previous history</h3>}
         <FlashcardRound key={'round-past'} cards={props.previous} round={1} />
       </div>
     );
@@ -44,9 +42,6 @@ const mapStateToProps = (state, props) => {
   return Object.assign( {}, props, {
     // limit to last 50 so we dont render too much on DOM
     previous: previous.slice( 0, 50 ),
-    level,
-    wordSize,
-    difficulty,
     cards
   } );
 };
