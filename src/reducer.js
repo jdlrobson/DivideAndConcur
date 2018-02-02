@@ -5,6 +5,7 @@ import { markWordAsDifficult, markWordAsEasy } from './reducers/difficulty-ratin
 import DictionaryUtils from './../data/DictionaryUtils';
 import actionTypes from './actionTypes';
 import dictJson from './../data/dictionary.json';
+import { removeCharactersThatAreTooEasy } from './helpers/characters';
 
 const NUM_CARDS_PER_LEVEL = 10;
 const MAX_DIFFICULTY = 11;
@@ -41,11 +42,11 @@ function actionAnswerCard(state, action) {
 
     switch (action.type) {
         case actionTypes.GUESS_FLASHCARD_WRONG:
-            answers = markWordAsDifficult(state.answers, char);
+            answers = markWordAsDifficult(getDifficultyRatings(state), char);
             isKnown = false;
             break;
         case actionTypes.GUESS_FLASHCARD_RIGHT:
-            answers = markWordAsEasy(state.answers, char);
+            answers = markWordAsEasy(getDifficultyRatings(state), char);
             break;
         default:
             break;
@@ -59,9 +60,9 @@ function actionAnswerCard(state, action) {
 }
 
 function mapCard(state, character) {
-    const difficultyLevel = getDifficultyRating(state.answers, character);
+    const difficultyLevel = getDifficultyRating(getDifficultyRatings(state), character);
     return {
-        isKnown: knowsWord(state.answers, character),
+        isKnown: knowsWord(getDifficultyRatings(state), character),
         character,
         difficultyLevel,
         level: `${dictUtils.getWordLength(character)}.${dictUtils.getDifficultyRating(character)}`,
@@ -71,7 +72,7 @@ function mapCard(state, character) {
 }
 
 function addKnownWordCount(state) {
-    const knownWordCount = getKnownWordCount(state.answers);
+    const knownWordCount = getKnownWordCount(getDifficultyRatings(state));
     return Object.assign({}, state, { knownWordCount });
 }
 
@@ -87,11 +88,15 @@ function findPackStartPosition(answers, pack) {
     return i;
 }
 
+function getDifficultyRatings(state) {
+    return state.answers;
+}
+
 function fastForwardToPackPosition(state) {
     let difficulty = state.difficulty;
     let wordSize = state.wordSize;
     const pack = dictUtils.getWords(wordSize, difficulty);
-    const packPosition = findPackStartPosition(state.answers, pack);
+    const packPosition = findPackStartPosition(getDifficultyRatings(state), pack);
     const previous = state.previous || [];
     if (difficulty >= MAX_DIFFICULTY * (wordSize + 1)) {
         wordSize = 1;
@@ -124,10 +129,11 @@ function fastForwardToPackPosition(state) {
 }
 
 function dealKnownCards(state, total) {
-    const known = ALL_WORDS.filter(char => knowsWord(state.answers, char));
+    const known = ALL_WORDS.filter(char => knowsWord(getDifficultyRatings(state), char));
     const cards = makeCardsFromCharacters(state, known);
     return addKnownWordCount(Object.assign({}, state, { cards, previous: [] }));
 }
+
 /**
  * Deal ten cards from the dictionary that the user is unfamiliar with
  * sorted by difficulty level
@@ -138,7 +144,11 @@ function dealCards(state, total = NUM_CARDS_PER_LEVEL) {
     const pack = position.pack;
     const packPosition = position.packPosition;
     const cards = makeCardsFromCharacters(
-        state, pack.slice(packPosition, packPosition + total)
+        state,
+        removeCharactersThatAreTooEasy(
+            getDifficultyRatings(state),
+            pack.slice(packPosition, packPosition + total)
+        )
     );
     const answeredCardsInCurrentPack = pack.slice(0, packPosition);
     const previous = makeCardsFromCharacters(state,
@@ -223,7 +233,7 @@ function revealedFlashcardPairGame(state, action) {
     if (selectedCards.length === 2) {
         if (selectedCards[0].character === selectedCards[1].character) {
             const char = action.character;
-            const answers = markWordAsEasy(state.answers, char);
+            const answers = markWordAsEasy(getDifficultyRatings(state), char);
             const cards = markCardsAsAnswered(state.cards, char, true);
             return addHighlightedCards(Object.assign({}, state, { cards, answers }), char);
         } else {
