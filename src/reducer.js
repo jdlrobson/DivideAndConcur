@@ -41,20 +41,12 @@ function clearOverlay(state) {
     });
 }
 
-function highlightCards(cards, highlighted) {
-    return cards.map((card) => {
-        return Object.assign({}, card, {
-            isHighlighted: highlighted.indexOf(card.character) > -1
-        });
-    });
-}
-
 // Reducer for when a card is answered
 function actionAnswerCard(state, action) {
     const char = action.character;
     const isAnswered = true;
     let isKnown = true;
-    const decomps = dictUtils.decompose(char);
+    const highlighted = dictUtils.decompose(char);
 
     switch (action.type) {
         case actionTypes.GUESS_FLASHCARD_WRONG.type:
@@ -69,11 +61,9 @@ function actionAnswerCard(state, action) {
     }
 
     return Object.assign({}, state, {
-        cards: highlightCards(
-            updateCardInCards(state.cards, action, { isAnswered, isKnown }),
-            decomps
-        ),
-        previous: highlightCards(state.previous, decomps)
+        highlighted,
+        cards: updateCardInCards(state.cards, action, { isAnswered, isKnown }),
+        previous: state.previous
     });
 }
 
@@ -237,15 +227,15 @@ function revealedFlashcardPairGame(state, action) {
     state = revealCardInAction(state, action);
     const selectedCards = state.cards.filter(card => card.isSelected && !card.isAnswered);
     if (selectedCards.length === 2) {
-        let cards;
-
         if (selectedCards[0].character === selectedCards[1].character) {
-            memory.markAsEasy(action.character);
-            cards = markCardsAsAnswered(state.cards, action.character, true);
+            const char = action.character;
+            memory.markAsEasy(char);
+            const cards = markCardsAsAnswered(state.cards, char, true);
+            const highlighted = dictUtils.decompose(char);
+            return Object.assign({}, state, { cards, highlighted });
         } else {
             return queueDeselectOfUnansweredCards(pausePlay(state));
         }
-        return Object.assign({}, state, { cards });
     }
     return state;
 }

@@ -5,6 +5,16 @@ import './styles.less';
 import { requestPinyin } from './../../actions'
 import actionTypes from './../../actionTypes'
 
+function className( block, element, modifiers=[] ) {
+    let blockElement = block;
+    if ( element ) {
+        blockElement += '__' + element;
+    }
+    return blockElement + ' ' + modifiers.map((modifier)=> {
+        return blockElement + '--' + modifier;
+    }).join( ' ' );
+}
+
 class Card extends Component {
   onClick(ev) {
     const props = this.props;
@@ -29,50 +39,67 @@ class Card extends Component {
     ev.stopPropagation();
   };
   render(props) {
+    const blockName = 'card';
     const hidden = { display: 'none' };
-    let className = 'card';
+    let modifiers = [];
     let dLevel = props.difficultyLevel;
     const isEasy = dLevel < 0;
     const isKnown = dLevel < -4;
     const isSelected = props.isSelected;
     const isFrozen = props.isFrozen;
     let done = props.isAnswered;
+    let components = [];
 
     if ( isEasy ) {
       dLevel = -dLevel;
     }
 
+    const difficultyBar = (
+        <div className={className(blockName, 'difficulty-bar')}>
+            {
+              new Array(dLevel).fill((<div className={isEasy ? 'easy' : ''} />))
+            }
+            { props.level }
+        </div>
+    );
+
     if ( done ) {
-      className += props.isKnown ? ' card-known' : ' card-unknown';
+      modifiers.push( props.isKnown ? 'known' : 'unknown' );
     }
     if ( props.isHighlighted ) {
-      className += ' card-highlighted';
+      modifiers.push( 'highlighted' );
     }
     if ( props.isFlipped && !isSelected ) {
-      className += ' card-flipped';
+      modifiers.push( 'flipped' );
+    }
+    const translations = [
+        <div key='lang' className={className(blockName, 'english')}
+            style={isSelected ? {} : hidden}>{props.english}</div>,
+        <div key='pinyin' className={className(blockName, 'pinyin')}
+            style={isSelected ? {} : hidden}>{props.pinyin}</div>
+    ];
+    const buttons = [
+        <div key='tick' className='tick button' onClick={this.tick.bind(this)}
+          style={isSelected && !done && !isKnown && !isFrozen ? {} : hidden}>✅</div>,
+        <div key='wrong' className='wrong button' onClick={this.wrong.bind(this)}
+          style={isSelected && !done && !isKnown && !isFrozen ? {} : hidden}>❌</div>,
+        <div key="pinyin" className="pinyin button" onClick={this.requestPidgin.bind(this)}>🔊</div>
+    ];
+
+    if ( props.isSmall ) {
+        modifiers.push( 'small' );
+    } else {
+        components = translations.concat( buttons );
     }
 
     return (
-      <div className={className} onClick={this.onClick.bind(this)}>
-      <div className="front">
-          <div className={"difficulty-bar"}>
-          {
-            new Array(dLevel).fill((<div className={isEasy ? 'easy' : ''} />))
-          }
-          { props.level }
-          </div>
-          <div key='char' className="char">
-          {props.character}
-          </div>
-          <div key='lang' className='english' style={isSelected ? {} : hidden}>{props.english}</div>
-          <div key='pinyin' className='pinyin' style={isSelected ? {} : hidden}>{props.pinyin}</div>
-          <div key='tick' className='tick button' onClick={this.tick.bind(this)}
-            style={isSelected && !done && !isKnown && !isFrozen ? {} : hidden}>✅</div>
-          <div key='wrong' className='wrong button' onClick={this.wrong.bind(this)}
-            style={isSelected && !done && !isKnown && !isFrozen ? {} : hidden}>❌</div>
-          <div key="pinyin" className="pinyin button" onClick={this.requestPidgin.bind(this)}>🔊</div>
+      <div className={className(blockName, false, modifiers)} onClick={this.onClick.bind(this)}>
+      <div className={className(blockName, 'front')}>
+          {difficultyBar}
+          <div key='char' className={className(blockName, 'char')}>{props.character}</div>
+          {components}
       </div>
-      <div className="back" />
+      <div className={className(blockName, 'back')} />
       </div>
     );
   }

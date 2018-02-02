@@ -8,53 +8,62 @@
   background: #ccc;
   float: left;
   margin-right: 10px;
-  margin-top: 10px;
   text-align: center;
   position: relative;
   border: solid @cardBorder transparent;
-  
-  &.card-known {
-    border: solid @cardBorder green;
-    opacity: 0.4;
-  }
+}
 
-  .front,
-  .back {
-    backface-visibility: hidden;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-  }
-  .front {
-    z-index: 2;
-    background: #ccc;
-    /* for firefox 31 */
-    transform: rotateY(0deg);
-  }
-  &.card-flipped {
-    transform: rotateY(180deg);
-  }
-  &.card-highlighted {
-    border: solid @cardBorder yellow;
-    background-color: rgb(252, 252, 188);
-  }
+.card--known {
+  border: solid @cardBorder green;
+  opacity: 0.4;
+}
 
-  &.card-unknown {
-    border: solid @cardBorder red;
-    opacity: 0.4;
-  }
-  .pinyin,
-  .english {
-    font-size: 0.8em;
-  }
-  .pinyin {
-    font-weight: bold;
+.card--unknown {
+  border: solid @cardBorder red;
+  opacity: 0.4;
+}
+
+.card__front,
+.card__back {
+  backface-visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.card__front {
+  z-index: 2;
+  background: #ccc;
+  /* for firefox 31 */
+  transform: rotateY(0deg);
+}
+
+.card--flipped {
+  transform: rotateY(180deg);
+}
+
+.card__pinyin,
+.card__english {
+  font-size: 0.8em;
+}
+
+.card__pinyin {
+  font-weight: bold;
+}
+
+.card--small {
+  width: 60px;
+  height: 60px;
+  margin-right: 5px;
+
+  .card__char {
+    font-size: 30px;
   }
 }
 
-.difficulty-bar {
+.card__difficulty-bar {
   float: left;
   height: 10px;
   width: 100%;
@@ -98,7 +107,7 @@
   bottom: 0;
 }
 
-.char {
+.card__char {
   font-size: 40px;
   font-weight: bold;
 }
