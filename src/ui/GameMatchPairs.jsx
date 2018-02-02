@@ -2,6 +2,7 @@
 import { Component, h } from 'preact';
 import { connect } from 'preact-redux';
 import Card from './Card'
+import GameDescription from './GameDescription'
 import { flipCardsAfter } from './../actions'
 import { startRound } from './../actions'
 
@@ -11,9 +12,13 @@ class GameMatchPairs extends Component {
   }
   render(props) {
     const cards = props.cards;
+    const msg = props.isFlipped ?
+      'Match the pairs to win the cards!' :
+      'The cards will be flipped soon! Try and remember their locations!';
 
     return (
       <div className="game-match-pairs">
+      <GameDescription>{msg}</GameDescription>
       {
         cards.map((card) => <Card isSelected={true} {...card}/> )
       }
@@ -23,9 +28,9 @@ class GameMatchPairs extends Component {
 }
 
 const mapStateToProps = (state, props) => {
-  const { cards } = state;
+  const { cards, isFlipped } = state;
 
-  return Object.assign( {}, props, { cards } );
+  return Object.assign( {}, props, { cards, isFlipped } );
 };
 
 const mapDispatchToProps = (dispatch, props) => {

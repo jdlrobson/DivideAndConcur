@@ -309,11 +309,11 @@ function newRound(state) {
 function flipCards(state) {
     const cards = state.cards.map(card => Object.assign({}, card,
         { isFlipped: true, isSelected: false }));
-    return Object.assign({}, state, { cards });
+    return Object.assign({}, state, { cards, isFlipped: true });
 }
 
 function flipCardStart(state, action) {
-    return Object.assign({}, state);
+    return Object.assign({}, state, { isFlipped: false });
 }
 
 export default (state, action) => {

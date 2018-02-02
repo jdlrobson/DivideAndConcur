@@ -3,6 +3,7 @@ import { Component, h } from 'preact';
 import { connect } from 'preact-redux';
 import Card from './Card'
 import FlashcardRound from './FlashcardRound'
+import GameDescription from './GameDescription'
 import './game.less'
 
 import { startRound } from './../actions'
@@ -22,6 +23,7 @@ class Game extends Component {
       <div className="game" onClick={props.onCanvasClick}>
         <div className="game__debug-tools">Level {props.level}&nbsp;
          [word size = {props.wordSize} difficultyLevel {props.difficulty}]</div>
+        <GameDescription>{props.description}</GameDescription>
         {cards || loader }
         {props.previous && props.previous.length && <h3 className="game__history-header">Previous history</h3>}
         <FlashcardRound key={'round-past'} cards={props.previous} round={1} />

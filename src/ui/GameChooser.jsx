@@ -19,6 +19,9 @@ class GameChooser extends Component {
   render(props) {
     const game = props.game;
     const switcherDisabled = props.switcherDisabled;
+    const gameDescription = game === FLIP_CARDS ?
+      'See if you know these cards. Click and tick the ones you know and cross the ones you have forgotten.' :
+      'You got these cards right already. Can you remember them?'
 
     return (
       <div className="game-chooser" onClick={props.onCanvasClick}>
@@ -47,7 +50,7 @@ class GameChooser extends Component {
             onClick={(ev)=>this.setGame( REVISE )}>Revise</button>
         </div>
         <div className="game-chooser__content">
-        { ( game === FLIP_CARDS || game === REVISE ) && <Game /> }
+        { ( game === FLIP_CARDS || game === REVISE ) && <Game description={gameDescription} /> }
         { game === MATCH_PAIRS && <GameMatchPairs /> }
         </div>
       </div>
