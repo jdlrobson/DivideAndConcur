@@ -302,7 +302,7 @@ function newRound(state) {
     switch (state.game) {
         case MATCH_PAIRS:
         case MATCH_PAIRS_REVISE:
-            state = shuffleCards(freezeCards(cloneCards(state)));
+            state = flipCardStart(shuffleCards(freezeCards(cloneCards(state))));
             break;
         default:
             break;
