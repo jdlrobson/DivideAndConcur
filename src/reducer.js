@@ -8,7 +8,7 @@ import dictJson from './../data/dictionary.json';
 import { removeCharactersThatAreTooEasy } from './helpers/characters';
 
 const NUM_CARDS_PER_LEVEL = 10;
-const MAX_DIFFICULTY = 11;
+const MAX_DIFFICULTY = 20;
 const dictUtils = new DictionaryUtils(dictJson.words,
     dictJson.decompositions, dictJson.difficulty, dictJson.pinyin);
 
