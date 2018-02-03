@@ -16,8 +16,7 @@ DictionaryUtils.prototype = {
   },
   missing: function () {
     return this.all()
-      .filter((word) => ( ( !this.words[word] || this.words[word] === '?' ) || !this.words[word] ) &&
-         !this.decompositions[word]);
+      .filter((word) => ( ( !this.words[word] || this.words[word] === '?' ) || !this.words[word] ));
   },
   getPinyin: function ( word ) {
     if ( this.pinyin[word] ) {

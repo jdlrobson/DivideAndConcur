@@ -1,6 +1,5 @@
 var util = require('util');
 var dict = require('./data/dictionary');
-const mcs = require('./src/mcs');
 const htmlToText = require('html-to-text');
 const chalk = require('chalk');
 var fs = require('fs');
@@ -137,11 +136,15 @@ function game() {
 		});
 }
 
-function batchAutoDecompose(words) {
+function loadHanzi() {
 	if ( !hanziLoaded ) {
 		hanzi.start();
 		hanziLoaded = true;
 	}
+}
+
+function batchAutoDecompose(words) {
+	loadHanzi();
 	words.filter((char) => char.length === 1).forEach((char) => {
 		const decomps = hanzi.decompose(char);
 		const components = decomps.components1.filter((comp) =>
@@ -157,7 +160,24 @@ function batchAutoDecompose(words) {
 	})
 }
 
+function getEnglish(char) {
+	loadHanzi();
+	var inEnglish = hanzi.definitionLookup(char, 's');
+	return !inEnglish ? ['?'] : inEnglish.map((definition) => {
+		return definition.definition;
+	}).join('/').split('/')
+		.filter((def)=> {
+			const l = def.toLowerCase();
+			return l.indexOf('surname ') === -1 && l.indexOf('[') === -1 && l.length < 15;
+		});
+}
+
 function clean() {
+	dict.missing().forEach((chinese)=> {
+		var english = getEnglish(chinese).slice(0, 3).join(';');
+		dict.saveWord( chinese, english );
+		console.log('added', chinese, english);
+	});
 	var mapper = {
 		'⺮': '𥫗'
 	};
@@ -213,9 +233,7 @@ function menu() {
 			switch ( val ) {
 				case 4:
 					getUserInput('Enter chinese character').then((msg) => {
-						return mcs.getDefinition( msg )
-					}).then((text)=> {
-						console.log(htmlToText.fromString(text));
+						console.log(getEnglish(msg));
 						return menu();
 					});
 					break;
