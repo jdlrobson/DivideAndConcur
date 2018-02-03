@@ -17,14 +17,14 @@ class GameSelection extends Component {
           <h2>Learn new words</h2>
           <button disabled={game === FLIP_CARDS}
               className="game-selection__button"
-              onClick={(ev)=>this.setGame( FLIP_CARDS )}>Flip</button>
+              onClick={(ev)=>this.setGame( FLIP_CARDS )}>Test and click</button>
           <button disabled={game === MATCH_PAIRS}
             className="game-selection__button"
             onClick={(ev)=>this.setGame( MATCH_PAIRS )}>Pairs</button>
           <h2>Remember old words</h2>
           <button disabled={game === REVISE}
             className="game-selection__button"
-            onClick={(ev)=>this.setGame( REVISE )}>Flip</button>
+            onClick={(ev)=>this.setGame( REVISE )}>Test and click</button>
           <button disabled={game === MATCH_PAIRS_REVISE}
             className="game-selection__button"
             onClick={(ev)=>this.setGame( MATCH_PAIRS_REVISE )}>Pairs</button>

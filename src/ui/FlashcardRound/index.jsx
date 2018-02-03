@@ -2,10 +2,12 @@
 import { Component, h } from 'preact';
 import Card from './../Card'
 
+import './styles.less';
+
 class FlashcardRound extends Component {
   render(props) {
     return (
-      <div className="round">{
+      <div className="flashcard-round">{
         props.cards.map((cardProps) => {
           return <Card
             isSelected={props.round > 0}
@@ -13,7 +15,9 @@ class FlashcardRound extends Component {
             {...cardProps}
             key={'card-' + cardProps.character + '-' + props.round} />;
         })
-      }</div>
+      }
+        <div className="flashcard-round__end-marker"></div>
+      </div>
     );
   }
 }

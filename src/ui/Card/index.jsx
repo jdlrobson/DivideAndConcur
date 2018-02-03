@@ -20,6 +20,9 @@ class Card extends Component {
     if ( !props.isSelected ) {
       props.onSelect( props.character, props.index );
     }
+    if ( props.onClick ) {
+      props.onClick(ev, this.props);
+    }
   };
   wrong(ev) {
     const props = this.props;
@@ -33,6 +36,7 @@ class Card extends Component {
   };
   render(props) {
     const blockName = 'card';
+    const additionalClassName = props.className || '';
     const hidden = { display: 'none' };
     let modifiers = [];
     let dLevel = props.difficultyLevel;
@@ -83,8 +87,12 @@ class Card extends Component {
     } else {
         components = translations.concat( buttons );
     }
+    if ( props.isLarge ) {
+        modifiers.push( 'large' );
+    }
     return (
-      <div className={className(blockName, false, modifiers)} onClick={this.onClick.bind(this)}>
+      <div className={className(blockName, false, modifiers) + ' ' + additionalClassName}
+        onClick={this.onClick.bind(this)}>
       <div className={className(blockName, 'front')}>
           {difficultyBar}
           <div key='char' className={className(blockName, 'char')}>{props.character}</div>

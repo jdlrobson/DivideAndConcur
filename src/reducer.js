@@ -1,5 +1,5 @@
 /** @jsx h */
-import { FLIP_CARDS, MATCH_PAIRS, REVISE, MATCH_PAIRS_REVISE } from './constants';
+import { FLIP_CARDS, MATCH_PAIRS, MATCH_PAIRS_REVISE, REVISE } from './constants';
 import { getDifficultyRating, getKnownWordCount, knowsWord } from './helpers/difficulty-ratings';
 import { markWordAsDifficult, markWordAsEasy } from './reducers/difficulty-ratings';
 import DictionaryUtils from './../data/DictionaryUtils';
@@ -156,8 +156,8 @@ function dealCards(state, total = NUM_CARDS_PER_LEVEL) {
 
     // if all have been answered lets deal again..
     return Object.assign({}, state, position, {
-            cards, previous
-        });
+        cards, previous
+    });
 }
 
 function setGame(state, action) {
@@ -288,11 +288,10 @@ function cutCardDeck(state, total) {
 
 function newRound(state) {
     state = addKnownWordCount(state);
-    let cards;
 
     if (state.game === MATCH_PAIRS) {
         state = dealCards(state, 6);
-    } else if ( state.game === MATCH_PAIRS_REVISE ) {
+    } else if (state.game === MATCH_PAIRS_REVISE) {
         state = cutCardDeck(shuffleCards(dealKnownCards(state)), 6);
     } else if (state.game === FLIP_CARDS) {
         state = dealCards(state, 9);
@@ -309,7 +308,6 @@ function newRound(state) {
             break;
     }
 
-    console.log(state);
     return requestSave(addIndexToCards(state));
 }
 function flipCards(state) {
@@ -350,7 +348,7 @@ export default (state, action) => {
     if (!action.isPaused) {
         switch (action.type) {
             case actionTypes.DISMOUNT_GAME:
-                return Object.assign({}, state, { game: false });
+                return setGame(state, { game: false });
             case actionTypes.REVEAL_FLASHCARD:
                 return state.isPaused ? state : revealedFlashcard(state, action);
             case actionTypes.SWITCH_GAME:

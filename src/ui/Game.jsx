@@ -23,7 +23,7 @@ class Game extends Component {
       <div className="game" onClick={props.onCanvasClick}>
         <GameDescription>{props.description}</GameDescription>
         {cards || loader }
-        {props.previous && props.previous.length > 0 && <h3 className="game__history-header">Previous history</h3>}
+        {props.previous && props.previous.length > 0 && <h3 className="game__history-header">Words you have recently learned</h3>}
         <FlashcardRound key={'round-past'} cards={props.previous} round={1} />
       </div>
     );

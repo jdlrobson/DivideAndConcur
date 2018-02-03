@@ -13,8 +13,26 @@ class App extends Component {
   setGame( game ) {
     this.props.setGame( game );
   }
+  clearOverlay() {
+    this.setState({ overlay: undefined });
+  }
+  onHighlightedCardClick(ev, props) {
+    ev.stopPropagation();
+    this.setState({
+      overlay: (
+        <div className="app__overlay">
+          <Card {...props} isLarge={true} isSmall={false} isFrozen={true}
+            isSelected={true}
+            className="app__overlay__card"/>
+          <button className="app__overlay__button"
+            onClick={this.clearOverlay.bind(this)}>Got it!</button>
+        </div>
+      )
+    });
+  }
   render(props) {
     let workflow;
+    const onHighlightedCardClick = this.onHighlightedCardClick.bind(this);
     const game = props.game;
     const gameDescription = game === FLIP_CARDS ?
       'See if you know these cards. Click and tick the ones you know and cross the ones you don\'t.' :
@@ -32,10 +50,11 @@ class App extends Component {
     }
     return (
       <div className="app" onClick={props.onCanvasClick}>
-        {props.overlay}
+        {this.state && this.state.overlay}
         <div className="app__header">
-          <div className="app__component--floated">
-            <button onClick={props.onHomeClick} disabled={props.switcherDisabled || !game}>Home</button>
+          <div className="app__header__home">
+            <button onClick={props.onHomeClick}
+                disabled={props.switcherDisabled || !game}>Home</button>
           </div>
           <div className="app__component--floated">
             <ProgressBar percent={(props.knownWordCount/props.maxSize) * 100}>
@@ -46,6 +65,7 @@ class App extends Component {
             {
               props.highlighted.map((props) => {
                 return <Card {...props} isHighlighted={true}
+                  onClick={onHighlightedCardClick}
                   key={'card-highlighted-' + props.character} isSmall={true} />;
               })
             }
