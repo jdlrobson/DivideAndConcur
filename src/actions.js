@@ -19,7 +19,8 @@ export function clickRootNode() {
 export function timedAction(type, milliseconds) {
     return (dispatch, getState) => {
         setTimeout(() => {
-            dispatch({ type });
+            const action = typeof type === 'string' ? { type } : type();
+            dispatch(action);
         }, milliseconds);
         dispatch({ type: actionTypes.CLEAR_TIMED_ACTION });
     };

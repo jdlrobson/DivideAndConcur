@@ -5,9 +5,11 @@ import { connect } from 'preact-redux';
 import Card from './Card'
 import GameMatchPairs from './GameMatchPairs'
 import GameSelection from './GameSelection'
+import GameMatchSound from './GameMatchSound'
 import ProgressBar from './ProgressBar'
 import { clickRootNode, switchGame, dismountCurrentGame } from './../actions'
-import { MATCH_PAIRS, FLIP_CARDS, REVISE, MATCH_PAIRS_REVISE } from './../constants'
+import { MATCH_PAIRS, FLIP_CARDS, REVISE, MATCH_PAIRS_REVISE,
+  MATCH_SOUND } from './../constants'
 
 class App extends Component {
   setGame( game ) {
@@ -35,7 +37,7 @@ class App extends Component {
     const onHighlightedCardClick = this.onHighlightedCardClick.bind(this);
     const game = props.game;
     const gameDescription = game === FLIP_CARDS ?
-      'See if you know these cards. Click and tick the ones you know and cross the ones you don\'t.' :
+      'Here are some cards. Do you know them? Click to see!' :
       'You got these cards right already. Can you remember them?'
 
     if ( game ) {
@@ -43,6 +45,7 @@ class App extends Component {
           <div className="app__content">
           { ( game === FLIP_CARDS || game === REVISE ) && <Game description={gameDescription} /> }
           { ( game === MATCH_PAIRS || game === MATCH_PAIRS_REVISE ) && <GameMatchPairs /> }
+          { ( game === MATCH_SOUND ) && <GameMatchSound /> }
           </div>
       );
     } else {

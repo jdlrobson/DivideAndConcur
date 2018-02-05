@@ -27,6 +27,7 @@ class GameMatchPairs extends Component {
       <GameDescription>{msg}</GameDescription>
       {
         cards.map((card) => <Card className={className}
+          selectedControls={false}
           isSelected={true} {...card}/> )
       }
       <div className="game-match-pairs__end-marker"></div>

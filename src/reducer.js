@@ -1,5 +1,6 @@
 /** @jsx h */
-import { FLIP_CARDS, MATCH_PAIRS, MATCH_PAIRS_REVISE, REVISE } from './constants';
+import { MATCH_SOUND, FLIP_CARDS, MATCH_PAIRS, MATCH_PAIRS_REVISE,
+    REVISE } from './constants';
 import { getDifficultyRating, getKnownWordCount, knowsWord } from './helpers/difficulty-ratings';
 import { markWordAsDifficult, markWordAsEasy } from './reducers/difficulty-ratings';
 import DictionaryUtils from './../data/DictionaryUtils';
@@ -241,24 +242,55 @@ function revealedFlashcardPairGame(state, action) {
     return state;
 }
 
+function revealFlashcardDecompose(state, action) {
+    let cards = state.cards;
+    let card = state.card;
+    const isEnd = cards.filter(card => card.isAnswered).length === state.goal.length;
+    const char = action.character;
+    const isKnown = state.goal.indexOf(char) > -1;
+    let answers = getDifficultyRatings(state);
+
+
+    if (!isEnd) {
+        if ( isKnown ) {
+            answers = markWordAsEasy(answers, char);
+            // If the word is of length > 1 also mark the parent
+            if ( state.goal.indexOf(card.character) === -1 ) {
+                markWordAsEasy(answers, card.character);
+            }
+        } else {
+            answers = markWordAsDifficult(answers, char);
+        }
+        // Mark selected card as answered
+        cards = updateCardInCards(state.cards, action, {
+            isAnswered: true,
+            answers,
+            isKnown
+        });
+    }
+
+    return addHighlightedCards(
+        Object.assign({}, state, { answers, cards }),
+        char
+    );
+}
 function revealedFlashcard(state, action) {
-    if (state.game === MATCH_PAIRS) {
+    if (state.game === MATCH_SOUND) {
+        return revealFlashcardDecompose(state, action);
+    } else if (state.game === MATCH_PAIRS) {
         return revealedFlashcardPairGame(state, action);
     }  else {
         return revealCardInAction(state, action);
     }
 }
 
-function freezeCards(state) {
-    const isFrozen = true;
-    return Object.assign({}, state, {
-        cards: state.cards.map(card => Object.assign({}, card, { isFrozen }))
-    });
+function shuffle(arr) {
+    return arr.sort((a,b) => { return Math.random() < 0.5 ? -1 : 1; });
 }
 
 function shuffleCards(state) {
     return Object.assign({}, state, {
-        cards: state.cards.sort((a,b) => { return Math.random() < 0.5 ? -1 : 1; })
+        cards: shuffle(state.cards)
     });
 }
 function cloneCards(state) {
@@ -297,12 +329,27 @@ function newRound(state) {
         state = dealCards(state, 9);
     } else if (state.game === REVISE) {
         state = cutCardDeck(shuffleCards(dealKnownCards(state)), 9);
+    } else if (state.game === MATCH_SOUND) {
+        // get a word which is composed of other words
+        const card = dealCards(state, 1).cards[0];
+        const goal = [card.character];
+        const randomRadicals = shuffle(dictUtils.getWords(0)
+        .filter(char => goal.indexOf(char) === -1)
+        ).slice(0, 7);
+
+        state = Object.assign({},
+            state,
+            {
+                card,
+                goal,
+                cards: makeCardsFromCharacters(state, shuffle(goal.concat(randomRadicals)))
+            });
     }
 
     switch (state.game) {
         case MATCH_PAIRS:
         case MATCH_PAIRS_REVISE:
-            state = flipCardStart(shuffleCards(freezeCards(cloneCards(state))));
+            state = flipCardStart(shuffleCards(cloneCards(state)));
             break;
         default:
             break;

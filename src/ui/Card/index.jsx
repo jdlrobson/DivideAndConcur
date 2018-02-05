@@ -17,7 +17,7 @@ function className( block, element, modifiers=[] ) {
 class Card extends Component {
   onClick(ev) {
     const props = this.props;
-    if ( !props.isSelected ) {
+    if ( !props.isSelected && !props.isFrozen ) {
       props.onSelect( props.character, props.index );
     }
     if ( props.onClick ) {
@@ -51,14 +51,14 @@ class Card extends Component {
       dLevel = -dLevel;
     }
 
-    const difficultyBar = (
+    const difficultyBar = props.debug ? (
         <div className={className(blockName, 'difficulty-bar')}>
             {
               new Array(dLevel).fill((<div className={isEasy ? 'easy' : ''} />))
             }
             { props.level }
         </div>
-    );
+    ) : [];
 
     if ( done ) {
       modifiers.push( props.isKnown ? 'known' : 'unknown' );
@@ -75,27 +75,32 @@ class Card extends Component {
         <div key='pinyin' className={className(blockName, 'pinyin')}
             style={isSelected ? {} : hidden}>{props.pinyin}</div>
     ];
-    const buttons = [
+    const buttons = props.selectedControls ? [
         <div key='tick' className='tick button' onClick={this.tick.bind(this)}
           style={isSelected && !done && !isKnown && !isFrozen ? {} : hidden}>✅</div>,
         <div key='wrong' className='wrong button' onClick={this.wrong.bind(this)}
           style={isSelected && !done && !isKnown && !isFrozen ? {} : hidden}>❌</div>
-    ];
+    ] : false;
 
     if ( props.isSmall ) {
         modifiers.push( 'small' );
-    } else {
-        components = translations.concat( buttons );
     }
+    components = translations.concat( buttons );
     if ( props.isLarge ) {
         modifiers.push( 'large' );
     }
+    const label = props.label || props.character;
+    const labelModifiers = [];
+    if (label.length > 4) {
+      labelModifiers.push('long');
+    }
+    //if ( !props.english && !props.character)
     return (
       <div className={className(blockName, false, modifiers) + ' ' + additionalClassName}
         onClick={this.onClick.bind(this)}>
       <div className={className(blockName, 'front')}>
           {difficultyBar}
-          <div key='char' className={className(blockName, 'char')}>{props.character}</div>
+          <div key='char' className={className(blockName, 'label', labelModifiers)}>{label}</div>
           {components}
       </div>
       <div className={className(blockName, 'back')} />
@@ -103,6 +108,13 @@ class Card extends Component {
     );
   }
 }
+
+Card.defaultProps = {
+  // Show the difficulty and word size
+  debug: true,
+  // Whether to show the tick/wrong buttons when card has been selected
+  selectedControls: true
+};
 
 const mapDispatchToProps = (dispatch, props) => {
   return {

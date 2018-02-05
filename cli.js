@@ -179,7 +179,7 @@ function clean() {
 		console.log('added', chinese, english);
 	});
 	var mapper = {
-		'⺮': '𥫗'
+		'𥫗': '⺮'
 	};
 
 	// Remove things that decompose to itself.
