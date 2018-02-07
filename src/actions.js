@@ -16,6 +16,16 @@ export function clickRootNode() {
     return { type: actionTypes.CLICK_ROOT_NODE };
 }
 
+export function init(game) {
+    return (dispatch, getState) => {
+        dispatch({ type: actionTypes.INIT });
+        return new Promise((resolve) => {
+            dispatch({ type: actionTypes.INIT_END });
+            resolve();
+        });
+    };
+}
+
 export function timedAction(type, milliseconds) {
     return (dispatch, getState) => {
         setTimeout(() => {

@@ -7,6 +7,7 @@ import GameMatchPairs from './GameMatchPairs'
 import GameSelection from './GameSelection'
 import GameMatchSound from './GameMatchSound'
 import ProgressBar from './ProgressBar'
+import BootScreen from './BootScreen';
 import { clickRootNode, switchGame, dismountCurrentGame } from './../actions'
 import { MATCH_PAIRS, FLIP_CARDS, REVISE, MATCH_PAIRS_REVISE,
   MATCH_SOUND } from './../constants'
@@ -40,7 +41,9 @@ class App extends Component {
       'Here are some cards. Do you know them? Click to see!' :
       'You got these cards right already. Can you remember them?'
 
-    if ( game ) {
+    if ( !props.isBooted ) {
+        workflow = <BootScreen className="app__content" />;
+    } else if ( game ) {
       workflow = (
           <div className="app__content">
           { ( game === FLIP_CARDS || game === REVISE ) && <Game description={gameDescription} /> }
@@ -51,6 +54,7 @@ class App extends Component {
     } else {
       workflow = <GameSelection />
     }
+
     return (
       <div className="app" onClick={props.onCanvasClick}>
         {this.state && this.state.overlay}
@@ -99,6 +103,7 @@ const mapDispatchToProps = (dispatch, props) => {
 const mapStateToProps = (state, props) => {
   const {
     isPaused,
+    isBooted,
     highlighted,
     game,
     overlay,
@@ -107,6 +112,7 @@ const mapStateToProps = (state, props) => {
   } = state;
 
   return Object.assign( {}, props, {
+      isBooted,
       highlighted: highlighted || [],
       switcherDisabled: isPaused, game,
       overlay, knownWordCount, maxSize } );

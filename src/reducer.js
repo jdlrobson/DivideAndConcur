@@ -17,7 +17,9 @@ const ALL_WORDS = dictUtils.all();
 
 // Setups state with the required globals for managing a game
 function actionBoot(state, action) {
-    return setGame({ answers: action.userData.answers || {} }, { game: false });
+    return Object.assign({}, state,
+        setGame({ answers: action.userData.answers || {} }, { game: false })
+    );
 }
 
 // clears the current overlay
@@ -244,7 +246,7 @@ function revealedFlashcardPairGame(state, action) {
 
 function revealFlashcardDecompose(state, action) {
     let cards = state.cards;
-    let card = state.card;
+    const card = state.card;
     const isEnd = cards.filter(card => card.isAnswered).length === state.goal.length;
     const char = action.character;
     const isKnown = state.goal.indexOf(char) > -1;
@@ -252,10 +254,10 @@ function revealFlashcardDecompose(state, action) {
 
 
     if (!isEnd) {
-        if ( isKnown ) {
+        if (isKnown) {
             answers = markWordAsEasy(answers, char);
             // If the word is of length > 1 also mark the parent
-            if ( state.goal.indexOf(card.character) === -1 ) {
+            if (state.goal.indexOf(card.character) === -1) {
                 markWordAsEasy(answers, card.character);
             }
         } else {
@@ -369,6 +371,10 @@ function flipCardStart(state, action) {
 
 export default (state, action) => {
     switch (action.type) {
+        case actionTypes.INIT:
+            return { isBooted: false };
+        case actionTypes.INIT_END:
+            return Object.assign({}, state, { isBooted: true });
         case actionTypes.FLIP_CARDS_START:
             return pausePlay(flipCardStart(state, action));
         case actionTypes.FLIP_CARDS_END:

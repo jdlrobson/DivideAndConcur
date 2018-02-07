@@ -22,6 +22,10 @@ const END_ROUND = 'END_ROUND';
 
 const CLEAR_TIMED_ACTION = 'CLEAR_TIMED_ACTION';
 
+const INIT = 'INIT';
+
+const INIT_END = 'INIT_END';
+
 const FLIP_CARDS_END = 'FLIP_CARDS_END';
 
 const FLIP_CARDS_START = 'FLIP_CARDS_START';
@@ -33,6 +37,8 @@ const SWITCH_GAME = 'SWITCH_GAME';
 const SAVE_COMPLETE = 'SAVE_COMPLETE';
 
 export default {
+    INIT,
+    INIT_END,
     BOOT,
     DISMOUNT_GAME,
     FLIP_CARDS_START,
