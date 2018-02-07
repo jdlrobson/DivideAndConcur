@@ -1,38 +1,20 @@
 /** @jsx h */
 import { MATCH_SOUND, FLIP_CARDS, MATCH_PAIRS, MATCH_PAIRS_REVISE,
     REVISE } from './constants';
-import { getDifficultyRating, getKnownWordCount, knowsWord } from './helpers/difficulty-ratings';
+import { getKnownWordCount } from './helpers/difficulty-ratings';
 import { markWordAsDifficult, markWordAsEasy } from './reducers/difficulty-ratings';
-import DictionaryUtils from './../data/DictionaryUtils';
 import actionTypes from './actionTypes';
-import dictJson from './../data/dictionary.json';
-import { removeCharactersThatAreTooEasy } from './helpers/characters';
-
-const NUM_CARDS_PER_LEVEL = 10;
-const MAX_DIFFICULTY = 20;
-const dictUtils = new DictionaryUtils(dictJson.words,
-    dictJson.decompositions, dictJson.difficulty, dictJson.pinyin);
-
-const ALL_WORDS = dictUtils.all();
-
-// Setups state with the required globals for managing a game
-function actionBoot(state, action) {
-    return Object.assign({}, state,
-        setGame({ answers: action.userData.answers || {} }, { game: false })
-    );
-}
+import {
+    dictUtils,
+    dealKnownCards, dealCards,
+    addHighlightedCards,
+    getDifficultyRatings,
+    makeCardsFromCharacters } from './helpers/cards';
 
 // clears the current overlay
 function clearOverlay(state) {
     return Object.assign({}, state, {
         overlay: null
-    });
-}
-
-function addHighlightedCards(state, char) {
-    const highlighted = makeCardsFromCharacters(state, dictUtils.decompose(char));
-    return Object.assign({}, state, {
-        highlighted
     });
 }
 
@@ -62,105 +44,9 @@ function actionAnswerCard(state, action) {
     }), char);
 }
 
-function mapCard(state, character) {
-    const difficultyLevel = getDifficultyRating(getDifficultyRatings(state), character);
-    return {
-        isKnown: knowsWord(getDifficultyRatings(state), character),
-        character,
-        difficultyLevel,
-        level: `${dictUtils.getWordLength(character)}.${dictUtils.getDifficultyRating(character)}`,
-        pinyin: dictUtils.getPinyin(character),
-        english: dictUtils.getWord(character)
-    };
-}
-
 function addKnownWordCount(state) {
     const knownWordCount = getKnownWordCount(getDifficultyRatings(state));
     return Object.assign({}, state, { knownWordCount });
-}
-
-function makeCardsFromCharacters(state, chars) {
-    return chars.map(char => mapCard(state, char));
-}
-
-function findPackStartPosition(answers, pack) {
-    let i = 0;
-    while (knowsWord(answers, pack[i])) {
-        i += 1;
-    }
-    return i;
-}
-
-function getDifficultyRatings(state) {
-    return state.answers;
-}
-
-function fastForwardToPackPosition(state) {
-    let difficulty = state.difficulty;
-    let wordSize = state.wordSize;
-    const pack = dictUtils.getWords(wordSize, difficulty);
-    const packPosition = findPackStartPosition(getDifficultyRatings(state), pack);
-    const previous = state.previous || [];
-    if (difficulty >= MAX_DIFFICULTY * (wordSize + 1)) {
-        wordSize = 1;
-        difficulty = 0;
-    }
-
-    if (pack.length === 0 && difficulty > MAX_DIFFICULTY) {
-    // we ran out on this difficulty (there may be more but they are unreachable with current words)
-    // given assumption every difficulty has at least one word
-        return fastForwardToPackPosition(Object.assign({}, state, {
-            wordSize: wordSize + 1,
-            previous: pack.concat(previous),
-            difficulty: 0
-        }));
-    } else if (packPosition >= pack.length) {
-        return fastForwardToPackPosition(Object.assign({}, state, {
-            wordSize,
-            previous: pack.concat(previous),
-            difficulty: difficulty + 1
-        }));
-    } else {
-        return Object.assign({}, state, {
-            pack,
-            previous,
-            packPosition,
-            wordSize,
-            difficulty
-        });
-    }
-}
-
-function dealKnownCards(state, total) {
-    const known = ALL_WORDS.filter(char => knowsWord(getDifficultyRatings(state), char));
-    const cards = makeCardsFromCharacters(state, known);
-    return Object.assign({}, state, { cards, previous: [] });
-}
-
-/**
- * Deal ten cards from the dictionary that the user is unfamiliar with
- * sorted by difficulty level
- */
-function dealCards(state, total = NUM_CARDS_PER_LEVEL) {
-    const position = fastForwardToPackPosition(Object.assign({}, state,
-        { difficulty: 0, wordSize: 0, previous: [] }));
-    const pack = position.pack;
-    const packPosition = position.packPosition;
-    const cards = makeCardsFromCharacters(
-        state,
-        removeCharactersThatAreTooEasy(
-            getDifficultyRatings(state),
-            pack.slice(packPosition, packPosition + total)
-        )
-    );
-    const answeredCardsInCurrentPack = pack.slice(0, packPosition);
-    const previous = makeCardsFromCharacters(state,
-        answeredCardsInCurrentPack.concat(position.previous));
-
-    // if all have been answered lets deal again..
-    return Object.assign({}, state, position, {
-        cards, previous
-    });
 }
 
 function setGame(state, action) {
@@ -168,8 +54,7 @@ function setGame(state, action) {
         game: action.game,
         highlighted: [],
         previous: [],
-        cards: [],
-        maxSize: ALL_WORDS.length
+        cards: []
     }));
 }
 
@@ -372,9 +257,11 @@ function flipCardStart(state, action) {
 export default (state, action) => {
     switch (action.type) {
         case actionTypes.INIT:
-            return { isBooted: false };
+            return { isBooted: false, answers: action.userData.answers };
         case actionTypes.INIT_END:
-            return Object.assign({}, state, { isBooted: true });
+            return addKnownWordCount(
+                Object.assign({}, state, { isBooted: true, words: action.words })
+            );
         case actionTypes.FLIP_CARDS_START:
             return pausePlay(flipCardStart(state, action));
         case actionTypes.FLIP_CARDS_END:
@@ -392,8 +279,6 @@ export default (state, action) => {
         case actionTypes.GUESS_FLASHCARD_WRONG:
         case actionTypes.GUESS_FLASHCARD_RIGHT:
             return actionAnswerCard(state, action);
-        case actionTypes.BOOT:
-            return actionBoot(state, action);
         default:
             break;
     }

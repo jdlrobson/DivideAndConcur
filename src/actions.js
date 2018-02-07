@@ -1,8 +1,5 @@
 import actionTypes from './actionTypes';
-
-export function boot(userData) {
-    return { type: actionTypes.BOOT, userData };
-}
+import { getOrderedCards } from './helpers/cards';
 
 export function dismountCurrentGame() {
     return { type: actionTypes.DISMOUNT_GAME };
@@ -16,13 +13,13 @@ export function clickRootNode() {
     return { type: actionTypes.CLICK_ROOT_NODE };
 }
 
-export function init(game) {
+export function init(userData) {
     return (dispatch, getState) => {
-        dispatch({ type: actionTypes.INIT });
-        return new Promise((resolve) => {
-            dispatch({ type: actionTypes.INIT_END });
-            resolve();
-        });
+        dispatch({ type: actionTypes.INIT, userData });
+        setTimeout(() => {
+            const words = getOrderedCards(userData.answers);
+            dispatch({ type: actionTypes.INIT_END, words });
+        }, 0);
     };
 }
 

@@ -64,9 +64,12 @@ class App extends Component {
                 disabled={props.switcherDisabled || !game}>Home</button>
           </div>
           <div className="app__component--floated">
-            <ProgressBar percent={(props.knownWordCount/props.maxSize) * 100}>
-              {`${props.knownWordCount} of ${props.maxSize} words`}
-            </ProgressBar>
+            {
+                props.maxSize &&
+                <ProgressBar percent={(props.knownWordCount/props.maxSize) * 100}>
+                    {`${props.knownWordCount} of ${props.maxSize} words`}
+                </ProgressBar>
+            }
           </div>
           <div className="app__component--floated">
             {
@@ -107,15 +110,20 @@ const mapStateToProps = (state, props) => {
     highlighted,
     game,
     overlay,
-    knownWordCount,
-    maxSize
+    words,
+    knownWordCount
   } = state;
 
+  let maxSize;
+
+  if ( words ) {
+      maxSize = words.length;
+  }
   return Object.assign( {}, props, {
       isBooted,
       highlighted: highlighted || [],
       switcherDisabled: isPaused, game,
-      overlay, knownWordCount, maxSize } );
+      overlay, knownWordCount, maxSize  } );
 };
 
 export default connect( mapStateToProps, mapDispatchToProps )(App);

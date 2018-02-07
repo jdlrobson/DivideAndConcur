@@ -7,7 +7,7 @@ import { h, render } from 'preact';
 
 import App from './ui/App';
 import { Provider } from 'preact-redux';
-import { boot, init } from './actions';
+import { init } from './actions';
 import reducer from './reducer';
 import thunkMiddleware from 'redux-thunk';
 
@@ -53,8 +53,7 @@ const store = createStore(reducer,
     const memory = localStorage.getItem('memory');
     const userData = memory ? JSON.parse(memory) : false;
 
-    store.dispatch(init());
-    store.dispatch(boot(userData));
+    store.dispatch(init(userData));
     renderGame();
 }());
 
