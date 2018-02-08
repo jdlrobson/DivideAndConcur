@@ -1,14 +1,13 @@
 /** @jsx h */
 import { MATCH_SOUND, FLIP_CARDS, MATCH_PAIRS, MATCH_PAIRS_REVISE,
     REVISE } from './constants';
-import { getKnownWordCount } from './helpers/difficulty-ratings';
+import { getKnownWordCount, getDifficultyRatings } from './helpers/difficulty-ratings';
 import { markWordAsDifficult, markWordAsEasy } from './reducers/difficulty-ratings';
 import actionTypes from './actionTypes';
 import {
     dictUtils,
     dealKnownCards, dealCards,
     addHighlightedCards,
-    getDifficultyRatings,
     makeCardsFromCharacters } from './helpers/cards';
 
 // clears the current overlay
@@ -27,11 +26,11 @@ function actionAnswerCard(state, action) {
 
     switch (action.type) {
         case actionTypes.GUESS_FLASHCARD_WRONG:
-            answers = markWordAsDifficult(getDifficultyRatings(state), char);
+            answers = markWordAsDifficult(state, char);
             isKnown = false;
             break;
         case actionTypes.GUESS_FLASHCARD_RIGHT:
-            answers = markWordAsEasy(getDifficultyRatings(state), char);
+            answers = markWordAsEasy(state, char);
             break;
         default:
             break;
@@ -119,7 +118,7 @@ function revealedFlashcardPairGame(state, action) {
     if (selectedCards.length === 2) {
         if (selectedCards[0].character === selectedCards[1].character) {
             const char = action.character;
-            const answers = markWordAsEasy(getDifficultyRatings(state), char);
+            const answers = markWordAsEasy(state, char);
             const cards = markCardsAsAnswered(state.cards, char, true);
             return addHighlightedCards(Object.assign({}, state, { cards, answers }), char);
         } else {
@@ -143,10 +142,10 @@ function revealFlashcardDecompose(state, action) {
             answers = markWordAsEasy(answers, char);
             // If the word is of length > 1 also mark the parent
             if (state.goal.indexOf(card.character) === -1) {
-                markWordAsEasy(answers, card.character);
+                markWordAsEasy(state, card.character);
             }
         } else {
-            answers = markWordAsDifficult(answers, char);
+            answers = markWordAsDifficult(state, char);
         }
         // Mark selected card as answered
         cards = updateCardInCards(state.cards, action, {

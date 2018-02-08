@@ -1,5 +1,9 @@
 import { TOO_EASY } from './../constants';
 
+export function getDifficultyRatings(state) {
+    return state.answers;
+}
+
 export function getDifficultyRating(difficultyRatings, char) {
     return difficultyRatings[char] || 0;
 }

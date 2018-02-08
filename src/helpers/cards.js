@@ -2,7 +2,8 @@ import dictJson from './../../data/dictionary.json';
 import DictionaryUtils from './../../data/DictionaryUtils';
 
 import { removeCharactersThatAreTooEasy } from './characters';
-import { getDifficultyRating, knowsWord } from './difficulty-ratings';
+import { getDifficultyRating, knowsWord,
+    getDifficultyRatings } from './difficulty-ratings';
 
 const NUM_CARDS_PER_LEVEL = 10;
 const MAX_DIFFICULTY = 20;
@@ -96,10 +97,6 @@ function fastForwardToPackPosition(state) {
             difficulty
         });
     }
-}
-
-export function getDifficultyRatings(state) {
-    return state.answers;
 }
 
 /**
