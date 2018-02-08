@@ -4,3 +4,4 @@ export const FLIP_CARDS = 'flip';
 export const REVISE = 'revise';
 export const MATCH_SOUND = 'match-sound';
 export const TOO_EASY = -3;
+export const MAX_DIFFICULTY = 20;

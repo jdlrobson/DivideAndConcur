@@ -2,11 +2,12 @@
 import { MATCH_SOUND, FLIP_CARDS, MATCH_PAIRS, MATCH_PAIRS_REVISE,
     REVISE } from './constants';
 import { getKnownWordCount, getDifficultyRatings } from './helpers/difficulty-ratings';
+import { getUnknownCards } from './reducers/cards';
 import { markWordAsDifficult, markWordAsEasy } from './reducers/difficulty-ratings';
 import actionTypes from './actionTypes';
 import {
     dictUtils,
-    dealKnownCards, dealCards,
+    dealKnownCards,
     addHighlightedCards,
     makeCardsFromCharacters } from './helpers/cards';
 
@@ -139,7 +140,7 @@ function revealFlashcardDecompose(state, action) {
 
     if (!isEnd) {
         if (isKnown) {
-            answers = markWordAsEasy(answers, char);
+            answers = markWordAsEasy(state, char);
             // If the word is of length > 1 also mark the parent
             if (state.goal.indexOf(card.character) === -1) {
                 markWordAsEasy(state, card.character);
@@ -205,32 +206,34 @@ function cutCardDeck(state, total) {
 }
 
 function newRound(state) {
+    let cards = [];
     state = addKnownWordCount(state);
 
     if (state.game === MATCH_PAIRS) {
-        state = dealCards(state, 6);
+        cards = getUnknownCards(state, 6);
     } else if (state.game === MATCH_PAIRS_REVISE) {
         state = cutCardDeck(shuffleCards(dealKnownCards(state)), 6);
     } else if (state.game === FLIP_CARDS) {
-        state = dealCards(state, 9);
+        cards = getUnknownCards(state, 9);
     } else if (state.game === REVISE) {
         state = cutCardDeck(shuffleCards(dealKnownCards(state)), 9);
     } else if (state.game === MATCH_SOUND) {
         // get a word which is composed of other words
-        const card = dealCards(state, 1).cards[0];
+        const card = getUnknownCards(state, 1)[0];
         const goal = [card.character];
         const randomRadicals = shuffle(dictUtils.getWords(0)
         .filter(char => goal.indexOf(char) === -1)
         ).slice(0, 7);
+        cards = makeCardsFromCharacters(state, shuffle(goal.concat(randomRadicals)));
 
         state = Object.assign({},
             state,
             {
                 card,
-                goal,
-                cards: makeCardsFromCharacters(state, shuffle(goal.concat(randomRadicals)))
+                goal
             });
     }
+    state = Object.assign({}, state, { cards });
 
     switch (state.game) {
         case MATCH_PAIRS:
