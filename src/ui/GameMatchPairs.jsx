@@ -8,7 +8,9 @@ import { startRound } from './../actions'
 
 class GameMatchPairs extends Component {
   componentDidMount() {
-    this.props.onStart();
+    if ( !this.props.isFlipped ) {
+      this.props.onStart();
+    }
   }
   componentDidUpdate() {
     if ( !this.props.isFlipped ) {

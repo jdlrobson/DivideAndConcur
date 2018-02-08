@@ -4,7 +4,7 @@ import { MATCH_SOUND, FLIP_CARDS, MATCH_PAIRS, MATCH_PAIRS_REVISE,
 import { getKnownWordCount, getDifficultyRatings } from './helpers/difficulty-ratings';
 import { shuffle, getSelectedUnansweredCards, getAnsweredCards } from './helpers/cards';
 import { getUnknownCards, getKnownCards,
-    flipCards, cloneCards,
+    flipCards, cloneCards, answerCard,
     selectCard, deselectUnansweredCards, markCardsAsAnswered,
     cutCardDeck, shuffleCards, addIndexToCards } from './reducers/cards';
 import { markWordAsDifficult, markWordAsEasy } from './reducers/difficulty-ratings';
