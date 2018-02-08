@@ -178,7 +178,7 @@ function newRound(state) {
         const randomRadicals = shuffle(
             dictUtils.getWords(0)
                 .filter(char => goal.indexOf(char) === -1)
-        ).slice(0, 7);
+        ).slice(0, 5);
         cards = makeCardsFromCharacters(state, shuffle(goal.concat(randomRadicals)));
 
         state = Object.assign({},
