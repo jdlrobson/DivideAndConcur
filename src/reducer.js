@@ -200,7 +200,8 @@ function newRound(state) {
         default:
             break;
     }
-    state = Object.assign({}, state, { cards: addIndexToCards({ cards }) });
+    const previous = getKnownCards(state).slice(-50).reverse();
+    state = Object.assign({}, state, { cards: addIndexToCards({ cards }), previous });
     return requestSave(state);
 }
 
