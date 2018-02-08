@@ -60,13 +60,6 @@ export function makeCardsFromCharacters(state, chars) {
     return chars.map(char => mapCard(state, char));
 }
 
-export function addHighlightedCards(state, char) {
-    const highlighted = makeCardsFromCharacters(state, dictUtils.decompose(char));
-    return Object.assign({}, state, {
-        highlighted
-    });
-}
-
 export function dealKnownCards(state) {
     const known = ALL_WORDS.filter(char => knowsWord(getDifficultyRatings(state), char));
     const cards = makeCardsFromCharacters(state, known);

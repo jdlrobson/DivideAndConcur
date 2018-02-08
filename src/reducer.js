@@ -8,10 +8,10 @@ import { getUnknownCards, getKnownCards,
     selectCard, deselectUnansweredCards, markCardsAsAnswered,
     cutCardDeck, shuffleCards, addIndexToCards } from './reducers/cards';
 import { markWordAsDifficult, markWordAsEasy } from './reducers/difficulty-ratings';
+import { getHighlightedCards } from './reducers/highlighted'
 import actionTypes from './actionTypes';
 import {
     dictUtils,
-    addHighlightedCards,
     makeCardsFromCharacters } from './helpers/cards';
 
 // clears the current overlay
@@ -40,11 +40,12 @@ function actionAnswerCard(state, action) {
     }
 
     const cards = answerCard(state, char, action.index, isKnown);
-    return addHighlightedCards(Object.assign({}, state, {
+    const highlighted = getHighlightedCards(state, char);
+    return Object.assign({}, state, {
         answers,
-        cards,
-        previous: state.previous
-    }), char);
+        highlighted,
+        cards
+    });
 }
 
 function addKnownWordCount(state) {
@@ -103,7 +104,8 @@ function revealedFlashcardPairGame(state, action) {
             const char = action.character;
             const answers = markWordAsEasy(state, char);
             const cards = markCardsAsAnswered(state, char, true);
-            return addHighlightedCards(Object.assign({}, state, { cards, answers }), char);
+            const highlighted = getHighlightedCards(state, char);
+            return Object.assign({}, state, { cards, answers, highlighted });
         } else {
             return queueDeselectOfUnansweredCards(pausePlay(state));
         }
@@ -133,10 +135,8 @@ function revealFlashcardDecompose(state, action) {
         cards = markCardsAsAnswered(state, action.character, isKnown);
     }
 
-    return addHighlightedCards(
-        Object.assign({}, state, { answers, cards }),
-        char
-    );
+    const highlighted = getHighlightedCards(state, char);
+    return Object.assign({}, state, { answers, cards, highlighted });
 }
 function revealedFlashcard(state, action) {
     if (state.game === MATCH_SOUND) {
