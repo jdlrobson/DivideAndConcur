@@ -2,12 +2,15 @@
 import { MATCH_SOUND, FLIP_CARDS, MATCH_PAIRS, MATCH_PAIRS_REVISE,
     REVISE } from './constants';
 import { getKnownWordCount, getDifficultyRatings } from './helpers/difficulty-ratings';
-import { getUnknownCards } from './reducers/cards';
+import { shuffle, getSelectedUnansweredCards, getAnsweredCards } from './helpers/cards';
+import { getUnknownCards, getKnownCards,
+    flipCards, cloneCards,
+    selectCard, deselectUnansweredCards, markCardsAsAnswered,
+    cutCardDeck, shuffleCards, addIndexToCards } from './reducers/cards';
 import { markWordAsDifficult, markWordAsEasy } from './reducers/difficulty-ratings';
 import actionTypes from './actionTypes';
 import {
     dictUtils,
-    dealKnownCards,
     addHighlightedCards,
     makeCardsFromCharacters } from './helpers/cards';
 
@@ -21,7 +24,6 @@ function clearOverlay(state) {
 // Reducer for when a card is answered
 function actionAnswerCard(state, action) {
     const char = action.character;
-    const isAnswered = true;
     let isKnown = true;
     let answers;
 
@@ -37,9 +39,10 @@ function actionAnswerCard(state, action) {
             break;
     }
 
+    const cards = answerCard(state, char, action.index, isKnown);
     return addHighlightedCards(Object.assign({}, state, {
         answers,
-        cards: updateCardInCards(state.cards, action, { isAnswered, isKnown }),
+        cards,
         previous: state.previous
     }), char);
 }
@@ -56,28 +59,6 @@ function setGame(state, action) {
         previous: [],
         cards: []
     }));
-}
-
-function updateCardInCards(cards, action, props) {
-    return cards.map((card, i) => {
-        return action.character === card.character &&
-          action.index === i ?
-            Object.assign({}, card,  props) : card;
-    });
-}
-
-function markCardsAsAnswered(cards, character, isKnown) {
-    return cards.map((card, i) => {
-        return character === card.character ?
-            Object.assign({}, card,  { isAnswered: true, isKnown }) : card;
-    });
-}
-
-function deselectUnansweredCards(cards) {
-    return cards.map((card, i) => {
-        return card.isSelected && !card.isAnswered ?
-            Object.assign({}, card,  { isSelected: false }) : card;
-    });
 }
 
 function resumePlay(state) {
@@ -102,25 +83,26 @@ function queueDeselectOfUnansweredCards(state) {
 function actionDeselectUnansweredCards(state) {
     return resumePlay(
         Object.assign({}, state, {
-            cards: deselectUnansweredCards(state.cards)
+            cards: deselectUnansweredCards(state)
         })
     );
 }
 
 function revealCardInAction(state, action) {
+    const cards = selectCard(state, action.character, action.index);
     return Object.assign({}, state, {
-        cards: updateCardInCards(state.cards, action, { isSelected: true })
+        cards
     });
 }
 
 function revealedFlashcardPairGame(state, action) {
     state = revealCardInAction(state, action);
-    const selectedCards = state.cards.filter(card => card.isSelected && !card.isAnswered);
+    const selectedCards = getSelectedUnansweredCards(state);
     if (selectedCards.length === 2) {
         if (selectedCards[0].character === selectedCards[1].character) {
             const char = action.character;
             const answers = markWordAsEasy(state, char);
-            const cards = markCardsAsAnswered(state.cards, char, true);
+            const cards = markCardsAsAnswered(state, char, true);
             return addHighlightedCards(Object.assign({}, state, { cards, answers }), char);
         } else {
             return queueDeselectOfUnansweredCards(pausePlay(state));
@@ -130,13 +112,12 @@ function revealedFlashcardPairGame(state, action) {
 }
 
 function revealFlashcardDecompose(state, action) {
-    let cards = state.cards;
     const card = state.card;
-    const isEnd = cards.filter(card => card.isAnswered).length === state.goal.length;
+    const isEnd = getAnsweredCards(state).length === state.goal.length;
     const char = action.character;
     const isKnown = state.goal.indexOf(char) > -1;
     let answers = getDifficultyRatings(state);
-
+    let cards = state.cards;
 
     if (!isEnd) {
         if (isKnown) {
@@ -149,11 +130,7 @@ function revealFlashcardDecompose(state, action) {
             answers = markWordAsDifficult(state, char);
         }
         // Mark selected card as answered
-        cards = updateCardInCards(state.cards, action, {
-            isAnswered: true,
-            answers,
-            isKnown
-        });
+        cards = markCardsAsAnswered(state, action.character, isKnown);
     }
 
     return addHighlightedCards(
@@ -171,38 +148,11 @@ function revealedFlashcard(state, action) {
     }
 }
 
-function shuffle(arr) {
-    return arr.sort((a,b) => { return Math.random() < 0.5 ? -1 : 1; });
-}
-
-function shuffleCards(state) {
-    return Object.assign({}, state, {
-        cards: shuffle(state.cards)
-    });
-}
-function cloneCards(state) {
-    const cards = state.cards;
-    return Object.assign({}, state, {
-        cards: cards.concat(cards)
-    });
-}
-
-function addIndexToCards(state) {
-    return Object.assign({}, state, {
-        cards: state.cards.map((card, i) => Object.assign({}, card, { index: i }))
-    });
-}
-
 function requestSave(state) {
     return Object.assign({}, state, { isDirty: true });
 }
 function saveDone(state) {
     return Object.assign({}, state, { isDirty: false });
-}
-
-function cutCardDeck(state, total) {
-    const cards = state.cards.slice(0,total);
-    return Object.assign({}, state, { cards });
 }
 
 function newRound(state) {
@@ -212,17 +162,22 @@ function newRound(state) {
     if (state.game === MATCH_PAIRS) {
         cards = getUnknownCards(state, 6);
     } else if (state.game === MATCH_PAIRS_REVISE) {
-        state = cutCardDeck(shuffleCards(dealKnownCards(state)), 6);
+        cards = getKnownCards(state);
+        cards = shuffleCards( { cards } );
+        cards = cutCardDeck( { cards }, 6 );
     } else if (state.game === FLIP_CARDS) {
         cards = getUnknownCards(state, 9);
     } else if (state.game === REVISE) {
-        state = cutCardDeck(shuffleCards(dealKnownCards(state)), 9);
+        cards = getKnownCards(state);
+        cards = shuffleCards( { cards } );
+        cards = cutCardDeck( { cards }, 9 );
     } else if (state.game === MATCH_SOUND) {
         // get a word which is composed of other words
         const card = getUnknownCards(state, 1)[0];
         const goal = [card.character];
-        const randomRadicals = shuffle(dictUtils.getWords(0)
-        .filter(char => goal.indexOf(char) === -1)
+        const randomRadicals = shuffle(
+            dictUtils.getWords(0)
+                .filter(char => goal.indexOf(char) === -1)
         ).slice(0, 7);
         cards = makeCardsFromCharacters(state, shuffle(goal.concat(randomRadicals)));
 
@@ -233,23 +188,20 @@ function newRound(state) {
                 goal
             });
     }
-    state = Object.assign({}, state, { cards });
 
     switch (state.game) {
         case MATCH_PAIRS:
         case MATCH_PAIRS_REVISE:
-            state = flipCardStart(shuffleCards(cloneCards(state)));
+            cards = cloneCards({ cards });
+            cards = shuffleCards({ cards });
+            state = Object.assign({}, state, { cards });
+            state = flipCardStart(state);
             break;
         default:
             break;
     }
-
-    return requestSave(addIndexToCards(state));
-}
-function flipCards(state) {
-    const cards = state.cards.map(card => Object.assign({}, card,
-        { isFlipped: true, isSelected: false }));
-    return Object.assign({}, state, { cards, isFlipped: true });
+    state = Object.assign({}, state, { cards: addIndexToCards({ cards }) });
+    return requestSave(state);
 }
 
 function flipCardStart(state, action) {
@@ -267,7 +219,9 @@ export default (state, action) => {
         case actionTypes.FLIP_CARDS_START:
             return pausePlay(flipCardStart(state, action));
         case actionTypes.FLIP_CARDS_END:
-            return resumePlay(flipCards(state));
+            return resumePlay(
+                Object.assign({}, state, { isFlipped: true, cards: flipCards(state) })
+            );
         case actionTypes.SAVE_COMPLETE:
             return saveDone(state);
         case actionTypes.DESELECT_ALL_UNANSWERED_CARDS:

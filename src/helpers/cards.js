@@ -20,6 +20,14 @@ export function mapCard(state, character) {
     };
 }
 
+export function getAnsweredCards(state) {
+    return state.cards.filter(card => card.isAnswered);
+}
+
+export function getSelectedUnansweredCards(state) {
+    return state.cards.filter(card => card.isSelected && !card.isAnswered)
+}
+
 export function getOrderedCards(answers) {
     return ALL_WORDS.map((character) => {
         const wordLength = dictUtils.getWordLength(character);
@@ -65,3 +73,6 @@ export function dealKnownCards(state) {
     return Object.assign({}, state, { cards, previous: [] });
 }
 
+export function shuffle(arr) {
+    return arr.sort((a,b) => { return Math.random() < 0.5 ? -1 : 1; });
+}
