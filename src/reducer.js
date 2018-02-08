@@ -277,7 +277,7 @@ function revealFlashcardDecompose(state, action) {
 function revealedFlashcard(state, action) {
     if (state.game === MATCH_SOUND) {
         return revealFlashcardDecompose(state, action);
-    } else if (state.game === MATCH_PAIRS) {
+    } else if (state.game === MATCH_PAIRS || state.game === MATCH_PAIRS_REVISE) {
         return revealedFlashcardPairGame(state, action);
     }  else {
         return revealCardInAction(state, action);
