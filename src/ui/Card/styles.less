@@ -3,6 +3,7 @@
 @cardSizeSmall: 60px;
 
 .card {
+  box-sizing: border-box;
   transition: 0.6s;
   transform-style: preserve-3d;
   perspective: 1000px;
@@ -26,6 +27,11 @@
 .card--known {
   border: solid @cardBorder green;
   opacity: 0.4;
+}
+
+.card--empty {
+  border: solid 1px #aaa;
+  background: #fff;
 }
 
 .card--unknown {

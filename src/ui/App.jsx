@@ -2,7 +2,7 @@
 import { Component, h } from 'preact';
 import Game from './Game';
 import { connect } from 'preact-redux';
-import Card from './Card';
+import FlashCard, { Card } from './Card';
 import GameMatchPairs from './GameMatchPairs';
 import GameSelection from './GameSelection';
 import GameMatchSound from './GameMatchSound';
@@ -24,8 +24,9 @@ class App extends Component {
         this.setState({
             overlay: (
                 <div className='app__overlay'>
-                    <Card {...props} isLarge isSmall={false} isFrozen
-                        isSelected className='app__overlay__card' />
+                    <FlashCard {...props} isLarge isSmall={false} isFrozen
+                        isSelected
+                        className='app__overlay__card' />
                     <button className='app__overlay__button'
                         onClick={this.clearOverlay.bind(this)}>Got it!</button>
                 </div>
@@ -73,11 +74,14 @@ class App extends Component {
                     </div>
                     <div className='app__component--floated'>
                         {
-                            props.highlighted.map((props) => {
-                                return <Card {...props} isHighlighted
+                            props.isBooted && props.highlighted.map((props) => {
+                                return <FlashCard {...props} isHighlighted
                                     onClick={onHighlightedCardClick}
                                     key={`card-highlighted-${props.character}`} isSmall />;
-                            })
+                            }).concat(
+                                Array(2 - props.highlighted.length).fill()
+                                    .map(() => <Card isSmall />)
+                            )
                         }
                     </div>
                 </div>
