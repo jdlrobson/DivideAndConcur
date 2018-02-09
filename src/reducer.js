@@ -202,8 +202,7 @@ function newRound(state) {
             break;
     }
     const previous = getKnownCards(state).slice(-50).reverse();
-    state = Object.assign({}, state, { cards: addIndexToCards({ cards }), previous });
-    return requestSave(state);
+    return Object.assign({}, state, { cards: addIndexToCards({ cards }), previous });
 }
 
 function flipCardStart(state, action) {
@@ -236,7 +235,9 @@ export default (state, action) => {
             return Object.assign({}, state, { timedAction: undefined,
                 timedActionDuration: undefined });
         case actionTypes.END_ROUND:
-            return Object.assign({}, state, { cards: freezeCards(state), endRound: true });
+            return requestSave(
+                Object.assign({}, state, { cards: freezeCards(state), endRound: true })
+            );
         case actionTypes.START_ROUND:
             return Object.assign({}, newRound(state), { endRound: false });
         case actionTypes.GUESS_FLASHCARD_WRONG:
