@@ -12,6 +12,18 @@ class GameSelection extends Component {
   }
   render(props) {
     const game = props.game;
+    let revise = [];
+    if ( props.knownWordCount > 0 ) {
+        revise = [
+          <h2>Remember old words</h2>,
+          <button
+            className="game-selection__button"
+            onClick={(ev)=>this.setGame( REVISE )}>Test and click</button>,
+          <button
+            className="game-selection__button"
+            onClick={(ev)=>this.setGame( MATCH_PAIRS_REVISE )}>Pairs</button>
+        ];
+    }
     return (
         <div className="game-selection">
           <p>How would you like to play today?</p>
@@ -25,13 +37,7 @@ class GameSelection extends Component {
           <button
             className="game-selection__button"
             onClick={(ev)=>this.setGame( MATCH_SOUND )}>How's that sound?</button>
-          <h2>Remember old words</h2>
-          <button
-            className="game-selection__button"
-            onClick={(ev)=>this.setGame( REVISE )}>Test and click</button>
-          <button
-            className="game-selection__button"
-            onClick={(ev)=>this.setGame( MATCH_PAIRS_REVISE )}>Pairs</button>
+          {revise}
         </div>
       );
   }
@@ -47,10 +53,11 @@ const mapDispatchToProps = (dispatch, props) => {
 
 const mapStateToProps = (state, props) => {
   const {
-    game
+    game,
+    knownWordCount
   } = state;
 
-  return Object.assign( {}, props, { game } );
+  return Object.assign( {}, props, { game, knownWordCount } );
 };
 
 export default connect( mapStateToProps, mapDispatchToProps )(GameSelection);
