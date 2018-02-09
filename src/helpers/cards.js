@@ -56,6 +56,10 @@ export function getOrderedCards(answers) {
     });
 }
 
+export function freezeCards(cards) {
+    return cards.map(card => Object.assign({}, card, { isFrozen: true }));
+}
+
 export function makeCardsFromCharacters(state, chars) {
     return chars.map(char => mapCard(state, char));
 }

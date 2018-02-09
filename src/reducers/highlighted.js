@@ -1,7 +1,7 @@
-import { makeCardsFromCharacters, dictUtils } from './../helpers/cards';
+import { makeCardsFromCharacters, dictUtils, freezeCards } from './../helpers/cards';
 
 export function getHighlightedCards(state, char) {
-    return makeCardsFromCharacters(state,
+    return freezeCards(makeCardsFromCharacters(state,
         dictUtils.decompose(char).filter(char => char && char !== '?')
-    );
+    ));
 }

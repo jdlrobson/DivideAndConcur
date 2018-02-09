@@ -1,4 +1,4 @@
-import { mapCard, shuffle } from './../helpers/cards';
+import { mapCard, shuffle, freezeCards as freezeCardsHelper } from './../helpers/cards';
 import { isTooEasy, knowsWord, getDifficultyRatings } from './../helpers/difficulty-ratings';
 import { MAX_DIFFICULTY } from './../constants';
 
@@ -40,7 +40,7 @@ export function addIndexToCards(state) {
 }
 
 export function freezeCards(state) {
-    return state.cards.map(card => Object.assign({}, card, { isFrozen: true }));
+    return freezeCardsHelper(state.cards);
 }
 
 export function getUnknownCards(state, total) {
