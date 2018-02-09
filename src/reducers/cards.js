@@ -45,7 +45,7 @@ export function freezeCards(state) {
 
 export function getUnknownCards(state, total) {
     const words = state.words.filter(word => !isTooEasy(state.answers, word.character) &&
-        word.rating < MAX_DIFFICULTY * word.wordLength
+        word.rating < MAX_DIFFICULTY * Math.max(1, word.wordLength)
     );
     const firstUnknown = words.findIndex(word => !knowsWord(state.answers, word.character));
     const cards = words.slice(firstUnknown, firstUnknown + total)
