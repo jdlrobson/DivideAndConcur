@@ -8,7 +8,7 @@ import GameSelection from './GameSelection';
 import GameMatchSound from './GameMatchSound';
 import ProgressBar from './ProgressBar';
 import BootScreen from './BootScreen';
-import { clickRootNode, switchGame, dismountCurrentGame } from './../actions';
+import { switchGame, dismountCurrentGame } from './../actions';
 import { MATCH_PAIRS, FLIP_CARDS, REVISE, MATCH_PAIRS_REVISE,
     MATCH_SOUND } from './../constants';
 
@@ -57,7 +57,7 @@ class App extends Component {
         }
 
         return (
-            <div className='app' onClick={props.onCanvasClick}>
+            <div className='app'>
                 {this.state && this.state.overlay}
                 <div className='app__header'>
                     <div className='app__header__home'>
@@ -97,9 +97,6 @@ const mapDispatchToProps = (dispatch, props) => {
     return {
         onHomeClick:() => {
             dispatch(dismountCurrentGame());
-        },
-        onCanvasClick: () => {
-            dispatch(clickRootNode());
         },
         setGame: (game) => {
             dispatch(switchGame(game));

@@ -9,10 +9,6 @@ export function switchGame(game) {
     return { type: actionTypes.SWITCH_GAME, game };
 }
 
-export function clickRootNode() {
-    return { type: actionTypes.CLICK_ROOT_NODE };
-}
-
 export function init(userData) {
     return (dispatch, getState) => {
         dispatch({ type: actionTypes.INIT, userData });

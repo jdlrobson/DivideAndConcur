@@ -14,13 +14,6 @@ import { markWordAsDifficult, markWordAsEasy } from './reducers/difficulty-ratin
 import { getHighlightedCards } from './reducers/highlighted';
 import actionTypes from './actionTypes';
 
-// clears the current overlay
-function clearOverlay(state) {
-    return Object.assign({}, state, {
-        overlay: null
-    });
-}
-
 // Reducer for when a card is answered
 function actionAnswerCard(state, action) {
     const char = action.character;
@@ -258,8 +251,6 @@ export default (state, action) => {
             case actionTypes.GUESS_FLASHCARD_WRONG:
             case actionTypes.GUESS_FLASHCARD_RIGHT:
                 return actionAnswerCard(state, action);
-            case actionTypes.CLICK_ROOT_NODE:
-                return clearOverlay(state);
             default:
                 break;
         }
