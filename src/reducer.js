@@ -178,7 +178,7 @@ function newRound(state) {
         const goal = [card.character];
         const randomRadicals = shuffle(
             dictUtils.getWords(0)
-                .filter(char => goal.indexOf(char) === -1)
+                .filter(char => goal.indexOf(char) === -1 && ['⺶','𥫗', '⺮'].indexOf(char) === -1)
         ).slice(0, 5);
         cards = makeCardsFromCharacters(state, shuffle(goal.concat(randomRadicals)));
 
@@ -214,7 +214,7 @@ export default (state, action) => {
     switch (action.type) {
         case actionTypes.CHEAT_ANSWER_ALL:
             return Object.assign({}, state, {
-                cards: selectAndAnswerAll(state, false)
+                cards: selectAndAnswerAll(state)
             });
         case actionTypes.INIT:
             return { isBooted: false, answers: action.userData.answers };
