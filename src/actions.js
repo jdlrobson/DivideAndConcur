@@ -33,6 +33,10 @@ export function timedAction(type, milliseconds) {
     };
 }
 
+export function answerAllCardsInRound() {
+    return { type: actionTypes.CHEAT_ANSWER_ALL };
+}
+
 export function flipCardsAfter(milliseconds) {
     return (dispatch, getState) => {
         setTimeout(() => {

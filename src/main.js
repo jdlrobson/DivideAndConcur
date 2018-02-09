@@ -7,7 +7,7 @@ import { h, render } from 'preact';
 
 import App from './ui/App';
 import { Provider } from 'preact-redux';
-import { init } from './actions';
+import { init, answerAllCardsInRound } from './actions';
 import reducer from './reducer';
 import thunkMiddleware from 'redux-thunk';
 
@@ -38,6 +38,19 @@ const store = createStore(reducer,
             provider,
             document.getElementById('container')
         );
+    };
+
+    let keys = [];
+    window.onkeypress = function(ev) {
+        keys.push(ev.key);
+        if (keys.join('').indexOf('JRG') > -1) {
+            keys = [];
+            store.dispatch(answerAllCardsInRound());
+        }
+        if (keys.length > 10) {
+            keys = keys.slice(-10);
+        }
+
     };
 
     // setup subscribers

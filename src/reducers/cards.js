@@ -10,6 +10,12 @@ function updateCardInCards(cards, character, index, props) {
     });
 }
 
+export function selectAndAnswerAll(state, isKnown) {
+    return state.cards.map(card => Object.assign({}, card, { isAnswered: true,
+        isSelected: true,
+        isKnown }));
+}
+
 export function markCardsAsAnswered(state, character, isKnown) {
     return updateCardInCards(state.cards, character, false, { isAnswered: true, isKnown });
 }

@@ -7,7 +7,7 @@ import { shuffle, getSelectedUnansweredCards, getAnsweredCards,
     makeCardsFromCharacters  } from './helpers/cards';
 import { getUnknownCards, getKnownCards,
     flipCards, cloneCards, answerCard,
-    freezeCards,
+    freezeCards, selectAndAnswerAll,
     selectCard, deselectUnansweredCards, markCardsAsAnswered,
     cutCardDeck, shuffleCards, addIndexToCards } from './reducers/cards';
 import { markWordAsDifficult, markWordAsEasy } from './reducers/difficulty-ratings';
@@ -212,6 +212,10 @@ function flipCardStart(state, action) {
 
 export default (state, action) => {
     switch (action.type) {
+        case actionTypes.CHEAT_ANSWER_ALL:
+            return Object.assign({}, state, {
+                cards: selectAndAnswerAll(state, false)
+            });
         case actionTypes.INIT:
             return { isBooted: false, answers: action.userData.answers };
         case actionTypes.INIT_END:

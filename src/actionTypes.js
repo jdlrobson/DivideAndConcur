@@ -20,6 +20,8 @@ const START_ROUND = 'START_ROUND';
 
 const END_ROUND = 'END_ROUND';
 
+const CHEAT_ANSWER_ALL = 'CHEAT_ANSWER_ALL';
+
 const CLEAR_TIMED_ACTION = 'CLEAR_TIMED_ACTION';
 
 const INIT = 'INIT';
@@ -40,6 +42,7 @@ export default {
     INIT,
     INIT_END,
     BOOT,
+    CHEAT_ANSWER_ALL,
     DISMOUNT_GAME,
     FLIP_CARDS_START,
     FLIP_CARDS_END,
