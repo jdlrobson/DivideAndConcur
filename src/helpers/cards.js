@@ -25,7 +25,7 @@ export function getAnsweredCards(state) {
 }
 
 export function getSelectedUnansweredCards(state) {
-    return state.cards.filter(card => card.isSelected && !card.isAnswered)
+    return state.cards.filter(card => card.isSelected && !card.isAnswered);
 }
 
 export function getOrderedCards(answers) {

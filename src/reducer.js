@@ -2,17 +2,16 @@
 import { MATCH_SOUND, FLIP_CARDS, MATCH_PAIRS, MATCH_PAIRS_REVISE,
     REVISE } from './constants';
 import { getKnownWordCount, getDifficultyRatings } from './helpers/difficulty-ratings';
-import { shuffle, getSelectedUnansweredCards, getAnsweredCards } from './helpers/cards';
+import { shuffle, getSelectedUnansweredCards, getAnsweredCards,
+    dictUtils,
+    makeCardsFromCharacters  } from './helpers/cards';
 import { getUnknownCards, getKnownCards,
     flipCards, cloneCards, answerCard,
     selectCard, deselectUnansweredCards, markCardsAsAnswered,
     cutCardDeck, shuffleCards, addIndexToCards } from './reducers/cards';
 import { markWordAsDifficult, markWordAsEasy } from './reducers/difficulty-ratings';
-import { getHighlightedCards } from './reducers/highlighted'
+import { getHighlightedCards } from './reducers/highlighted';
 import actionTypes from './actionTypes';
-import {
-    dictUtils,
-    makeCardsFromCharacters } from './helpers/cards';
 
 // clears the current overlay
 function clearOverlay(state) {
@@ -163,14 +162,14 @@ function newRound(state) {
         cards = getUnknownCards(state, 6);
     } else if (state.game === MATCH_PAIRS_REVISE) {
         cards = getKnownCards(state);
-        cards = shuffleCards( { cards } );
-        cards = cutCardDeck( { cards }, 6 );
+        cards = shuffleCards({ cards });
+        cards = cutCardDeck({ cards }, 6);
     } else if (state.game === FLIP_CARDS) {
         cards = getUnknownCards(state, 9);
     } else if (state.game === REVISE) {
         cards = getKnownCards(state);
-        cards = shuffleCards( { cards } );
-        cards = cutCardDeck( { cards }, 9 );
+        cards = shuffleCards({ cards });
+        cards = cutCardDeck({ cards }, 9);
     } else if (state.game === MATCH_SOUND) {
         // get a word which is composed of other words
         const card = getUnknownCards(state, 1)[0];

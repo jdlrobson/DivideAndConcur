@@ -5,7 +5,7 @@ import { MAX_DIFFICULTY } from './../constants';
 function updateCardInCards(cards, character, index, props) {
     return cards.map((card, i) => {
         return character === card.character &&
-            ( index === i || index === false ) ?
+            (index === i || index === false) ?
             Object.assign({}, card,  props) : card;
     });
 }
@@ -27,7 +27,7 @@ export function deselectUnansweredCards(state) {
 }
 
 export function selectCard(state, character, index) {
-    return updateCardInCards(state.cards, character, index, { isSelected: true })
+    return updateCardInCards(state.cards, character, index, { isSelected: true });
 }
 export function addIndexToCards(state) {
     return state.cards.map((card, i) => Object.assign({}, card, { index: i }));
