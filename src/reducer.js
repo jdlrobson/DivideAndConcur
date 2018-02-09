@@ -246,12 +246,12 @@ export default (state, action) => {
             break;
     }
     // All these actions are user driven and will not work if paused.
-    if (!action.isPaused) {
+    if (state && !state.isPaused) {
         switch (action.type) {
             case actionTypes.DISMOUNT_GAME:
                 return setGame(state, { game: false });
             case actionTypes.REVEAL_FLASHCARD:
-                return state.isPaused ? state : revealedFlashcard(state, action);
+                return revealedFlashcard(state, action);
             case actionTypes.SWITCH_GAME:
                 return setGame(state, action);
             case actionTypes.GUESS_FLASHCARD_WRONG:
