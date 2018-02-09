@@ -7,6 +7,7 @@ import { shuffle, getSelectedUnansweredCards, getAnsweredCards,
     makeCardsFromCharacters  } from './helpers/cards';
 import { getUnknownCards, getKnownCards,
     flipCards, cloneCards, answerCard,
+    freezeCards,
     selectCard, deselectUnansweredCards, markCardsAsAnswered,
     cutCardDeck, shuffleCards, addIndexToCards } from './reducers/cards';
 import { markWordAsDifficult, markWordAsEasy } from './reducers/difficulty-ratings';
@@ -55,6 +56,7 @@ function addKnownWordCount(state) {
 function setGame(state, action) {
     return newRound(Object.assign({}, state, {
         game: action.game,
+        endRound: undefined,
         highlighted: [],
         previous: [],
         cards: []
@@ -230,8 +232,9 @@ export default (state, action) => {
             return Object.assign({}, state, { timedAction: undefined,
                 timedActionDuration: undefined });
         case actionTypes.END_ROUND:
+            return Object.assign({}, state, { cards: freezeCards(state), endRound: true });
         case actionTypes.START_ROUND:
-            return newRound(state);
+            return Object.assign({}, newRound(state), { endRound: false });
         case actionTypes.GUESS_FLASHCARD_WRONG:
         case actionTypes.GUESS_FLASHCARD_RIGHT:
             return actionAnswerCard(state, action);

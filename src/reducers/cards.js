@@ -33,6 +33,10 @@ export function addIndexToCards(state) {
     return state.cards.map((card, i) => Object.assign({}, card, { index: i }));
 }
 
+export function freezeCards(state) {
+    return state.cards.map(card => Object.assign({}, card, { isFrozen: true }));
+}
+
 export function getUnknownCards(state, total) {
     const words = state.words.filter(word => !isTooEasy(state.answers, word.character) &&
         word.rating < MAX_DIFFICULTY * word.wordLength

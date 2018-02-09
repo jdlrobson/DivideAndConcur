@@ -37,7 +37,7 @@ class GameDecompose extends Component {
 const mapDispatchToProps = (dispatch, props) => {
   return {
     onFinished: () => {
-      dispatch(timedAction(endRound, 2000));
+      dispatch(endRound());
     }
   };
 };

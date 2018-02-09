@@ -47,7 +47,14 @@ export function startRound() {
 }
 
 export function endRound() {
-    return { type: actionTypes.END_ROUND };
+    return (dispatch, getState) => {
+        if (!getState().endRound) {
+            dispatch({ type: actionTypes.END_ROUND });
+            setTimeout(() => {
+                dispatch({ type: actionTypes.START_ROUND });
+            }, 1000);
+        }
+    };
 }
 
 export function saveComplete() {
