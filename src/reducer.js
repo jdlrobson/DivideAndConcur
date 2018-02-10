@@ -11,7 +11,7 @@ import { getUnknownCards, getKnownCards,
     selectCard, deselectUnansweredCards, markCardsAsAnswered,
     cutCardDeck, shuffleCards, addIndexToCards } from './reducers/cards';
 import { markWordAsDifficult, markWordAsEasy } from './reducers/difficulty-ratings';
-import { getHighlightedCards } from './reducers/highlighted';
+import _highlighted from './reducers/highlighted';
 import _paused from './reducers/paused';
 import actionTypes from './actionTypes';
 
@@ -34,10 +34,8 @@ function actionAnswerCard(state, action) {
     }
 
     const cards = answerCard(state, char, action.index, isKnown);
-    const highlighted = getHighlightedCards(state, char);
     return Object.assign({}, state, {
         answers,
-        highlighted,
         cards
     });
 }
@@ -88,8 +86,7 @@ function revealFlashcardDecompose(state, action) {
         cards = markCardsAsAnswered(state, action.character, isKnown);
     }
 
-    const highlighted = getHighlightedCards(state, char);
-    return Object.assign({}, state, { answers, cards, highlighted });
+    return Object.assign({}, state, { answers, cards });
 }
 function revealedFlashcard(state, action) {
     if (state.game === MATCH_SOUND) {
@@ -159,8 +156,9 @@ function flipCardStart(state, action) {
 }
 
 export default (state={}, action) => {
+    const highlighted = _highlighted(state.highlighted, action);
     const paused = _paused(state.paused, action);
-    state = Object.assign({}, state, { paused });
+    state = Object.assign({}, state, { paused, highlighted });
     switch (action.type) {
         case actionTypes.CHEAT_ANSWER_ALL:
             return Object.assign({}, state, {
