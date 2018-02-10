@@ -63,7 +63,7 @@ const store = createStore(reducer,
    *******************************************
    */
     const memory = localStorage.getItem('memory');
-    const userData = memory ? JSON.parse(memory) : false;
+    const userData = memory ? JSON.parse(memory) : { answers: {} };
 
     store.dispatch(init(userData));
     renderGame();
