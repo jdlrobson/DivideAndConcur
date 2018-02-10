@@ -12,6 +12,7 @@ import { getUnknownCards, getKnownCards,
     cutCardDeck, shuffleCards, addIndexToCards } from './reducers/cards';
 import { markWordAsDifficult, markWordAsEasy } from './reducers/difficulty-ratings';
 import { getHighlightedCards } from './reducers/highlighted';
+import _paused from './reducers/paused';
 import actionTypes from './actionTypes';
 
 // Reducer for when a card is answered
@@ -56,20 +57,10 @@ function setGame(state, action) {
     }));
 }
 
-function resumePlay(state) {
-    return Object.assign({}, state, { isPaused: false });
-}
-
-function pausePlay(state) {
-    return Object.assign({}, state, { isPaused: true });
-}
-
 function actionDeselectUnansweredCards(state) {
-    return resumePlay(
-        Object.assign({}, state, {
-            cards: deselectUnansweredCards(state)
-        })
-    );
+    return Object.assign({}, state, {
+        cards: deselectUnansweredCards(state)
+    });
 }
 
 function revealCardInAction(state, action) {
@@ -171,7 +162,9 @@ function flipCardStart(state, action) {
     return Object.assign({}, state, { isFlipped: false, isFlipping: true });
 }
 
-export default (state, action) => {
+export default (state={}, action) => {
+    const paused = _paused(state.paused, action);
+    state = Object.assign({}, state, { paused });
     switch (action.type) {
         case actionTypes.CHEAT_ANSWER_ALL:
             return Object.assign({}, state, {
@@ -184,11 +177,10 @@ export default (state, action) => {
                 Object.assign({}, state, { isBooted: true, words: action.words })
             );
         case actionTypes.FLIP_CARDS_START:
-            return pausePlay(flipCardStart(state, action));
+            return flipCardStart(state, action);
         case actionTypes.FLIP_CARDS_END:
-            return resumePlay(
-                Object.assign({}, state, { isFlipped: true, isFlipping: false,
-                    cards: flipCards(state) })
+            return Object.assign({}, state, { isFlipped: true, isFlipping: false,
+                cards: flipCards(state) }
             );
         case actionTypes.SAVE_COMPLETE:
             return saveDone(state);
@@ -207,7 +199,7 @@ export default (state, action) => {
             break;
     }
     // All these actions are user driven and will not work if paused.
-    if (state && !state.isPaused) {
+    if (!paused) {
         switch (action.type) {
             case actionTypes.DISMOUNT_GAME:
                 return setGame(state, { game: false });
