@@ -19,26 +19,18 @@ export function init(userData) {
     };
 }
 
-export function timedAction(type, milliseconds) {
-    return (dispatch, getState) => {
-        setTimeout(() => {
-            const action = typeof type === 'string' ? { type } : type();
-            dispatch(action);
-        }, milliseconds);
-        dispatch({ type: actionTypes.CLEAR_TIMED_ACTION });
-    };
-}
-
 export function answerAllCardsInRound() {
     return { type: actionTypes.CHEAT_ANSWER_ALL };
 }
 
 export function flipCardsAfter(milliseconds) {
     return (dispatch, getState) => {
-        setTimeout(() => {
-            dispatch({ type: actionTypes.FLIP_CARDS_END });
-        }, milliseconds);
-        dispatch({ type: actionTypes.FLIP_CARDS_START });
+        if ( !getState().isFlipping ) {
+            setTimeout(() => {
+                dispatch({ type: actionTypes.FLIP_CARDS_END });
+            }, milliseconds);
+            dispatch({ type: actionTypes.FLIP_CARDS_START });
+        }
     };
 }
 

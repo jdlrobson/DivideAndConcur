@@ -2,7 +2,7 @@
 import { Component, h } from 'preact';
 import Card from './../Card'
 import { connect } from 'preact-redux';
-import { endRound, timedAction } from './../../actions'
+import { endRound } from './../../actions'
 import './styles.less'
 
 class GameDecompose extends Component {

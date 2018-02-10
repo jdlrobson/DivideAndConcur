@@ -55,7 +55,6 @@ const store = createStore(reducer,
 
     // setup subscribers
     store.subscribe(checkIfEndOfRound(store));
-    store.subscribe(checkForTimedAction(store));
     store.subscribe(checkForSave(store));
 
     /**

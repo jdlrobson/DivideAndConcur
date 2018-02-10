@@ -64,17 +64,6 @@ function pausePlay(state) {
     return Object.assign({}, state, { isPaused: true });
 }
 
-function addTimedAction(state, timedAction, timedActionDuration) {
-    return pausePlay(Object.assign({}, state, {
-        timedAction,
-        timedActionDuration })
-    );
-}
-
-function queueDeselectOfUnansweredCards(state) {
-    return addTimedAction(state, actionTypes.DESELECT_ALL_UNANSWERED_CARDS, 2000);
-}
-
 function actionDeselectUnansweredCards(state) {
     return resumePlay(
         Object.assign({}, state, {
@@ -88,23 +77,6 @@ function revealCardInAction(state, action) {
     return Object.assign({}, state, {
         cards
     });
-}
-
-function revealedFlashcardPairGame(state, action) {
-    state = revealCardInAction(state, action);
-    const selectedCards = getSelectedUnansweredCards(state);
-    if (selectedCards.length === 2) {
-        if (selectedCards[0].character === selectedCards[1].character) {
-            const char = action.character;
-            const answers = markWordAsEasy(state, char);
-            const cards = markCardsAsAnswered(state, char, true);
-            const highlighted = getHighlightedCards(state, char);
-            return Object.assign({}, state, { cards, answers, highlighted });
-        } else {
-            return queueDeselectOfUnansweredCards(pausePlay(state));
-        }
-    }
-    return state;
 }
 
 function revealFlashcardDecompose(state, action) {
@@ -135,8 +107,6 @@ function revealFlashcardDecompose(state, action) {
 function revealedFlashcard(state, action) {
     if (state.game === MATCH_SOUND) {
         return revealFlashcardDecompose(state, action);
-    } else if (state.game === MATCH_PAIRS || state.game === MATCH_PAIRS_REVISE) {
-        return revealedFlashcardPairGame(state, action);
     }  else {
         return revealCardInAction(state, action);
     }
@@ -188,8 +158,7 @@ function newRound(state) {
         case MATCH_PAIRS_REVISE:
             cards = cloneCards({ cards });
             cards = shuffleCards({ cards });
-            state = Object.assign({}, state, { cards });
-            state = flipCardStart(state);
+            state = Object.assign({}, state, { cards, isFlipped: false });
             break;
         default:
             break;
@@ -199,7 +168,7 @@ function newRound(state) {
 }
 
 function flipCardStart(state, action) {
-    return Object.assign({}, state, { isFlipped: false });
+    return Object.assign({}, state, { isFlipped: false, isFlipping: true });
 }
 
 export default (state, action) => {
@@ -218,15 +187,13 @@ export default (state, action) => {
             return pausePlay(flipCardStart(state, action));
         case actionTypes.FLIP_CARDS_END:
             return resumePlay(
-                Object.assign({}, state, { isFlipped: true, cards: flipCards(state) })
+                Object.assign({}, state, { isFlipped: true, isFlipping: false,
+                    cards: flipCards(state) })
             );
         case actionTypes.SAVE_COMPLETE:
             return saveDone(state);
         case actionTypes.DESELECT_ALL_UNANSWERED_CARDS:
             return actionDeselectUnansweredCards(state, action);
-        case actionTypes.CLEAR_TIMED_ACTION:
-            return Object.assign({}, state, { timedAction: undefined,
-                timedActionDuration: undefined });
         case actionTypes.END_ROUND:
             return requestSave(
                 Object.assign({}, state, { cards: freezeCards(state), endRound: true })

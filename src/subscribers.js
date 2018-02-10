@@ -1,17 +1,4 @@
-import { endRound, saveComplete, timedAction } from './actions';
-
-export function checkForTimedAction(store) {
-    return () => {
-        const state = store.getState();
-        const queuedTimedAction = state && state.timedAction;
-
-        if (queuedTimedAction) {
-            store.dispatch(
-                timedAction(queuedTimedAction, state.timedActionDuration || 5000)
-            );
-        }
-    };
-}
+import { endRound, saveComplete } from './actions';
 
 /**
  * Return a subscriber bound to the Redux store that

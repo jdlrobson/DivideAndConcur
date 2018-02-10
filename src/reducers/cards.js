@@ -33,7 +33,7 @@ export function deselectUnansweredCards(state) {
 }
 
 export function selectCard(state, character, index) {
-    return updateCardInCards(state.cards, character, index, { isSelected: true });
+    return updateCardInCards(state.cards, character, index, { isSelected: true, isFlipped: false });
 }
 export function addIndexToCards(state) {
     return state.cards.map((card, i) => Object.assign({}, card, { index: i }));
@@ -72,6 +72,11 @@ export function shuffleCards(state) {
 }
 
 export function flipCards(state) {
-    return state.cards.map(card => Object.assign({}, card,
-        { isFlipped: true, isSelected: false }));
+    return state.cards.map(card => {
+        if ( card.isAnswered ) {
+            return card;
+        } else {
+            return Object.assign({}, card, { isFlipped: true, isSelected: false });
+        }
+    });
 }
