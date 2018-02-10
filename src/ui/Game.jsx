@@ -9,7 +9,9 @@ import { startRound } from './../actions';
 
 class Game extends Component {
     componentDidMount() {
-        this.props.onStart();
+        if ( !this.props.cards.length ) {
+            this.props.onStart();
+        }
     }
     render(props) {
         const cards = props.cards ? <FlashcardRound cards={props.cards} round={0} /> : false;
