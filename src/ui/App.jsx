@@ -8,14 +8,11 @@ import GameSelection from './GameSelection';
 import GameMatchSound from './GameMatchSound';
 import ProgressBar from './ProgressBar';
 import BootScreen from './BootScreen';
-import { switchGame, dismountCurrentGame } from './../actions';
+import { dismountCurrentGame } from './../actions';
 import { MATCH_PAIRS, FLIP_CARDS, REVISE, MATCH_PAIRS_REVISE,
     MATCH_SOUND } from './../constants';
 
 class App extends Component {
-    setGame(game) {
-        this.props.setGame(game);
-    }
     clearOverlay() {
         this.setState({ overlay: undefined });
     }
@@ -97,9 +94,6 @@ const mapDispatchToProps = (dispatch, props) => {
     return {
         onHomeClick:() => {
             dispatch(dismountCurrentGame());
-        },
-        setGame: (game) => {
-            dispatch(switchGame(game));
         }
     };
 };

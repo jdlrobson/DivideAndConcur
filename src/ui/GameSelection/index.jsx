@@ -1,7 +1,7 @@
 /** @jsx h */
 import { Component, h } from 'preact';
 import { connect } from 'preact-redux';
-import { switchGame } from './../../actions'
+import { switchGame, startRound } from './../../actions'
 import { MATCH_PAIRS, FLIP_CARDS, REVISE, MATCH_PAIRS_REVISE,
    MATCH_SOUND } from './../../constants'
 import './styles.less'
@@ -47,6 +47,7 @@ const mapDispatchToProps = (dispatch, props) => {
   return {
     setGame: ( game ) => {
       dispatch(switchGame(game));
+      dispatch(startRound());
     }
   };
 };

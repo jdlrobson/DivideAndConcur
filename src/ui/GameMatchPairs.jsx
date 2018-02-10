@@ -63,6 +63,10 @@ class GameMatchPairs extends Component {
     }
 }
 
+GameMatchPairs.defaultProps = {
+    cards: []
+};
+
 const mapStateToProps = (state, props) => {
     const { cards, isFlipped } = state;
 

@@ -48,13 +48,9 @@ function addKnownWordCount(state) {
 }
 
 function setGame(state, action) {
-    return newRound(Object.assign({}, state, {
-        game: action.game,
-        endRound: undefined,
-        highlighted: [],
-        previous: [],
-        cards: []
-    }));
+    return Object.assign({}, state, {
+        game: action.game
+    });
 }
 
 function actionDeselectUnansweredCards(state) {
