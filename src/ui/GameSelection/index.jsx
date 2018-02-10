@@ -54,11 +54,10 @@ const mapDispatchToProps = (dispatch, props) => {
 
 const mapStateToProps = (state, props) => {
   const {
-    game,
-    knownWordCount
+    game
   } = state;
 
-  return Object.assign( {}, props, { game, knownWordCount } );
+  return Object.assign( {}, props, { game } );
 };
 
 export default connect( mapStateToProps, mapDispatchToProps )(GameSelection);

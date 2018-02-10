@@ -8,6 +8,7 @@ import GameSelection from './GameSelection';
 import GameMatchSound from './GameMatchSound';
 import ProgressBar from './ProgressBar';
 import BootScreen from './BootScreen';
+import { getKnownWordCount } from './../helpers/difficulty-ratings';
 import { dismountCurrentGame } from './../actions';
 import { MATCH_PAIRS, FLIP_CARDS, REVISE, MATCH_PAIRS_REVISE,
     MATCH_SOUND } from './../constants';
@@ -50,7 +51,7 @@ class App extends Component {
                 </div>
             );
         } else {
-            workflow = <GameSelection />;
+            workflow = <GameSelection knownWordCount={props.knownWordCount} />;
         }
 
         return (
@@ -106,7 +107,7 @@ const mapStateToProps = (state, props) => {
         game,
         overlay,
         words,
-        knownWordCount
+        answers
     } = state;
 
     let maxSize;
@@ -114,6 +115,7 @@ const mapStateToProps = (state, props) => {
     if (words) {
         maxSize = words.length;
     }
+    const knownWordCount = getKnownWordCount(answers);
     return Object.assign({}, props, {
         isBooted,
         highlighted: highlighted || [],

@@ -1,7 +1,7 @@
 /** @jsx h */
 import { MATCH_SOUND, FLIP_CARDS, MATCH_PAIRS, MATCH_PAIRS_REVISE,
     REVISE } from './constants';
-import { getKnownWordCount, getDifficultyRatings } from './helpers/difficulty-ratings';
+import { getDifficultyRatings } from './helpers/difficulty-ratings';
 import { shuffle, getSelectedUnansweredCards, getAnsweredCards,
     dictUtils,
     makeCardsFromCharacters  } from './helpers/cards';
@@ -38,11 +38,6 @@ function actionAnswerCard(state, action) {
         answers,
         cards
     });
-}
-
-function addKnownWordCount(state) {
-    const knownWordCount = getKnownWordCount(getDifficultyRatings(state));
-    return Object.assign({}, state, { knownWordCount });
 }
 
 function setGame(state, action) {
@@ -105,7 +100,6 @@ function saveDone(state) {
 
 function newRound(state) {
     let cards = [];
-    state = addKnownWordCount(state);
 
     if (state.game === MATCH_PAIRS) {
         cards = getUnknownCards(state, 6);
@@ -167,9 +161,7 @@ export default (state={}, action) => {
         case actionTypes.INIT:
             return { isBooted: false, answers: action.userData.answers };
         case actionTypes.INIT_END:
-            return addKnownWordCount(
-                Object.assign({}, state, { isBooted: true, words: action.words })
-            );
+            return Object.assign({}, state, { isBooted: true, words: action.words });
         case actionTypes.FLIP_CARDS_START:
             return flipCardStart(state, action);
         case actionTypes.FLIP_CARDS_END:
