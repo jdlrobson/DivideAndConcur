@@ -9,11 +9,8 @@ export const dictUtils = new DictionaryUtils(dictJson.words,
 export const ALL_WORDS = dictUtils.all();
 
 export function mapCard(state, character) {
-    const difficultyLevel = getDifficultyRating(getDifficultyRatings(state), character);
     return {
-        isKnown: knowsWord(getDifficultyRatings(state), character),
         character,
-        difficultyLevel,
         level: `${dictUtils.getWordLength(character)}.${dictUtils.getDifficultyRating(character)}`,
         pinyin: dictUtils.getPinyin(character),
         english: dictUtils.getWord(character)

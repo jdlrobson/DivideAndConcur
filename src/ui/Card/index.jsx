@@ -2,7 +2,8 @@
 import { Component, h } from 'preact';
 import { connect } from 'preact-redux';
 import './styles.less';
-import { revealFlashcard, answerFlashcard } from './../../actions'
+import { revealFlashcard, answerFlashcard } from './../../actions';
+import { getDifficultyRating, knowsWord } from './../../helpers/difficulty-ratings';
 
 const BLOCK_NAME = 'card';
 
@@ -132,15 +133,28 @@ FlashCard.defaultProps = {
   selectedControls: true
 };
 
+const mapStateToProps = (state, props) => {
+    const {
+      answers
+    } = state;
+    const {
+        character
+    } = props;
+    const difficultyLevel = getDifficultyRating(answers, character);
+    const isKnown = knowsWord(answers, character);
+
+    return Object.assign( {}, props, { isKnown, difficultyLevel } );
+};
+
 const mapDispatchToProps = (dispatch, props) => {
   return {
-  onSelect: ( character, index ) => {
-    dispatch( revealFlashcard( character, index ) );
-  },
-  onAnswered: ( character, index, isCorrect ) => {
-    dispatch( answerFlashcard( isCorrect, character, index ) );
-  }
+      onSelect: ( character, index ) => {
+        dispatch( revealFlashcard( character, index ) );
+      },
+      onAnswered: ( character, index, isCorrect ) => {
+        dispatch( answerFlashcard( isCorrect, character, index ) );
+      }
   };
 };
 
-export default connect( null, mapDispatchToProps )(FlashCard);
+export default connect( mapStateToProps, mapDispatchToProps )(FlashCard);
