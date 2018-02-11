@@ -13,16 +13,17 @@ class GameDecompose extends Component {
     }
   }
   isFinished(props) {
-    return props.goal.length === props.cards.filter(card=>card.isAnswered).length;
+    return props.cards.slice(1).filter(card=>card.isAnswered).length === 1;
   }
   render(props) {
+      const card = props.cards[0];
     return (
         <div className="game-decompose">
           <p>Match the card with its sound!</p>
-          <Card {...props.card} isLarge={true} isSelected={this.isFinished(props)}
-            pinyin={false} isFrozen={true} debug={false} />
+          <Card {...card} isLarge={true} isSelected={this.isFinished(props)}
+              pinyin={this.isFinished(props) ? false : card.pinyin} isFrozen={true} debug={false} />
           {
-            props.cards.map((cardProps) => {
+            props.cards.slice(1).map((cardProps) => {
               return <Card {...cardProps} isSmall={true} label={cardProps.pinyin}
                 selectedControls={false}
                 english={false} debug={false} />

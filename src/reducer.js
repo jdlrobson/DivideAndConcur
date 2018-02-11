@@ -62,20 +62,16 @@ function revealCardInAction(state, action) {
 }
 
 function revealFlashcardDecompose(state, action) {
-    const card = state.card;
-    const isEnd = getAnsweredCards(state).length === state.goal.length;
+    const card = state.cards[0];
+    const isEnd = getAnsweredCards(state).length === 1;
     const char = action.character;
-    const isKnown = state.goal.indexOf(char) > -1;
+    const isKnown = card.character === char;
     let answers = getDifficultyRatings(state);
     let cards = state.cards;
 
     if (!isEnd) {
         if (isKnown) {
             answers = markWordAsEasy(state, char);
-            // If the word is of length > 1 also mark the parent
-            if (state.goal.indexOf(card.character) === -1) {
-                markWordAsEasy(state, card.character);
-            }
         } else {
             answers = markWordAsDifficult(state, char);
         }
@@ -128,21 +124,17 @@ function newRound(state) {
         case PINYIN_HARD:
         case PINYIN_REVISE:
         case MATCH_SOUND:
-            // get a word which is composed of other words
-            const card = cards[0];
-            const goal = [card.character];
-            const randomRadicals = shuffle(
-                dictUtils.getWords(0)
-                    .filter(char => goal.indexOf(char) === -1 && ['⺶','𥫗', '⺮'].indexOf(char) === -1)
-            ).slice(0, 5);
-            cards = makeCardsFromCharacters(state, shuffle(goal.concat(randomRadicals)));
+            // The first word will be the one we guess the sound for.
+            // exclude some words we know don't have pinyin
+            cards = cards.filter(card => ['⺶','𥫗', '⺮'].indexOf(card.character) === -1)
+                .slice(0, 5);
 
-            state = Object.assign({},
-                state,
-                {
-                    card,
-                    goal
-                });
+            // Pick card to play the game with
+            const card = cards[0];
+            // shuffle them again
+            cards = shuffleCards({ cards });
+            // add the goal card at the front
+            cards.unshift(card);
             break;
         case MATCH_PAIRS_HARD:
         case MATCH_PAIRS:
