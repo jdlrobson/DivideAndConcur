@@ -10,7 +10,7 @@ import GameMatchSound from './GameMatchSound';
 import ProgressBar from './ProgressBar';
 import BootScreen from './BootScreen';
 import Button from './Button';
-import { getKnownWordCount } from './../helpers/difficulty-ratings';
+import { getKnownWordCount, getUnKnownWordCount } from './../helpers/difficulty-ratings';
 import { dismountCurrentGame } from './../actions';
 import { MATCH_PAIRS, REVISE,
     ENGLISH_TO_CHINESE, PINYIN_TO_CHINESE,
@@ -76,7 +76,9 @@ class App extends Component {
                     <div className='app__component--floated'>
                         {
                             props.maxSize &&
-                <ProgressBar percent={(props.knownWordCount / props.maxSize) * 100}>
+                <ProgressBar percent={(props.knownWordCount / props.maxSize) * 100}
+                    percentRed={(props.unknownWordCount / props.maxSize) * 100}
+                >
                     {`${props.knownWordCount} of ${props.maxSize} words`}
                 </ProgressBar>
                         }
@@ -128,6 +130,7 @@ const mapStateToProps = (state, props) => {
         maxSize = words.length;
     }
     const knownWordCount = getKnownWordCount(answers);
+    const unknownWordCount = getUnKnownWordCount(answers);
     return Object.assign({}, props, {
         isBooted,
         highlighted: highlighted || [],
@@ -135,6 +138,7 @@ const mapStateToProps = (state, props) => {
         game,
         deck,
         overlay,
+        unknownWordCount,
         knownWordCount,
         maxSize  });
 };

@@ -17,8 +17,14 @@
   margin-bottom: 8px;
 
   div {
-    background-color: green;
     height: 100%;
+    float: left;
+    &:first-child {
+       background-color: green;
+    }
+    &:last-child {
+       background-color: red;
+    }
   }
 }
 
