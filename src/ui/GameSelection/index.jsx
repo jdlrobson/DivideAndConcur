@@ -7,7 +7,7 @@ import { MATCH_PAIRS, FLIP_CARDS, REVISE, MATCH_PAIRS_REVISE,
     REVISE_HARD, MATCH_PAIRS_HARD, PINYIN_HARD, PINYIN_REVISE,
     MATCH_SOUND } from './../../constants'
 import Button from './../Button'
-import './styles.less'
+import ButtonGroup from './../ButtonGroup'
 
 class GameSelection extends Component {
   setGame( game ) {
@@ -35,7 +35,7 @@ class GameSelection extends Component {
         ];
     }
     return (
-        <div className="game-selection">
+        <ButtonGroup>
           <p>How would you like to play today?</p>
           <h2>Review unfamiliar words</h2>
           <Button onClick={(ev)=>this.setGame( FLIP_CARDS )}>Revise</Button>
@@ -48,7 +48,7 @@ class GameSelection extends Component {
           <Button
             onClick={(ev)=>this.setGame( PINYIN_TO_CHINESE )}>Simplified&lt;-&gt;Pinyin</Button>
           {revise}
-        </div>
+        </ButtonGroup>
       );
   }
 }
