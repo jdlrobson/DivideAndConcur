@@ -2,6 +2,8 @@
 @cardSize: 95px;
 @cardSizeSmall: 60px;
 
+@someday-orange: #ffd666;
+
 .card {
   box-sizing: border-box;
   transition: 0.6s;
@@ -9,7 +11,7 @@
   perspective: 1000px;
   width: @cardSize;
   height: @cardSize;
-  background: #ccc;
+  background: @someday-orange;
   float: left;
   margin-right: 10px;
   text-align: center;
@@ -30,7 +32,7 @@
 }
 
 .card--empty {
-  border: solid 1px #aaa;
+  border: solid 1px @someday-orange;
   background: #fff;
 }
 
@@ -99,14 +101,8 @@
   }
 }
 
-.button {
+.card__control__button {
   cursor: pointer;
-
-  &.pinyin {
-    position: absolute;
-    right: 10px;
-    top: 0;
-  }
 }
 
 .wrong {

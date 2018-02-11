@@ -102,9 +102,9 @@ class FlashCard extends Component {
                 style={isSelected ? {} : hidden}>{props.pinyin}</div>
         ];
         const buttons = props.selectedControls ? [
-            <div key='tick' className='tick button' onClick={this.tick.bind(this)}
+            <div key='tick' className='tick card__control__button' onClick={this.tick.bind(this)}
                 style={isSelected && !done && !isKnown && !isFrozen ? {} : hidden}>✅</div>,
-            <div key='wrong' className='wrong button' onClick={this.wrong.bind(this)}
+            <div key='wrong' className='wrong card__control__button' onClick={this.wrong.bind(this)}
                 style={isSelected && !done && !isKnown && !isFrozen ? {} : hidden}>❌</div>
         ] : false;
 

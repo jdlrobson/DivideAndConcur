@@ -17,6 +17,7 @@ import { MATCH_PAIRS, REVISE,
     MATCH_SOUND,
     DECK_NEW
 } from './../constants';
+import logoUrl from './logo.png';
 
 class App extends Component {
     clearOverlay() {
@@ -72,6 +73,10 @@ class App extends Component {
                     <div className='app__header__home'>
                         <Button onClick={props.onHomeClick}
                             disabled={props.isPaused || !props.deck}>Home</Button>
+                        <img src={logoUrl} alt="Divide and concur"
+                            width="220"
+                            className="app__header__home__logo"
+                        />
                     </div>
                     <div className='app__component--floated'>
                         {
