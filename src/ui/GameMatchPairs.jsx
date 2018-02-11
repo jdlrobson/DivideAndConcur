@@ -79,6 +79,7 @@ class GameMatchPairs extends Component {
                     <Card className={className}
                         {...card}
                         english={false}
+                        pinyin={false}
                         label={pairIndex === index ? undefined : card.pinyin}
                         selectedControls={false} isFrozen={isFrozen} />
                 );
