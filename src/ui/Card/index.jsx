@@ -110,7 +110,7 @@ class FlashCard extends Component {
 
       components = translations.concat( buttons );
 
-      const label = props.label || props.character;
+      const label = props.label !== undefined ? props.label : props.character;
       const labelModifiers = [];
       if ( props.label ) {
           labelModifiers.push('custom');

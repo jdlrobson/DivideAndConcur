@@ -12,6 +12,7 @@ import { getKnownWordCount } from './../helpers/difficulty-ratings';
 import { dismountCurrentGame } from './../actions';
 import { MATCH_PAIRS, FLIP_CARDS, REVISE, MATCH_PAIRS_REVISE,
     PINYIN_HARD, PINYIN_REVISE,
+    ENGLISH_TO_CHINESE,
     REVISE_HARD, MATCH_PAIRS_HARD,
     MATCH_SOUND } from './../constants';
 
@@ -51,6 +52,7 @@ class App extends Component {
                     { (game === MATCH_PAIRS || game === MATCH_PAIRS_REVISE ||
                         game === MATCH_PAIRS_HARD)
                         && <GameMatchPairs /> }
+                    { (game === ENGLISH_TO_CHINESE) && <GameMatchPairs mode={1} /> }
                     { (game === MATCH_SOUND || game === PINYIN_HARD || game === PINYIN_REVISE)
                         && <GameMatchSound /> }
                 </div>

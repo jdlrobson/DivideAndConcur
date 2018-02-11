@@ -39,23 +39,42 @@ class GameMatchPairs extends Component {
     }
     render(props) {
         const isFrozen = !this.canSelect();
-        const cards = props.cards;
         const msg = props.isFlipped ?
             'Match the pairs to win the cards!' :
             'The cards will be flipped soon! Try and remember their locations!';
         const className = props.isFlipped ? 'game-match-pairs__card' :
             'game-match-pairs__card--pending';
+        let cards;
+
+        const mode = props.mode || 0;
+        if (mode === 0) {
+            cards = props.cards.map((card) => {
+                return (
+                    <Card className={className}
+                        selectedControls={false} {...card} isFrozen={isFrozen} />
+                );
+            });
+        } else if (mode === 1) {
+            // half cards show the character
+            cards = props.cards.map((card, index) => {
+                const pairIndex = props.cards.findIndex(anotherCard =>
+                    anotherCard.character === card.character);
+                return (
+                    <Card className={className}
+                        {...card}
+                        pinyin={false}
+                        english={false}
+                        label={pairIndex === index ? undefined : card.english}
+                        selectedControls={false} isFrozen={isFrozen} />
+                );
+            });
+        }
 
         return (
             <div className='game-match-pairs'>
                 <GameDescription>{msg}</GameDescription>
                 {
-                    cards.map((card) => {
-                        return (
-                            <Card className={className}
-                                selectedControls={false} isSelected {...card} isFrozen={isFrozen} />
-                        );
-                    })
+                    cards
                 }
                 <div className='game-match-pairs__end-marker' />
             </div>
