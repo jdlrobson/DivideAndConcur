@@ -13,6 +13,7 @@ class GameDecompose extends Component {
     }
   }
   isFinished(props) {
+      console.log('??', props.goal, props.cards, props.cards.filter(card=>card.isAnswered).length)
     return props.goal.length === props.cards.filter(card=>card.isAnswered).length;
   }
   render(props) {

@@ -5,3 +5,7 @@ export const REVISE = 'revise';
 export const MATCH_SOUND = 'match-sound';
 export const TOO_EASY = -3;
 export const MAX_DIFFICULTY = 20;
+export const MATCH_PAIRS_HARD = 'pairs-hard';
+export const REVISE_HARD = 'revise-hard';
+export const PINYIN_HARD = 'pinyin-hard';
+export const PINYIN_REVISE = 'pinyin-revise';

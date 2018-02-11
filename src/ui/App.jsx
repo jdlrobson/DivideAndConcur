@@ -11,6 +11,8 @@ import BootScreen from './BootScreen';
 import { getKnownWordCount } from './../helpers/difficulty-ratings';
 import { dismountCurrentGame } from './../actions';
 import { MATCH_PAIRS, FLIP_CARDS, REVISE, MATCH_PAIRS_REVISE,
+    PINYIN_HARD, PINYIN_REVISE,
+    REVISE_HARD, MATCH_PAIRS_HARD,
     MATCH_SOUND } from './../constants';
 
 class App extends Component {
@@ -44,10 +46,13 @@ class App extends Component {
         } else if (game) {
             workflow = (
                 <div className='app__content'>
-                    { (game === FLIP_CARDS || game === REVISE) &&
+                    { (game === FLIP_CARDS || game === REVISE || game === REVISE_HARD) &&
                         <Game description={gameDescription} /> }
-                    { (game === MATCH_PAIRS || game === MATCH_PAIRS_REVISE) && <GameMatchPairs /> }
-                    { (game === MATCH_SOUND) && <GameMatchSound /> }
+                    { (game === MATCH_PAIRS || game === MATCH_PAIRS_REVISE ||
+                        game === MATCH_PAIRS_HARD)
+                        && <GameMatchPairs /> }
+                    { (game === MATCH_SOUND || game === PINYIN_HARD || game === PINYIN_REVISE)
+                        && <GameMatchSound /> }
                 </div>
             );
         } else {

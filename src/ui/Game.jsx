@@ -9,7 +9,7 @@ import { startRound } from './../actions';
 
 class Game extends Component {
     componentDidMount() {
-        if ( !this.props.cards.length ) {
+        if (!this.props.cards.length) {
             this.props.onStart();
         }
     }

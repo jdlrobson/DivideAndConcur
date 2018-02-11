@@ -59,8 +59,16 @@ export function cloneCards(state) {
     return state.cards.concat(state.cards);
 }
 
-export function getKnownCards(state) {
+export function getKnownCards(state, total) {
     return state.words.filter(word => knowsWord(getDifficultyRatings(state), word.character))
+        .map(word => mapCard(state, word.character));
+}
+
+export function getHardCards(state, total) {
+    return state.words.filter(word =>
+            state.answers[word.character] &&
+            !knowsWord(getDifficultyRatings(state), word.character)
+        ).slice(0, total)
         .map(word => mapCard(state, word.character));
 }
 

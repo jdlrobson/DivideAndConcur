@@ -1,11 +1,13 @@
 /** @jsx h */
 import { MATCH_SOUND, FLIP_CARDS, MATCH_PAIRS, MATCH_PAIRS_REVISE,
+    REVISE_HARD, MATCH_PAIRS_HARD,
+    PINYIN_HARD, PINYIN_REVISE,
     REVISE } from './constants';
 import { getDifficultyRatings } from './helpers/difficulty-ratings';
 import { shuffle, getSelectedUnansweredCards, getAnsweredCards,
     dictUtils,
     makeCardsFromCharacters  } from './helpers/cards';
-import { getUnknownCards, getKnownCards,
+import { getUnknownCards, getKnownCards, getHardCards,
     flipCards, cloneCards, answerCard,
     freezeCards, selectAndAnswerAll,
     selectCard, deselectUnansweredCards, markCardsAsAnswered,
@@ -84,7 +86,7 @@ function revealFlashcardDecompose(state, action) {
     return Object.assign({}, state, { answers, cards });
 }
 function revealedFlashcard(state, action) {
-    if (state.game === MATCH_SOUND) {
+    if (state.game === MATCH_SOUND || state.game === PINYIN_HARD || state.game === PINYIN_REVISE) {
         return revealFlashcardDecompose(state, action);
     }  else {
         return revealCardInAction(state, action);
@@ -101,39 +103,51 @@ function saveDone(state) {
 function newRound(state) {
     let cards = [];
 
-    if (state.game === MATCH_PAIRS) {
-        cards = getUnknownCards(state, 6);
-    } else if (state.game === MATCH_PAIRS_REVISE) {
-        cards = getKnownCards(state);
-        cards = shuffleCards({ cards });
-        cards = cutCardDeck({ cards }, 6);
-    } else if (state.game === FLIP_CARDS) {
-        cards = getUnknownCards(state, 9);
-    } else if (state.game === REVISE) {
-        cards = getKnownCards(state);
-        cards = shuffleCards({ cards });
-        cards = cutCardDeck({ cards }, 9);
-    } else if (state.game === MATCH_SOUND) {
-        // get a word which is composed of other words
-        const card = getUnknownCards(state, 1)[0];
-        const goal = [card.character];
-        const randomRadicals = shuffle(
-            dictUtils.getWords(0)
-                .filter(char => goal.indexOf(char) === -1 && ['⺶','𥫗', '⺮'].indexOf(char) === -1)
-        ).slice(0, 5);
-        cards = makeCardsFromCharacters(state, shuffle(goal.concat(randomRadicals)));
-
-        state = Object.assign({},
-            state,
-            {
-                card,
-                goal
-            });
+    switch (state.game) {
+        case REVISE_HARD:
+        case PINYIN_HARD:
+        case MATCH_PAIRS_HARD:
+            cards = getHardCards(state, 9);
+            break;
+        case MATCH_SOUND:
+        case FLIP_CARDS:
+        case MATCH_PAIRS:
+            cards = getUnknownCards(state, 9);
+            break;
+        case PINYIN_REVISE:
+        case MATCH_PAIRS_REVISE:
+        case REVISE:
+            cards = getKnownCards(state);
+            break;
+        default:
+            break;
     }
+    cards = shuffleCards({ cards });
 
     switch (state.game) {
+        case PINYIN_HARD:
+        case PINYIN_REVISE:
+        case MATCH_SOUND:
+            // get a word which is composed of other words
+            const card = cards[0];
+            const goal = [card.character];
+            const randomRadicals = shuffle(
+                dictUtils.getWords(0)
+                    .filter(char => goal.indexOf(char) === -1 && ['⺶','𥫗', '⺮'].indexOf(char) === -1)
+            ).slice(0, 5);
+            cards = makeCardsFromCharacters(state, shuffle(goal.concat(randomRadicals)));
+
+            state = Object.assign({},
+                state,
+                {
+                    card,
+                    goal
+                });
+            break;
+        case MATCH_PAIRS_HARD:
         case MATCH_PAIRS:
         case MATCH_PAIRS_REVISE:
+            cards = cutCardDeck({ cards }, 6);
             cards = cloneCards({ cards });
             cards = shuffleCards({ cards });
             state = Object.assign({}, state, { cards, isFlipped: false });
