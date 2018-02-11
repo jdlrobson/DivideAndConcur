@@ -112,6 +112,9 @@ class FlashCard extends Component {
 
       const label = props.label || props.character;
       const labelModifiers = [];
+      if ( props.label ) {
+          labelModifiers.push('custom');
+      }
       if (label.length > 4) {
         labelModifiers.push('long');
       }
