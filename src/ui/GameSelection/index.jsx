@@ -6,6 +6,7 @@ import { MATCH_PAIRS, FLIP_CARDS, REVISE, MATCH_PAIRS_REVISE,
     ENGLISH_TO_CHINESE, PINYIN_TO_CHINESE,
     REVISE_HARD, MATCH_PAIRS_HARD, PINYIN_HARD, PINYIN_REVISE,
     MATCH_SOUND } from './../../constants'
+import Button from './../Button'
 import './styles.less'
 
 class GameSelection extends Component {
@@ -18,46 +19,34 @@ class GameSelection extends Component {
     if ( props.knownWordCount > 0 ) {
         revise = [
           <h2>Review hard words</h2>,
-          <button
-            className="game-selection__button"
-            onClick={(ev)=>this.setGame( REVISE_HARD )}>Revise</button>,
-          <button
-            className="game-selection__button"
-            onClick={(ev)=>this.setGame( MATCH_PAIRS_HARD )}>Pairs</button>,
-          <button
-            className="game-selection__button"
-            onClick={(ev)=>this.setGame( PINYIN_HARD )}>Learn Pinyin</button>,
+          <Button
+            onClick={(ev)=>this.setGame( REVISE_HARD )}>Revise</Button>,
+          <Button
+            onClick={(ev)=>this.setGame( MATCH_PAIRS_HARD )}>Pairs</Button>,
+          <Button
+            onClick={(ev)=>this.setGame( PINYIN_HARD )}>Learn Pinyin</Button>,
           <h2>Remember old words</h2>,
-          <button
-            className="game-selection__button"
-            onClick={(ev)=>this.setGame( REVISE )}>Revise</button>,
-          <button
-            className="game-selection__button"
-            onClick={(ev)=>this.setGame( MATCH_PAIRS_REVISE )}>Pairs</button>,
-          <button
-            className="game-selection__button"
-            onClick={(ev)=>this.setGame( PINYIN_REVISE )}>Learn Pinyin</button>
+          <Button
+            onClick={(ev)=>this.setGame( REVISE )}>Revise</Button>,
+          <Button
+            onClick={(ev)=>this.setGame( MATCH_PAIRS_REVISE )}>Pairs</Button>,
+          <Button
+            onClick={(ev)=>this.setGame( PINYIN_REVISE )}>Learn Pinyin</Button>
         ];
     }
     return (
         <div className="game-selection">
           <p>How would you like to play today?</p>
           <h2>Review unfamiliar words</h2>
-          <button
-              className="game-selection__button"
-              onClick={(ev)=>this.setGame( FLIP_CARDS )}>Revise</button>
-          <button
-            className="game-selection__button"
-            onClick={(ev)=>this.setGame( MATCH_PAIRS )}>Pairs</button>
-          <button
-            className="game-selection__button"
-            onClick={(ev)=>this.setGame( MATCH_SOUND )}>Learn Pinyin</button>
-          <button
-            className="game-selection__button"
-            onClick={(ev)=>this.setGame(  ENGLISH_TO_CHINESE )}>English&lt;-&gt;Pinyin</button>
-          <button
-            className="game-selection__button"
-            onClick={(ev)=>this.setGame( PINYIN_TO_CHINESE )}>Simplified&lt;-&gt;Pinyin</button>
+          <Button onClick={(ev)=>this.setGame( FLIP_CARDS )}>Revise</Button>
+          <Button
+            onClick={(ev)=>this.setGame( MATCH_PAIRS )}>Pairs</Button>
+          <Button
+            onClick={(ev)=>this.setGame( MATCH_SOUND )}>Learn Pinyin</Button>
+          <Button
+            onClick={(ev)=>this.setGame(  ENGLISH_TO_CHINESE )}>English&lt;-&gt;Pinyin</Button>
+          <Button
+            onClick={(ev)=>this.setGame( PINYIN_TO_CHINESE )}>Simplified&lt;-&gt;Pinyin</Button>
           {revise}
         </div>
       );
