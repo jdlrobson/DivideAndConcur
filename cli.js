@@ -143,16 +143,23 @@ function loadHanzi() {
 	}
 }
 
+function removeUnreadableCharacters(components) {
+	return components.filter((char) => char.match(/[㇕𥃭㇕𠮛]/) === null);
+}
+
 function batchAutoDecompose(words) {
 	loadHanzi();
 	words.filter((char) => char.length === 1).forEach((char) => {
 		const decomps = hanzi.decompose(char);
-		const components = decomps.components1.filter((comp) =>
+		let components = decomps.components1.filter((comp) =>
 			comp !== 'No glyph available' );
 
 		if ( ( components.length === 1 && components[0] !== char ) || components.length > 1 ) {
 			const existingDecomps = dict.getDecompositions()[char] || [];
-			if ( existingDecomps.length <= components.length ) {
+			components = removeUnreadableCharacters(components).slice(0, 2);
+			if ( existingDecomps.length !== components.length ||
+				removeUnreadableCharacters(existingDecomps).length !== existingDecomps.length
+			) {
 				console.log('Add', char, components );
 				dict.addDecomposition( char, components );
 			}
@@ -253,7 +260,9 @@ function menu() {
 					break;
 				case 6:
 					getUserInput('Enter chinese character(s)').then((msg) => {
-						var words = Array.from(msg.trim().replace(/ /g, ''))
+						var words = dict.all().filter((char) => {
+							return dict.getWordLength(char) === 1 && dict.decompose(char).length === 1;
+						});
 						batchAutoDecompose(words);
 						return dict.save().then(() => menu());
 					});

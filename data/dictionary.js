@@ -8,6 +8,10 @@ const DictionaryUtils = require( './DictionaryUtils' );
 
 var utils; // will be defined on load
 
+function all() {
+	return utils.all();
+}
+
 function decompose(word) {
   return utils.decompose( word );
 }
@@ -122,6 +126,7 @@ module.exports = {
 	missing,
 	getWordLength,
 	getPinyin,
+	all,
 	removeWord,
 	getDecompositions: getDecompositions,
 	decompose: decompose,
