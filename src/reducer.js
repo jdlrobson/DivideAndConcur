@@ -1,9 +1,8 @@
 /** @jsx h */
-import { MATCH_SOUND, FLIP_CARDS, MATCH_PAIRS, MATCH_PAIRS_REVISE,
-    REVISE_HARD, MATCH_PAIRS_HARD,
+import { MATCH_SOUND, MATCH_PAIRS, REVISE,
     ENGLISH_TO_CHINESE, PINYIN_TO_CHINESE,
-    PINYIN_HARD, PINYIN_REVISE,
-    REVISE } from './constants';
+    DECK_NEW, DECK_KNOWN, DECK_UNKNOWN,
+} from './constants';
 import { getDifficultyRatings } from './helpers/difficulty-ratings';
 import { shuffle, getSelectedUnansweredCards, getAnsweredCards,
     dictUtils,
@@ -14,6 +13,7 @@ import { getUnknownCards, getKnownCards, getHardCards,
     selectCard, deselectUnansweredCards, markCardsAsAnswered,
     cutCardDeck, shuffleCards, addIndexToCards } from './reducers/cards';
 import { markWordAsDifficult, markWordAsEasy } from './reducers/difficulty-ratings';
+import _deck from './reducers/deck';
 import _highlighted from './reducers/highlighted';
 import _paused from './reducers/paused';
 import actionTypes from './actionTypes';
@@ -83,7 +83,7 @@ function revealFlashcardDecompose(state, action) {
     return Object.assign({}, state, { answers, cards });
 }
 function revealedFlashcard(state, action) {
-    if (state.game === MATCH_SOUND || state.game === PINYIN_HARD || state.game === PINYIN_REVISE) {
+    if (state.game === MATCH_SOUND) {
         return revealCardInAction(revealFlashcardDecompose(state, action), action);
     }  else {
         return revealCardInAction(state, action);
@@ -97,35 +97,28 @@ function saveDone(state) {
     return Object.assign({}, state, { isDirty: false });
 }
 
-function newRound(state) {
+function chooseDeck(state) {
     let cards = [];
-
-    switch (state.game) {
-        case REVISE_HARD:
-        case PINYIN_HARD:
-        case MATCH_PAIRS_HARD:
+    switch (state.deck) {
+        case DECK_UNKNOWN:
             cards = getHardCards(state, 9);
             break;
-        case PINYIN_TO_CHINESE:
-        case ENGLISH_TO_CHINESE:
-        case MATCH_SOUND:
-        case FLIP_CARDS:
-        case MATCH_PAIRS:
+        case DECK_NEW:
             cards = getUnknownCards(state, 9);
             break;
-        case PINYIN_REVISE:
-        case MATCH_PAIRS_REVISE:
-        case REVISE:
+        case DECK_KNOWN:
             cards = getKnownCards(state);
             break;
         default:
             break;
     }
+    return cards;
+}
+function newRound(state) {
+    let cards = chooseDeck(state, )
     cards = shuffleCards({ cards });
 
     switch (state.game) {
-        case PINYIN_HARD:
-        case PINYIN_REVISE:
         case MATCH_SOUND:
             // The first word will be the one we guess the sound for.
             // exclude some words we know don't have pinyin
@@ -141,9 +134,7 @@ function newRound(state) {
             break;
         case PINYIN_TO_CHINESE:
         case ENGLISH_TO_CHINESE:
-        case MATCH_PAIRS_HARD:
         case MATCH_PAIRS:
-        case MATCH_PAIRS_REVISE:
             cards = cutCardDeck({ cards }, 6);
             cards = cloneCards({ cards });
             cards = shuffleCards({ cards });
@@ -163,7 +154,8 @@ function flipCardStart(state, action) {
 export default (state={}, action) => {
     const highlighted = _highlighted(state.highlighted, action);
     const paused = _paused(state.paused, action);
-    state = Object.assign({}, state, { paused, highlighted });
+    const deck = _deck(state.deck, action);
+    state = Object.assign({}, state, { paused, highlighted, deck });
     switch (action.type) {
         case actionTypes.CHEAT_ANSWER_ALL:
             return Object.assign({}, state, {

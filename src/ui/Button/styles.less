@@ -1,5 +1,9 @@
 .button {
-  width: 100%;
-  display: block;
   height: 50px;
+
+  &:disabled {
+    text-decoration: line-through;
+    opacity: 0.5;
+    cursor: none;
+  }
 }

@@ -34,6 +34,10 @@ export function flipCardsAfter(milliseconds) {
     };
 }
 
+export function setDeck(deck) {
+    return { type: actionTypes.SET_DECK, deck };
+}
+
 export function startRound() {
     return { type: actionTypes.START_ROUND };
 }

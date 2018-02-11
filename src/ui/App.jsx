@@ -5,16 +5,18 @@ import { connect } from 'preact-redux';
 import FlashCard, { Card } from './Card';
 import GameMatchPairs from './GameMatchPairs';
 import GameSelection from './GameSelection';
+import DeckSelection from './DeckSelection';
 import GameMatchSound from './GameMatchSound';
 import ProgressBar from './ProgressBar';
 import BootScreen from './BootScreen';
+import Button from './Button';
 import { getKnownWordCount } from './../helpers/difficulty-ratings';
 import { dismountCurrentGame } from './../actions';
-import { MATCH_PAIRS, FLIP_CARDS, REVISE, MATCH_PAIRS_REVISE,
-    PINYIN_HARD, PINYIN_REVISE,
+import { MATCH_PAIRS, REVISE,
     ENGLISH_TO_CHINESE, PINYIN_TO_CHINESE,
-    REVISE_HARD, MATCH_PAIRS_HARD,
-    MATCH_SOUND } from './../constants';
+    MATCH_SOUND,
+    DECK_NEW
+} from './../constants';
 
 class App extends Component {
     clearOverlay() {
@@ -38,28 +40,29 @@ class App extends Component {
         let workflow;
         const onHighlightedCardClick = this.onHighlightedCardClick.bind(this);
         const game = props.game;
-        const gameDescription = game === FLIP_CARDS ?
+        const gameDescription = props.deck === DECK_NEW ?
             'Here are some cards. Do you know them? Click to see!' :
-            'You got these cards right already. Can you remember them?';
+            'You\'ve seen these cards before. Can you remember them?';
 
         if (!props.isBooted) {
             workflow = <BootScreen className='app__content' />;
         } else if (game) {
             workflow = (
                 <div className='app__content'>
-                    { (game === FLIP_CARDS || game === REVISE || game === REVISE_HARD) &&
+                    { (game === REVISE) &&
                         <Game description={gameDescription} /> }
-                    { (game === MATCH_PAIRS || game === MATCH_PAIRS_REVISE ||
-                        game === MATCH_PAIRS_HARD)
+                    { (game === MATCH_PAIRS)
                         && <GameMatchPairs /> }
                     { (game === PINYIN_TO_CHINESE) && <GameMatchPairs mode={2} /> }
                     { (game === ENGLISH_TO_CHINESE) && <GameMatchPairs mode={1} /> }
-                    { (game === MATCH_SOUND || game === PINYIN_HARD || game === PINYIN_REVISE)
+                    { (game === MATCH_SOUND)
                         && <GameMatchSound /> }
                 </div>
             );
+        } else if (props.deck) {
+            workflow = <GameSelection />;
         } else {
-            workflow = <GameSelection knownWordCount={props.knownWordCount} />;
+            workflow = <DeckSelection knownWordCount={props.knownWordCount} />;
         }
 
         return (
@@ -67,8 +70,8 @@ class App extends Component {
                 {this.state && this.state.overlay}
                 <div className='app__header'>
                     <div className='app__header__home'>
-                        <button onClick={props.onHomeClick}
-                            disabled={props.switcherDisabled || !game}>Home</button>
+                        <Button onClick={props.onHomeClick}
+                            disabled={props.isPaused || !props.deck}>Home</Button>
                     </div>
                     <div className='app__component--floated'>
                         {
@@ -113,6 +116,7 @@ const mapStateToProps = (state, props) => {
         isBooted,
         highlighted,
         game,
+        deck,
         overlay,
         words,
         answers
@@ -127,8 +131,9 @@ const mapStateToProps = (state, props) => {
     return Object.assign({}, props, {
         isBooted,
         highlighted: highlighted || [],
-        switcherDisabled: isPaused,
+        isPaused,
         game,
+        deck,
         overlay,
         knownWordCount,
         maxSize  });

@@ -56,7 +56,7 @@ class GameMatchPairs extends Component {
             });
         } else if (mode === 1) {
             // half cards show the character
-            cards = props.cards.filter((card)=> card.english);
+            cards = props.cards.filter(card => card.english);
             cards = cards.map((card, index) => {
                 const pairIndex = cards.findIndex(anotherCard =>
                     anotherCard.character === card.character);
@@ -71,7 +71,7 @@ class GameMatchPairs extends Component {
             });
         } else if (mode === 2) {
             // half cards show the pinyin
-            cards = props.cards.filter((card)=> card.pinyin);
+            cards = props.cards.filter(card => card.pinyin);
             cards = cards.map((card, index) => {
                 const pairIndex = cards.findIndex(anotherCard =>
                     anotherCard.character === card.character);

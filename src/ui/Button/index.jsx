@@ -3,9 +3,11 @@ import { Component, h } from 'preact';
 import './styles.less'
 
 class Button extends Component {
-    render({ children, onClick }) {
+    render({ children, onClick, disabled }) {
         return (
-            <button className="button" onClick={onClick}>{children}</button>
+            <button className="button"
+                disabled={disabled}
+                onClick={onClick}>{children}</button>
         );
     }
 }

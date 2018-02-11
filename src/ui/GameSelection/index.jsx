@@ -2,10 +2,10 @@
 import { Component, h } from 'preact';
 import { connect } from 'preact-redux';
 import { switchGame, startRound } from './../../actions'
-import { MATCH_PAIRS, FLIP_CARDS, REVISE, MATCH_PAIRS_REVISE,
-    ENGLISH_TO_CHINESE, PINYIN_TO_CHINESE,
-    REVISE_HARD, MATCH_PAIRS_HARD, PINYIN_HARD, PINYIN_REVISE,
-    MATCH_SOUND } from './../../constants'
+import { MATCH_PAIRS, REVISE,
+    ENGLISH_TO_CHINESE, PINYIN_TO_CHINESE, MATCH_SOUND,
+    DECK_NEW, DECK_KNOWN, DECK_UNKNOWN
+} from './../../constants'
 import Button from './../Button'
 import ButtonGroup from './../ButtonGroup'
 
@@ -14,31 +14,24 @@ class GameSelection extends Component {
     this.props.setGame( game );
   }
   render(props) {
-    const game = props.game;
-    let revise = [];
-    if ( props.knownWordCount > 0 ) {
-        revise = [
-          <h2>Review hard words</h2>,
-          <Button
-            onClick={(ev)=>this.setGame( REVISE_HARD )}>Revise</Button>,
-          <Button
-            onClick={(ev)=>this.setGame( MATCH_PAIRS_HARD )}>Pairs</Button>,
-          <Button
-            onClick={(ev)=>this.setGame( PINYIN_HARD )}>Learn Pinyin</Button>,
-          <h2>Remember old words</h2>,
-          <Button
-            onClick={(ev)=>this.setGame( REVISE )}>Revise</Button>,
-          <Button
-            onClick={(ev)=>this.setGame( MATCH_PAIRS_REVISE )}>Pairs</Button>,
-          <Button
-            onClick={(ev)=>this.setGame( PINYIN_REVISE )}>Learn Pinyin</Button>
-        ];
+    let heading;
+    switch (props.deck) {
+        case DECK_NEW:
+            heading = 'Review new words';
+            break;
+        case DECK_KNOWN:
+            heading = 'Review familiar words';
+            break;
+        case DECK_UNKNOWN:
+        default:
+            heading = 'Review unfamiliar words';
     }
+
     return (
         <ButtonGroup>
-          <p>How would you like to play today?</p>
-          <h2>Review unfamiliar words</h2>
-          <Button onClick={(ev)=>this.setGame( FLIP_CARDS )}>Revise</Button>
+          <p>What would you like to play today?</p>
+          <h2>{heading}</h2>
+          <Button onClick={(ev)=>this.setGame( REVISE )}>Revise</Button>
           <Button
             onClick={(ev)=>this.setGame( MATCH_PAIRS )}>Pairs</Button>
           <Button
@@ -47,7 +40,6 @@ class GameSelection extends Component {
             onClick={(ev)=>this.setGame(  ENGLISH_TO_CHINESE )}>English&lt;-&gt;Pinyin</Button>
           <Button
             onClick={(ev)=>this.setGame( PINYIN_TO_CHINESE )}>Simplified&lt;-&gt;Pinyin</Button>
-          {revise}
         </ButtonGroup>
       );
   }
@@ -64,10 +56,10 @@ const mapDispatchToProps = (dispatch, props) => {
 
 const mapStateToProps = (state, props) => {
   const {
-    game
+    deck
   } = state;
 
-  return Object.assign( {}, props, { game } );
+  return Object.assign( {}, props, { deck } );
 };
 
 export default connect( mapStateToProps, mapDispatchToProps )(GameSelection);
