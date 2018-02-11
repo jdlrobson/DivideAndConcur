@@ -10,3 +10,4 @@ export const REVISE_HARD = 'revise-hard';
 export const PINYIN_HARD = 'pinyin-hard';
 export const PINYIN_REVISE = 'pinyin-revise';
 export const ENGLISH_TO_CHINESE = 'english-match';
+export const PINYIN_TO_CHINESE = 'pinyin-match';

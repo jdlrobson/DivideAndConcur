@@ -1,7 +1,7 @@
 /** @jsx h */
 import { MATCH_SOUND, FLIP_CARDS, MATCH_PAIRS, MATCH_PAIRS_REVISE,
     REVISE_HARD, MATCH_PAIRS_HARD,
-    ENGLISH_TO_CHINESE,
+    ENGLISH_TO_CHINESE, PINYIN_TO_CHINESE,
     PINYIN_HARD, PINYIN_REVISE,
     REVISE } from './constants';
 import { getDifficultyRatings } from './helpers/difficulty-ratings';
@@ -106,6 +106,7 @@ function newRound(state) {
         case MATCH_PAIRS_HARD:
             cards = getHardCards(state, 9);
             break;
+        case PINYIN_TO_CHINESE:
         case ENGLISH_TO_CHINESE:
         case MATCH_SOUND:
         case FLIP_CARDS:
@@ -138,6 +139,7 @@ function newRound(state) {
             // add the goal card at the front
             cards.unshift(card);
             break;
+        case PINYIN_TO_CHINESE:
         case ENGLISH_TO_CHINESE:
         case MATCH_PAIRS_HARD:
         case MATCH_PAIRS:

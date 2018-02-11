@@ -3,7 +3,7 @@ import { Component, h } from 'preact';
 import { connect } from 'preact-redux';
 import { switchGame, startRound } from './../../actions'
 import { MATCH_PAIRS, FLIP_CARDS, REVISE, MATCH_PAIRS_REVISE,
-    ENGLISH_TO_CHINESE,
+    ENGLISH_TO_CHINESE, PINYIN_TO_CHINESE,
     REVISE_HARD, MATCH_PAIRS_HARD, PINYIN_HARD, PINYIN_REVISE,
     MATCH_SOUND } from './../../constants'
 import './styles.less'
@@ -54,7 +54,10 @@ class GameSelection extends Component {
             onClick={(ev)=>this.setGame( MATCH_SOUND )}>Learn Pinyin</button>
           <button
             className="game-selection__button"
-            onClick={(ev)=>this.setGame(  ENGLISH_TO_CHINESE )}>English&lt;-&gt;Pinyin</button>,
+            onClick={(ev)=>this.setGame(  ENGLISH_TO_CHINESE )}>English&lt;-&gt;Pinyin</button>
+          <button
+            className="game-selection__button"
+            onClick={(ev)=>this.setGame( PINYIN_TO_CHINESE )}>Simplified&lt;-&gt;Pinyin</button>
           {revise}
         </div>
       );
