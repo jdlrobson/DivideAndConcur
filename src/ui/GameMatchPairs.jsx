@@ -41,7 +41,7 @@ class GameMatchPairs extends Component {
         const isFrozen = !this.canSelect();
         const msg = props.isFlipped ?
             'Match the pairs to win the cards!' :
-            'The cards will be flipped soon! Try and remember their locations!';
+            'Flipping soon!';
         const className = props.isFlipped ? 'game-match-pairs__card' :
             'game-match-pairs__card--pending';
         let cards;
