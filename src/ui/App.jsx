@@ -31,8 +31,8 @@ class App extends Component {
                     <FlashCard {...props} isLarge isSmall={false} isFrozen
                         isSelected
                         className='app__overlay__card' />
-                    <button className='app__overlay__button'
-                        onClick={this.clearOverlay.bind(this)}>Got it!</button>
+                    <Button className='app__overlay__button'
+                        onClick={this.clearOverlay.bind(this)}>Got it!</Button>
                 </div>
             )
         });
@@ -90,7 +90,7 @@ class App extends Component {
                     </div>
                     <div className='app__component--floated'>
                         {
-                            props.isBooted && props.highlighted.map((props) => {
+                            props.isBooted && props.highlighted.slice(0, 2).map((props) => {
                                 return <FlashCard {...props} isHighlighted
                                     onClick={onHighlightedCardClick}
                                     key={`card-highlighted-${props.character}`} isSmall />;
