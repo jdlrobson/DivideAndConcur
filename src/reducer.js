@@ -79,15 +79,15 @@ function revealFlashcardDecompose(state, action) {
         } else {
             answers = markWordAsDifficult(state, char);
         }
-        // Mark selected card as answered
-        cards = markCardsAsAnswered(state, action.character, isKnown);
     }
+    // Mark selected card as answered
+    cards = markCardsAsAnswered(state, action.character, isKnown);
 
     return Object.assign({}, state, { answers, cards });
 }
 function revealedFlashcard(state, action) {
     if (state.game === MATCH_SOUND || state.game === PINYIN_HARD || state.game === PINYIN_REVISE) {
-        return revealFlashcardDecompose(state, action);
+        return revealCardInAction(revealFlashcardDecompose(state, action), action);
     }  else {
         return revealCardInAction(state, action);
     }

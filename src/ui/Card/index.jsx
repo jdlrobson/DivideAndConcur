@@ -141,9 +141,8 @@ const mapStateToProps = (state, props) => {
         character
     } = props;
     const difficultyLevel = getDifficultyRating(answers, character);
-    const isKnown = knowsWord(answers, character);
 
-    return Object.assign( {}, props, { isKnown, difficultyLevel } );
+    return Object.assign( {}, props, { difficultyLevel } );
 };
 
 const mapDispatchToProps = (dispatch, props) => {
