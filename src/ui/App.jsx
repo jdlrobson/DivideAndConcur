@@ -11,7 +11,7 @@ import ProgressBar from './ProgressBar';
 import BootScreen from './BootScreen';
 import Button from './Button';
 import { getKnownWordCount, getUnKnownWordCount } from './../helpers/difficulty-ratings';
-import { dismountCurrentGame } from './../actions';
+import { dismountCurrentGame, dismountDeck } from './../actions';
 import { MATCH_PAIRS, REVISE,
     ENGLISH_TO_CHINESE, PINYIN_TO_CHINESE,
     MATCH_SOUND,
@@ -71,11 +71,11 @@ class App extends Component {
                 {this.state && this.state.overlay}
                 <div className='app__header'>
                     <div className='app__header__home'>
-                        <Button onClick={props.onHomeClick}
-                            disabled={props.isPaused || !props.deck}>Home</Button>
-                        <img src={logoUrl} alt="Divide and concur"
-                            width="220"
-                            className="app__header__home__logo"
+                        <Button onClick={() => { props.onBackClick(props); }}
+                            disabled={props.isPaused || !props.deck}>Back</Button>
+                        <img src={logoUrl} alt='Divide and concur'
+                            width='220'
+                            className='app__header__home__logo'
                         />
                     </div>
                     <div className='app__component--floated'>
@@ -111,8 +111,12 @@ App.defaultProps = {};
 
 const mapDispatchToProps = (dispatch, props) => {
     return {
-        onHomeClick:() => {
-            dispatch(dismountCurrentGame());
+        onBackClick:(props) => {
+            if (props.game) {
+                dispatch(dismountCurrentGame());
+            } else if (props.deck) {
+                dispatch(dismountDeck());
+            }
         }
     };
 };

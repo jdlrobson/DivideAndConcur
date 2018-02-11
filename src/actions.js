@@ -38,6 +38,10 @@ export function setDeck(deck) {
     return { type: actionTypes.SET_DECK, deck };
 }
 
+export function dismountDeck() {
+    return { type: actionTypes.DISMOUNT_DECK };
+}
+
 export function startRound() {
     return { type: actionTypes.START_ROUND };
 }
