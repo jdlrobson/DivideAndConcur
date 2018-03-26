@@ -120,6 +120,9 @@ DictionaryUtils.prototype = {
       } );
   },
   decompose: function( word, isRecursive ) {
+    if ( word.length > 1 && !isRecursive ) {
+      return word.split('');
+    }
     var decompose = this.decompose.bind( this );
     var words = this.words;
     var decompositions = this.decompositions;

@@ -24,6 +24,7 @@ class App extends Component {
         this.setState({ overlay: undefined });
     }
     onHighlightedCardClick(ev, props) {
+        const decomp = props.decompositions || [];
         ev.stopPropagation();
         this.setState({
             overlay: (
@@ -31,6 +32,20 @@ class App extends Component {
                     <FlashCard {...props} isLarge isSmall={false} isFrozen
                         isSelected
                         className='app__overlay__card' />
+                    <div className='app__overlay__decompositions'>
+                    {
+                      decomp.length > 0 && (<h2>Decompositions</h2>)
+                    }
+                    {
+                      decomp.length > 0 && (
+                          decomp.map((cardProps) => {
+                            return <FlashCard {...cardProps} isSelected isFrozen
+                              className='app__overlay__decompositions__card'
+                              key={`card-highlighted-${cardProps.character}`} />;
+                          })
+                      )
+                    }
+                    </div>
                     <Button className='app__overlay__button'
                         onClick={this.clearOverlay.bind(this)}>Got it!</Button>
                 </div>

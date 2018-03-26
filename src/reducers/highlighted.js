@@ -4,7 +4,8 @@ import { makeCardsFromCharacters, dictUtils, freezeCards } from './../helpers/ca
 function getHighlightedCards(state, char) {
     return freezeCards(
         makeCardsFromCharacters(state,
-            dictUtils.decompose(char).filter(char => char && char !== '?').slice(0,2)
+            dictUtils.decompose(char).filter(char => char && char !== '?').slice(0,2),
+            true
         )
     );
 }

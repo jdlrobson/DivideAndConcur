@@ -8,12 +8,19 @@ export const dictUtils = new DictionaryUtils(dictJson.words,
 
 export const ALL_WORDS = dictUtils.all();
 
-export function mapCard(state, character) {
+export function mapCard(state, character, withDecompositions) {
+    let decompositions = withDecompositions ?
+      makeCardsFromCharacters(
+        state,
+        dictUtils.decompose( character ).filter((char) => char !== character )
+      ) : [];
+
     return {
         character,
         level: `${dictUtils.getWordLength(character)}.${dictUtils.getDifficultyRating(character)}`,
         pinyin: dictUtils.getPinyin(character),
-        english: dictUtils.getWord(character)
+        english: dictUtils.getWord(character),
+        decompositions
     };
 }
 
@@ -57,8 +64,8 @@ export function freezeCards(cards) {
     return cards.map(card => Object.assign({}, card, { isFrozen: true }));
 }
 
-export function makeCardsFromCharacters(state, chars) {
-    return chars.map(char => mapCard(state, char));
+export function makeCardsFromCharacters(state, chars, withDecompositions) {
+    return chars.map(char => mapCard(state, char, withDecompositions));
 }
 
 export function dealKnownCards(state) {
