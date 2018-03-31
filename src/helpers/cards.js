@@ -2,6 +2,7 @@ import dictJson from './../../data/dictionary.json';
 import DictionaryUtils from './../../data/DictionaryUtils';
 import { getDifficultyRating, knowsWord,
     getDifficultyRatings } from './difficulty-ratings';
+import { MAX_DIFFICULTY } from './../constants';
 
 export const dictUtils = new DictionaryUtils(dictJson.words,
     dictJson.decompositions, dictJson.difficulty, dictJson.pinyin);
@@ -32,7 +33,11 @@ export function getSelectedUnansweredCards(state) {
     return state.cards.filter(card => card.isSelected && !card.isAnswered);
 }
 
-export function getOrderedCards(answers) {
+export function isCardInGame( card ) {
+  return card.rating < MAX_DIFFICULTY * Math.max(1, card.wordLength);
+}
+
+export function getAllCardsWithUserDifficulty(answers) {
     return ALL_WORDS.map((character) => {
         const wordLength = dictUtils.getWordLength(character);
         const rating = dictUtils.getDifficultyRating(character);
@@ -49,7 +54,7 @@ export function getOrderedCards(answers) {
             // pinyin: dictUtils.getPinyin(character),
             english: dictUtils.getWord(character)
         };
-    }).sort((card, card2) => {
+    }).filter( isCardInGame ).sort((card, card2) => {
         if (card.wordLength < card2.wordLength) {
             return -1;
         } else if (card.wordLength === card2.wordLength) {

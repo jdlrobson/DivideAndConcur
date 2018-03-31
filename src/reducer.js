@@ -190,6 +190,7 @@ export default (state={}, action) => {
     // All these actions are user driven and will not work if paused.
     if (!paused) {
         switch (action.type) {
+            case actionTypes.DISMOUNT_DECK:
             case actionTypes.DISMOUNT_GAME:
                 return setGame(state, { game: false });
             case actionTypes.REVEAL_FLASHCARD:

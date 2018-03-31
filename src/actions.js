@@ -1,5 +1,5 @@
 import actionTypes from './actionTypes';
-import { getOrderedCards } from './helpers/cards';
+import { getAllCardsWithUserDifficulty } from './helpers/cards';
 
 export function dismountCurrentGame() {
     return { type: actionTypes.DISMOUNT_GAME };
@@ -13,7 +13,7 @@ export function init(userData) {
     return (dispatch, getState) => {
         dispatch({ type: actionTypes.INIT, userData });
         setTimeout(() => {
-            const words = getOrderedCards(userData.answers);
+            const words = getAllCardsWithUserDifficulty(userData.answers);
             dispatch({ type: actionTypes.INIT_END, words });
         }, 0);
     };

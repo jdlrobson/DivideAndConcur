@@ -24,14 +24,14 @@ class GameSelection extends Component {
                 break;
             case DECK_UNKNOWN:
             default:
-                heading = 'Review unfamiliar words';
+                heading = 'Review difficult words';
         }
 
         return (
             <ButtonGroup>
                 <p>What would you like to play today?</p>
                 <h2>{heading}</h2>
-                <Button onClick={ev => this.setGame(REVISE)}>Revise</Button>
+                <Button onClick={ev => this.setGame(REVISE)}>Review</Button>
                 <Button
                     onClick={ev => this.setGame(MATCH_PAIRS)}>Pairs</Button>
                 <Button

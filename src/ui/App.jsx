@@ -4,6 +4,7 @@ import Game from './Game';
 import { connect } from 'preact-redux';
 import FlashCard, { Card } from './Card';
 import GameMatchPairs from './GameMatchPairs';
+import ExhaustedDeck from './ExhaustedDeck';
 import GameSelection from './GameSelection';
 import DeckSelection from './DeckSelection';
 import GameMatchSound from './GameMatchSound';
@@ -33,18 +34,18 @@ class App extends Component {
                         isSelected
                         className='app__overlay__card' />
                     <div className='app__overlay__decompositions'>
-                    {
-                      decomp.length > 0 && (<h2>Decompositions</h2>)
-                    }
-                    {
-                      decomp.length > 0 && (
-                          decomp.map((cardProps) => {
-                            return <FlashCard {...cardProps} isSelected isFrozen
-                              className='app__overlay__decompositions__card'
-                              key={`card-highlighted-${cardProps.character}`} />;
-                          })
-                      )
-                    }
+                        {
+                            decomp.length > 0 && (<h2>Decompositions</h2>)
+                        }
+                        {
+                            decomp.length > 0 && (
+                                decomp.map((cardProps) => {
+                                    return <FlashCard {...cardProps} isSelected isFrozen
+                                        className='app__overlay__decompositions__card'
+                                        key={`card-highlighted-${cardProps.character}`} />;
+                                })
+                            )
+                        }
                     </div>
                     <Button className='app__overlay__button'
                         onClick={this.clearOverlay.bind(this)}>Got it!</Button>
@@ -60,9 +61,10 @@ class App extends Component {
             'Here are some cards. Do you know them? Click to see!' :
             'You\'ve seen these cards before. Can you remember them?';
 
+        const isDeckEmpty = props.isDeckEmpty;
         if (!props.isBooted) {
             workflow = <BootScreen className='app__content' />;
-        } else if (game) {
+        } else if (game && !isDeckEmpty) {
             workflow = (
                 <div className='app__content'>
                     { (game === REVISE) &&
@@ -75,10 +77,23 @@ class App extends Component {
                         && <GameMatchSound /> }
                 </div>
             );
+        } else if (game && isDeckEmpty) {
+            workflow = (
+                <div className='app__content'>
+                    <ExhaustedDeck />
+                </div>
+            );
         } else if (props.deck) {
             workflow = <GameSelection />;
         } else {
-            workflow = <DeckSelection knownWordCount={props.knownWordCount} />;
+            const isNewWordsAvailable = props.maxSize - props.knownWordCount -
+              props.unknownWordCount > 0;
+            workflow = <DeckSelection
+                isNewWordsAvailable={isNewWordsAvailable}
+                isDifficultWordsAvailable={props.unknownWordCount < props.maxSize}
+                isFamiliarWordsAvailable={props.knownWordCount > 0}
+                maxSize={props.maxSize}
+            />;
         }
 
         return (
@@ -144,6 +159,7 @@ const mapStateToProps = (state, props) => {
         game,
         deck,
         overlay,
+        cards,
         words,
         answers
     } = state;
@@ -154,9 +170,12 @@ const mapStateToProps = (state, props) => {
         maxSize = words.length;
     }
     const knownWordCount = getKnownWordCount(answers);
-    const unknownWordCount = getUnKnownWordCount(answers);
+    // While we're building out the game it's possible I've removed words from the game
+    // that are included in unknown word count.
+    const unknownWordCount = Math.min(maxSize - knownWordCount, getUnKnownWordCount(answers));
     return Object.assign({}, props, {
         isBooted,
+        isDeckEmpty: cards === undefined ? true : cards.length === 0,
         highlighted: highlighted || [],
         isPaused,
         game,

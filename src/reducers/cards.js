@@ -1,6 +1,5 @@
-import { mapCard, shuffle, freezeCards as freezeCardsHelper } from './../helpers/cards';
+import { mapCard, shuffle, isCardInGame, freezeCards as freezeCardsHelper } from './../helpers/cards';
 import { isTooEasy, knowsWord, getDifficultyRatings } from './../helpers/difficulty-ratings';
-import { MAX_DIFFICULTY } from './../constants';
 
 function updateCardInCards(cards, character, index, props) {
     return cards.map((card, i) => {
@@ -45,7 +44,7 @@ export function freezeCards(state) {
 
 export function getUnknownCards(state, total) {
     const words = state.words.filter(word => !isTooEasy(state.answers, word.character) &&
-        word.rating < MAX_DIFFICULTY * Math.max(1, word.wordLength)
+        isCardInGame(word)
     );
     // find first unanswered
     const firstUnknown = words.findIndex(word => state.answers[word.character] === undefined);
@@ -61,6 +60,7 @@ export function cloneCards(state) {
 
 export function getKnownCards(state, total) {
     return state.words.filter(word => knowsWord(getDifficultyRatings(state), word.character))
+        .filter(isCardInGame)
         .map(word => mapCard(state, word.character));
 }
 

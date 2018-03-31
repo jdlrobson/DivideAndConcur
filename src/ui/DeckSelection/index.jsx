@@ -16,11 +16,20 @@ class DeckSelection extends Component {
         return (
             <ButtonGroup>
                 <p>How would you like to play today?</p>
+                {
+                    props.isNewWordsAvailable &&
                 <Button onClick={ev => this.setDeck(DECK_NEW)}>New words</Button>
+                }
+                {
+                    props.isDifficultWordsAvailable &&
                 <Button onClick={ev => this.setDeck(DECK_UNKNOWN)}
                     disabled={props.knownWordCount === 0}>Difficult words</Button>
+                }
+                {
+                    props.isFamiliarWordsAvailable &&
                 <Button onClick={ev => this.setDeck(DECK_KNOWN)}
                     disabled={props.knownWordCount === 0}>Familiar words</Button>
+                }
             </ButtonGroup>
         );
     }
