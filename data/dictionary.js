@@ -79,10 +79,10 @@ function save() {
 }
 
 function removeWord( chinese ) {
+	const exists = Boolean(words[chinese]);
 	delete words[chinese];
-	delete difficulty[chinese];
-	delete decompositions[chinese];
 	save();
+	return exists;
 }
 
 function saveWord( chinese, english ) {

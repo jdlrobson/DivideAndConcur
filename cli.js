@@ -303,7 +303,12 @@ function menu() {
 					break;
 				case 11:
 					getUserInput('Enter chinese character to remove').then((word) => {
-						dict.removeWord(word);
+						const deleted = dict.removeWord(word);
+						if ( deleted ) {
+							console.log('Removed word (retained difficulty and decompositions)', word);
+						} else {
+							console.log('Word does not exist');
+						}
 						return menu()
 					} );
 					break;
