@@ -96,6 +96,19 @@ function saveWord( chinese, english ) {
 	});
 }
 
+/**
+ * Return any words that when decomposed contain this character
+ * e.g. 火 is used by 烟
+ * are contained inside 2 character words e.g. 山 in 火山
+ */
+function usedBy(char) {
+	return Object.keys( decompositions ).filter(
+		key => decompositions[key].indexOf(char) > -1
+	).concat(
+		Object.keys(words).filter((key)=> key.indexOf(char) > -1 && key !== char)
+	);
+}
+
 function getPinyin(word) {
 	return utils.getPinyin( word );
 }
@@ -125,6 +138,7 @@ module.exports = {
 	getWordLength,
 	getPinyin,
 	all,
+	usedBy,
 	removeWord,
 	getDecompositions: getDecompositions,
 	decompose: decompose,

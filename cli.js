@@ -280,6 +280,9 @@ function menu() {
 					break;
 				case 2:
 					getUserInput('Enter chinese character').then((char) => {
+						const usedBy = dict.usedBy(char);
+						const translation = usedBy.
+							map((char)=>`${char} (${dict.getWord(char)})`).join('; ')
 						feedback( `Character: ${char}` );
 						feedback( `English: ${dict.getWord( char )}`)
 						feedback( `Pinyin: ${dict.getPinyin( char )}`);
@@ -288,6 +291,7 @@ function menu() {
 						feedback( `Standalone Difficulty=${dict.getDifficultyRating(char, true)}` );
 						feedback( `True difficulty=${dict.getDifficultyRating(char)}` );
 						feedback( `Length=${dict.getWordLength(char)}` );
+						feedback( `Used by=${usedBy.length ? translation : 'Nothing'}`)
 						feedback( `Blurb=\n${blurb.getBlurb(char)}`)
 					} ).then(() => menu());
 					break;
