@@ -340,19 +340,33 @@ function rateWordsDifficultyByStrokeCount(words) {
 		});
 	});
 }
+
+function importWords(json) {
+	let promises = [];
+	json.forEach((word) => {
+		if ( !dict.getWord( word ) &&
+			// blacklist of characters to ignore.
+			!word.match( /[\—\:\+\─\：\%\·\；\》\《\<\=\>\?\~\@\!\_\の\よ\う\な\だ\め\…\／\#\！\‧\　\’\‘\•]/ )
+		) {
+			let def = getEnglish(word).join(';');
+			def = def.trim();
+			if ( def && def !== '?' ) {
+				console.log(`Imported ${word}=${def}`, def === '?');
+				promises.push( dict.saveWord( word, def ) );
+			}
+		}
+	})
+	console.log( 'Imported', promises.length, 'words');
+	promises.push( rateWordsDifficultyByStrokeCount( json ) );
+	return Promise.all(promises).then(()=>dict.save());
+}
+
 if ( process.argv[2] ) {
-	fs.readFile(process.argv[2], 'utf-8', ( err, data ) => {
+	const filename = process.argv[2];
+	fs.readFile(filename, 'utf-8', ( err, data ) => {
 		const json = JSON.parse( data );
-		let promises = [];
 		dict.load().then(() => {
-			json.forEach((word) => {
-				if ( !dict.getWord( word ) && !word.match( /[\—\:\+\─\：\%\·\；\》\《\<\=\>\?\~\@\!\_\の\よ\う\な\だ\め\…\／\#\！\‧\　\’\‘\•]/ ) ) {
-					promises.push( dict.saveWord( word, '?' ) );
-				}
-			})
-			console.log( 'Added', promises.length, 'words');
-			promises.push( rateWordsDifficultyByStrokeCount( json ) );
-			Promise.all(promises).then(()=>dict.save());
+			return importWords(json);
 		});
 	} );
 
