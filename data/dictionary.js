@@ -57,8 +57,6 @@ function load() {
 			} else {
 				words = data;
 			}
-			words._decompositions = decompositions;
-			words._difficulty = difficulty;
 			reload();
 			resolve(words);
 		} );
