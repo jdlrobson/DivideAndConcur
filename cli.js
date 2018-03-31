@@ -6,6 +6,7 @@ var fs = require('fs');
 const strokeCount = require('./strokeCount' );
 var hanzi = require("hanzi");
 var hanziLoaded = false;
+const blurb = require('./data/blurb.js');
 
 function addDictionaryItem() {
 	return new Promise( ( resolve ) => {
@@ -232,7 +233,8 @@ function menu() {
 		'10: Missing definitions',
 		'11: Delete word',
 		'12: Auto-assign difficulty',
-		'13: Clean'
+		'13: Clean',
+		'14: Add blurb'
 	];
 	getUserInput( '**********************\n' + options.join('\n') + '\n**********************' )
 		.then( ( val ) => {
@@ -286,6 +288,7 @@ function menu() {
 						feedback( `Standalone Difficulty=${dict.getDifficultyRating(char, true)}` );
 						feedback( `True difficulty=${dict.getDifficultyRating(char)}` );
 						feedback( `Length=${dict.getWordLength(char)}` );
+						feedback( `Blurb=\n${blurb.getBlurb(char)}`)
 					} ).then(() => menu());
 					break;
 					break;
@@ -309,6 +312,15 @@ function menu() {
 						return rateWordsDifficultyByStrokeCount([word]).then(()=> menu());
 					} );
 					break
+				case 14:
+					getUserInput('Enter chinese character to add blurb for').then((word) => {
+						getUserInput('Enter blurb').then((text) => {
+							blurb.addBlurb(word, text);
+							fs.writeFileSync(blurb.JSON_FILE, blurb.getBlurbJSONString());
+							return menu();
+						} );
+					} );
+					break;
 				default:
 					feedback('Huh?');
 					menu();
