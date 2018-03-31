@@ -1,4 +1,5 @@
 import dictJson from './../../data/dictionary.json';
+import blurbs from './../../data/blurbs.json';
 import DictionaryUtils from './../../data/DictionaryUtils';
 import { getDifficultyRating, knowsWord,
     getDifficultyRatings } from './difficulty-ratings';
@@ -9,15 +10,18 @@ export const dictUtils = new DictionaryUtils(dictJson.words,
 
 export const ALL_WORDS = dictUtils.all();
 
-export function mapCard(state, character, withDecompositions) {
+export function mapCard(state, character, withDecompositions, withBlurb) {
     let decompositions = withDecompositions ?
       makeCardsFromCharacters(
         state,
-        dictUtils.decompose( character ).filter((char) => char !== character )
+        dictUtils.decompose( character ).filter((char) => char !== character ),
+        withDecompositions, withBlurb
       ) : [];
 
+    const text = withBlurb ? blurbs[character] : undefined;
     return {
         character,
+        text,
         level: `${dictUtils.getWordLength(character)}.${dictUtils.getDifficultyRating(character)}`,
         pinyin: dictUtils.getPinyin(character),
         english: dictUtils.getWord(character),
@@ -69,8 +73,8 @@ export function freezeCards(cards) {
     return cards.map(card => Object.assign({}, card, { isFrozen: true }));
 }
 
-export function makeCardsFromCharacters(state, chars, withDecompositions) {
-    return chars.map(char => mapCard(state, char, withDecompositions));
+export function makeCardsFromCharacters(state, chars, withDecompositions, withBlurbs) {
+    return chars.map(char => mapCard(state, char, withDecompositions, withBlurbs));
 }
 
 export function dealKnownCards(state) {

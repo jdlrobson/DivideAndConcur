@@ -2,7 +2,7 @@
 import { Component, h } from 'preact';
 import Game from './Game';
 import { connect } from 'preact-redux';
-import FlashCard, { Card } from './Card';
+import FlashCard from './Card';
 import GameMatchPairs from './GameMatchPairs';
 import ExhaustedDeck from './ExhaustedDeck';
 import GameSelection from './GameSelection';
@@ -26,6 +26,7 @@ class App extends Component {
     }
     onHighlightedCardClick(ev, props) {
         const decomp = props.decompositions || [];
+        const blurb = props.text || '';
         ev.stopPropagation();
         this.setState({
             overlay: (
@@ -47,6 +48,10 @@ class App extends Component {
                             )
                         }
                     </div>
+                    { Boolean(blurb) && <h2>Using this word</h2> }
+                    {
+                        blurb.split('\n').map(text => <p>{text}</p>)
+                    }
                     <Button className='app__overlay__button'
                         onClick={this.clearOverlay.bind(this)}>Got it!</Button>
                 </div>
@@ -120,14 +125,11 @@ class App extends Component {
                     </div>
                     <div className='app__component--floated'>
                         {
-                            props.isBooted && props.highlighted.slice(0, 2).map((props) => {
+                            props.isBooted && props.highlighted.map((props) => {
                                 return <FlashCard {...props} isHighlighted
                                     onClick={onHighlightedCardClick}
                                     key={`card-highlighted-${props.character}`} isSmall />;
-                            }).concat(
-                                Array(2 - props.highlighted.length).fill()
-                                    .map(() => <Card isSmall />)
-                            )
+                            })
                         }
                     </div>
                 </div>
