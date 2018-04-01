@@ -11,6 +11,9 @@ import { init, answerAllCardsInRound, highlightCharacter } from './actions';
 import reducer from './reducer';
 import thunkMiddleware from 'redux-thunk';
 
+import img from './ui/BootScreen/panda.gif';
+import logo from './ui/logo.png';
+
 // Tell Babel to transform JSX into h() calls:
 /** @jsx h */
 
@@ -81,7 +84,28 @@ const store = createStore(reducer,
     const memory = localStorage.getItem('memory');
     const userData = memory ? JSON.parse(memory) : { answers: {} };
 
-    store.dispatch(init(userData));
+
+    function loadImages(imgs) {
+        return Promise.all(
+            imgs.map((src) => {
+                return new Promise((resolve) => {
+                    const image = new Image();
+                    if ( image.loaded ) {
+                        resolve();
+                    }
+                    image.oncomplete = ()=>resolve();
+                    image.onload = ()=>resolve();
+                    image.src = src;
+                });
+            })
+        );
+    }
     renderGame();
+    const boot = () => {
+        setTimeout(() => {
+            store.dispatch(init(userData))
+        }, 1000);
+    };
+    loadImages([img,logo]).then(boot);
 }());
 

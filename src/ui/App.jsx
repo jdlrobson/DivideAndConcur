@@ -44,7 +44,8 @@ class App extends Component {
         let gameDescription;
         switch (props.deck) {
             case DECK_NEW:
-                gameDescription = 'Here are some cards I\'d like to show. Click and tick the ones you know.';
+                gameDescription = `Here are some cards I\'d like to show.
+                    Click and tick the ones you know.`;
                 break;
             case DECK_UNKNOWN:
                 gameDescription = 'You struggled with these cards. Any change?';
