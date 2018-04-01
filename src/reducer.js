@@ -16,6 +16,7 @@ import _answers, { markWordAsDifficult, markWordAsEasy } from './reducers/diffic
 import _deck from './reducers/deck';
 import _highlighted from './reducers/highlighted';
 import _paused from './reducers/paused';
+import _cards from './reducers/cards';
 import actionTypes from './actionTypes';
 
 // Reducer for when a card is answered
@@ -115,7 +116,7 @@ function chooseDeck(state) {
     return cards;
 }
 function newRound(state) {
-    let cards = chooseDeck(state, )
+    let cards = chooseDeck(state);
     cards = shuffleCards({ cards });
 
     switch (state.game) {
@@ -151,12 +152,13 @@ function flipCardStart(state, action) {
     return Object.assign({}, state, { isFlipped: false, isFlipping: true });
 }
 
-export default (state={}, action) => {
+const reducer = (state={}, action) => {
     const highlighted = _highlighted(state.highlighted, action);
     const paused = _paused(state.paused, action);
     const deck = _deck(state.deck, action);
     const answers = _answers(state.answers, action);
-    state = Object.assign({}, state, { paused, highlighted, deck, answers });
+    const cards = _cards(state.cards, action);
+    state = Object.assign({}, state, { paused, highlighted, deck, answers, cards });
     switch (action.type) {
         case actionTypes.CHEAT_ANSWER_ALL:
             state.cards.forEach((card) =>
@@ -214,3 +216,12 @@ export default (state={}, action) => {
     return state;
 };
 
+const reducerWithPerf = function(state, action) {
+    const before = new Date();
+    const newState = reducer(state, action);
+    const after = new Date();
+    const perf = after - before;
+    return Object.assign( {}, newState, { perf } );
+};
+
+export default reducerWithPerf;
