@@ -12,7 +12,7 @@ import { getUnknownCards, getKnownCards, getHardCards,
     freezeCards, selectAndAnswerAll,
     selectCard, deselectUnansweredCards, markCardsAsAnswered,
     cutCardDeck, shuffleCards, addIndexToCards } from './reducers/cards';
-import { markWordAsDifficult, markWordAsEasy } from './reducers/difficulty-ratings';
+import _answers, { markWordAsDifficult, markWordAsEasy } from './reducers/difficulty-ratings';
 import _deck from './reducers/deck';
 import _highlighted from './reducers/highlighted';
 import _paused from './reducers/paused';
@@ -155,7 +155,8 @@ export default (state={}, action) => {
     const highlighted = _highlighted(state.highlighted, action);
     const paused = _paused(state.paused, action);
     const deck = _deck(state.deck, action);
-    state = Object.assign({}, state, { paused, highlighted, deck });
+    const answers = _answers(state.answers, action);
+    state = Object.assign({}, state, { paused, highlighted, deck, answers });
     switch (action.type) {
         case actionTypes.CHEAT_ANSWER_ALL:
             state.cards.forEach((card) =>
@@ -168,7 +169,7 @@ export default (state={}, action) => {
                 cards: selectAndAnswerAll(state, false)
             });
         case actionTypes.INIT:
-            return { isBooted: false, answers: action.userData.answers };
+            return Object.assign({}, state, { isBooted: false });
         case actionTypes.INIT_END:
             return Object.assign({}, state, { isBooted: true, words: action.words });
         case actionTypes.FLIP_CARDS_START:

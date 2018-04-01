@@ -1,3 +1,4 @@
+import actionTypes from './../actionTypes';
 import { getDifficultyRatings } from './../helpers/difficulty-ratings';
 
 export function markWordAsEasy(state, char) {
@@ -13,3 +14,14 @@ export function markWordAsDifficult(state, char) {
     difficultyRatings[char] = newRating;
     return Object.assign({}, difficultyRatings);
 }
+
+export default (state={}, action) => {
+    switch (action.type) {
+        case actionTypes.INIT:
+            return Object.assign({}, action.userData.answers);
+        default:
+            break;
+    }
+
+    return state;
+};
