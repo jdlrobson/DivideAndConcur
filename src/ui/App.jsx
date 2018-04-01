@@ -45,7 +45,7 @@ class App extends Component {
         let gameDescription;
         switch (props.deck) {
             case DECK_NEW:
-                gameDescription = `Here are some cards I\'d like to show.
+                gameDescription = `Here are some cards I'd like to show.
                     Click and tick the ones you know.`;
                 break;
             case DECK_UNKNOWN:
@@ -97,8 +97,9 @@ class App extends Component {
                 {this.state && this.state.overlay}
                 <div className='app__header'>
                     <div className='app__header__home'>
-                        { ALLOW_DECK_SELECTION && <Button onClick={() => { props.onBackClick(props); }}
-                            disabled={props.isPaused || !props.deck}>Back</Button>
+                        { ALLOW_DECK_SELECTION &&
+                            <Button onClick={() => { props.onBackClick(props); }}
+                                disabled={props.isPaused || !props.deck}>Back</Button>
                         }
                         <img src={logoUrl} alt='Divide and concur'
                             width='220'
