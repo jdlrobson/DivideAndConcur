@@ -1,5 +1,7 @@
 import actionTypes from './actionTypes';
 import { getAllCardsWithUserDifficulty } from './helpers/cards';
+import { ALLOW_DECK_SELECTION, DECK_NEW } from './constants';
+import { random } from './utils';
 
 export function dismountCurrentGame() {
     return { type: actionTypes.DISMOUNT_GAME };
@@ -50,8 +52,20 @@ export function endRound() {
     return (dispatch, getState) => {
         if (!getState().endRound) {
             dispatch({ type: actionTypes.END_ROUND });
+
             setTimeout(() => {
-                dispatch({ type: actionTypes.START_ROUND });
+                let followup = { type: actionTypes.START_ROUND };
+                if ( !ALLOW_DECK_SELECTION ) {
+                    // if reviewing new codes change game with 1 in 3 chance
+                    if ( getState().deck === DECK_NEW ) {
+                        if ( random( [1, 2, 3] ) === 2 ) {
+                            followup = dismountDeck();
+                        }
+                    } else {
+                        followup = dismountDeck();
+                    }
+                }
+                dispatch(followup);
             }, 1000);
         }
     };

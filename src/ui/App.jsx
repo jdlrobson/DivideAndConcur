@@ -18,7 +18,8 @@ import { MATCH_PAIRS, REVISE,
     ENGLISH_TO_CHINESE, PINYIN_TO_CHINESE,
     MATCH_SOUND,
     DECK_NEW,
-    DECK_UNKNOWN
+    DECK_UNKNOWN,
+    ALLOW_DECK_SELECTION
 } from './../constants';
 import logoUrl from './logo.png';
 
@@ -84,7 +85,8 @@ class App extends Component {
               props.unknownWordCount > 0;
             workflow = <DeckSelection
                 isNewWordsAvailable={isNewWordsAvailable}
-                isDifficultWordsAvailable={props.unknownWordCount < props.maxSize}
+                isDifficultWordsAvailable={props.unknownWordCount > 0 &&
+                    props.unknownWordCount < props.maxSize}
                 isFamiliarWordsAvailable={props.knownWordCount > 0}
                 maxSize={props.maxSize}
             />;
@@ -95,8 +97,9 @@ class App extends Component {
                 {this.state && this.state.overlay}
                 <div className='app__header'>
                     <div className='app__header__home'>
-                        <Button onClick={() => { props.onBackClick(props); }}
+                        { ALLOW_DECK_SELECTION && <Button onClick={() => { props.onBackClick(props); }}
                             disabled={props.isPaused || !props.deck}>Back</Button>
+                        }
                         <img src={logoUrl} alt='Divide and concur'
                             width='220'
                             className='app__header__home__logo'

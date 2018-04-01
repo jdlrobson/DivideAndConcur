@@ -1,4 +1,5 @@
-import { endRound, saveComplete } from './actions';
+import { endRound, saveComplete, dismountDeck } from './actions';
+import { DECK_NEW } from './constants';
 
 /**
  * Return a subscriber bound to the Redux store that

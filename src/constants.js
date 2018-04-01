@@ -9,3 +9,5 @@ export const PINYIN_TO_CHINESE = 'pinyin-match';
 export const DECK_NEW = 'new';
 export const DECK_KNOWN = 'known';
 export const DECK_UNKNOWN = 'unknown';
+
+export const ALLOW_DECK_SELECTION = false;

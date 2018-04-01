@@ -191,15 +191,15 @@ export default (state={}, action) => {
         case actionTypes.GUESS_FLASHCARD_WRONG:
         case actionTypes.GUESS_FLASHCARD_RIGHT:
             return actionAnswerCard(state, action);
+        case actionTypes.DISMOUNT_DECK:
+        case actionTypes.DISMOUNT_GAME:
+            return setGame(state, { game: false });
         default:
             break;
     }
     // All these actions are user driven and will not work if paused.
     if (!paused) {
         switch (action.type) {
-            case actionTypes.DISMOUNT_DECK:
-            case actionTypes.DISMOUNT_GAME:
-                return setGame(state, { game: false });
             case actionTypes.REVEAL_FLASHCARD:
                 return revealedFlashcard(state, action);
             case actionTypes.SWITCH_GAME:
