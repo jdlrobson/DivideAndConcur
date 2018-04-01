@@ -17,7 +17,8 @@ import { dismountCurrentGame, dismountDeck } from './../actions';
 import { MATCH_PAIRS, REVISE,
     ENGLISH_TO_CHINESE, PINYIN_TO_CHINESE,
     MATCH_SOUND,
-    DECK_NEW
+    DECK_NEW,
+    DECK_UNKNOWN
 } from './../constants';
 import logoUrl from './logo.png';
 
@@ -40,9 +41,18 @@ class App extends Component {
         let workflow;
         const onHighlightedCardClick = this.onHighlightedCardClick.bind(this);
         const game = props.game;
-        const gameDescription = props.deck === DECK_NEW ?
-            'Here are some cards. Do you know them? Click to see!' :
-            'You\'ve seen these cards before. Can you remember them?';
+        let gameDescription;
+        switch (props.deck) {
+            case DECK_NEW:
+                gameDescription = 'Here are some cards I\'d like to show. Click and tick the ones you know.';
+                break;
+            case DECK_UNKNOWN:
+                gameDescription = 'You struggled with these cards. Any change?';
+                break;
+            default:
+                gameDescription = 'Do you remember these?';
+                break;
+        }
 
         const isDeckEmpty = props.isDeckEmpty;
         if (!props.isBooted) {
