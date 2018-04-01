@@ -15,9 +15,6 @@ class Decompositions extends Component {
         return (
             <div className='app__overlay__decompositions'>
                 {
-                    decomp.length > 0 && level === 2 && (<h2>Decompositions</h2>)
-                }
-                {
                     decomp.length > 0 && (
                         decomp.map((cardProps) => {
                             const isSmall = level > 2;
@@ -48,12 +45,15 @@ class CharacterOverlay extends Component {
                     className='app__overlay__card' />
                 <a href={`https://en.wiktionary.org/wiki/${props.character}`}
                     className='app__overlay__link'>wiktionary</a>
+                {props.children}
+                {
+                    decomp.length > 0 && (<h2>Decompositions</h2>)
+                }
                 <Decompositions decompositions={decomp} />
                 { Boolean(blurb) && <h2>Using this word</h2> }
-                {
+                <div className='app__overlay__blurb'>{
                     blurb.split('\n').map(text => <p>{text}</p>)
-                }
-                {props.children}
+                }</div>
             </div>
         );
     }
