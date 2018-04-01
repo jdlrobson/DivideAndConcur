@@ -1,3 +1,4 @@
+import actionTypes from './../actionTypes';
 import { mapCard, shuffle, isCardInGame, freezeCards as freezeCardsHelper } from './../helpers/cards';
 import { isTooEasy, knowsWord, getDifficultyRatings } from './../helpers/difficulty-ratings';
 
@@ -59,7 +60,7 @@ export function cloneCards(state) {
 }
 
 export function getKnownCards(state, total) {
-    return state.words.filter(word => knowsWord(getDifficultyRatings(state), word.character))
+    return state.words.filter(word => word.difficultyLevel < 0)
         .filter(isCardInGame)
         .map(word => mapCard(state, word.character));
 }
@@ -92,6 +93,11 @@ export function flipCards(state) {
 
 export default (state=[], action) => {
     switch (action.type) {
+        case actionTypes.INIT_END:
+            // Load known cards into cache
+            const words = action.words;
+            getKnownCards( Object.assign( {}, state, { words } ) );
+            break;
         default:
             break;
     }
