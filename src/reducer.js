@@ -158,8 +158,14 @@ export default (state={}, action) => {
     state = Object.assign({}, state, { paused, highlighted, deck });
     switch (action.type) {
         case actionTypes.CHEAT_ANSWER_ALL:
+            state.cards.forEach((card) =>
+                actionAnswerCard(state, {
+                    type: actionTypes.GUESS_FLASHCARD_WRONG,
+                    character: card.character
+                })
+            );
             return Object.assign({}, state, {
-                cards: selectAndAnswerAll(state)
+                cards: selectAndAnswerAll(state, false)
             });
         case actionTypes.INIT:
             return { isBooted: false, answers: action.userData.answers };
