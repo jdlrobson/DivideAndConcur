@@ -94,11 +94,8 @@ class App extends Component {
                     <div className='app__component--floated'>
                         {
                             props.maxSize &&
-                <ProgressBar percent={(props.knownWordCount / props.maxSize) * 100}
-                    percentRed={(props.unknownWordCount / props.maxSize) * 100}
-                >
-                    {`${props.knownWordCount} of ${props.maxSize} words`}
-                </ProgressBar>
+                            <ProgressBar known={props.knownWordCount} total={props.maxSize}
+                                unknown={props.unknownWordCount} />
                         }
                     </div>
                     <div className='app__component--floated'>
