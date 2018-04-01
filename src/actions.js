@@ -12,10 +12,10 @@ export function switchGame(game) {
 export function init(userData) {
     return (dispatch, getState) => {
         dispatch({ type: actionTypes.INIT, userData });
-        setTimeout(() => {
+        window.requestIdleCallback(() => {
             const words = getAllCardsWithUserDifficulty(userData.answers);
             dispatch({ type: actionTypes.INIT_END, words });
-        }, 0);
+        });
     };
 }
 
