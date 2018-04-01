@@ -100,9 +100,9 @@ class FlashCard extends Component {
 
         const translations = [
             <div key='lang' className={className(BLOCK_NAME, 'english')}
-                style={isSelected ? {} : hidden}>{props.english}</div>,
+                style={isSelected && props.english !== false ? {} : hidden}>{props.english}</div>,
             <div key='pinyin' className={className(BLOCK_NAME, 'pinyin')}
-                style={isSelected ? {} : hidden}>{props.pinyin}</div>
+                style={isSelected && props.pinyin !== false ? {} : hidden}>{props.pinyin}</div>
         ];
         const buttons = props.selectedControls ? [
             <div key='tick' className='tick card__control__button' onClick={this.tick.bind(this)}

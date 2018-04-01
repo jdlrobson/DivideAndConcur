@@ -9,6 +9,7 @@ import GameSelection from './GameSelection';
 import DeckSelection from './DeckSelection';
 import GameMatchSound from './GameMatchSound';
 import ProgressBar from './ProgressBar';
+import CharacterOverlay from './CharacterOverlay';
 import BootScreen from './BootScreen';
 import Button from './Button';
 import { getKnownWordCount, getUnKnownWordCount } from './../helpers/difficulty-ratings';
@@ -25,36 +26,13 @@ class App extends Component {
         this.setState({ overlay: undefined });
     }
     onHighlightedCardClick(ev, props) {
-        const decomp = props.decompositions || [];
-        const blurb = props.text || '';
         ev.stopPropagation();
         this.setState({
             overlay: (
-                <div className='app__overlay'>
-                    <FlashCard {...props} isLarge isSmall={false} isFrozen
-                        isSelected
-                        className='app__overlay__card' />
-                    <div className='app__overlay__decompositions'>
-                        {
-                            decomp.length > 0 && (<h2>Decompositions</h2>)
-                        }
-                        {
-                            decomp.length > 0 && (
-                                decomp.map((cardProps) => {
-                                    return <FlashCard {...cardProps} isSelected isFrozen
-                                        className='app__overlay__decompositions__card'
-                                        key={`card-highlighted-${cardProps.character}`} />;
-                                })
-                            )
-                        }
-                    </div>
-                    { Boolean(blurb) && <h2>Using this word</h2> }
-                    {
-                        blurb.split('\n').map(text => <p>{text}</p>)
-                    }
+                <CharacterOverlay {...props}>
                     <Button className='app__overlay__button'
                         onClick={this.clearOverlay.bind(this)}>Got it!</Button>
-                </div>
+                </CharacterOverlay>
             )
         });
     }
