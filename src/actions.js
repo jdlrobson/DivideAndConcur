@@ -57,6 +57,10 @@ export function endRound() {
     };
 }
 
+export function highlightCharacter( character ) {
+    return { type: actionTypes.HIGHLIGHT_CHARACTER, character };
+}
+
 export function saveComplete() {
     return { type: actionTypes.SAVE_COMPLETE };
 }

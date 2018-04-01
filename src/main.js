@@ -7,7 +7,7 @@ import { h, render } from 'preact';
 
 import App from './ui/App';
 import { Provider } from 'preact-redux';
-import { init, answerAllCardsInRound } from './actions';
+import { init, answerAllCardsInRound, highlightCharacter } from './actions';
 import reducer from './reducer';
 import thunkMiddleware from 'redux-thunk';
 
@@ -41,17 +41,33 @@ const store = createStore(reducer,
     };
 
     let keys = [];
-    window.onkeypress = function(ev) {
-        keys.push(ev.key);
-        if (keys.join('').indexOf('JRG') > -1) {
+
+    function checkCheatCode(ev) {
+        if ( ev.type === 'paste' ) {
+            keys = keys.concat(ev.clipboardData.getData('text/plain'));
+        } else {
+           keys.push(ev.key); 
+        }
+        const code = keys.join('');
+        if (code.indexOf('JRG') > -1) {
             keys = [];
             store.dispatch(answerAllCardsInRound());
+        } else if ( code.indexOf( 'LC' ) > -1 ) {
+            const char = code.slice(code.indexOf( 'LC' )+2);
+            if ( char ) {
+                store.dispatch(highlightCharacter(char));
+                if ( char.length === 2 ) {
+                    keys = [];
+                }
+            }
         }
         if (keys.length > 10) {
             keys = keys.slice(-10);
         }
 
     };
+    document.body.onpaste = checkCheatCode;
+    window.onkeypress = checkCheatCode;
 
     // setup subscribers
     store.subscribe(checkIfEndOfRound(store));
