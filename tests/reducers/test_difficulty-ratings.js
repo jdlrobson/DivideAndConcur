@@ -1,7 +1,19 @@
-import { markWordAsDifficult, markWordAsEasy } from './../../src/reducers/difficulty-ratings';
+import { clean,
+    markWordAsDifficult, markWordAsEasy
+} from './../../src/reducers/difficulty-ratings';
 import assert from 'assert';
 
 describe('Reducer: difficulty-ratings', () => {
+    it('clean', () => {
+        const answers = { a: 1, b: 2, c: 3 };
+        const ratings = clean(answers, { words: [
+            { character: 'a' },
+            { character: 'd' },
+            { character: 'b' }
+        ] });
+        assert.ok(ratings.c === undefined, 'words not in the wordlist are ignored');
+        assert.ok(ratings.a === 1);
+    });
     it('markWordAsDifficult', () => {
         const answers = {};
         const ratings = markWordAsDifficult({ answers }, 'A');

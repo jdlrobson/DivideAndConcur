@@ -15,10 +15,22 @@ export function markWordAsDifficult(state, char) {
     return Object.assign({}, difficultyRatings);
 }
 
+export function clean(state, action) {
+    const words = action.words;
+    Object.keys(state).forEach((char) => {
+        if ( words.findIndex(word => word.character === char) === -1 ) {
+            delete state[char];
+        }
+    });
+    return Object.assign({}, state);
+}
+
 export default (state={}, action) => {
     switch (action.type) {
         case actionTypes.INIT:
             return Object.assign({}, action.userData.answers);
+        case actionTypes.INIT_END:
+            return clean(state, action);
         default:
             break;
     }
