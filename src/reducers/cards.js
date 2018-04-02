@@ -60,15 +60,19 @@ export function cloneCards(state) {
 }
 
 export function getKnownCards(state, total) {
-    return state.words.filter(word => word.difficultyLevel < 0)
-        .filter(isCardInGame)
-        .map(word => mapCard(state, word.character));
+    return shuffle(
+        state.words.filter(word => word.difficultyLevel < 0)
+            .filter(isCardInGame)
+            .map(word => mapCard(state, word.character))
+    );
 }
 
 export function getHardCards(state, total) {
-    return state.words.filter(word =>
-            state.answers[word.character] &&
-            !knowsWord(getDifficultyRatings(state), word.character)
+    return shuffle(
+            state.words.filter(word =>
+                state.answers[word.character] &&
+                !knowsWord(getDifficultyRatings(state), word.character)
+            )
         ).slice(0, total)
         .map(word => mapCard(state, word.character));
 }

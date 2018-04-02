@@ -1,7 +1,7 @@
 export const MATCH_PAIRS = 'pairs';
 export const REVISE = 'revise';
 export const MATCH_SOUND = 'match-sound';
-export const TOO_EASY = -3;
+export const TOO_EASY = -5;
 export const MAX_DIFFICULTY = 20;
 export const ENGLISH_TO_CHINESE = 'english-match';
 export const PINYIN_TO_CHINESE = 'pinyin-match';
