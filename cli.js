@@ -181,13 +181,22 @@ function getEnglish(char) {
 }
 
 function clean() {
+	dict.all().forEach((chinese) => {
+		const eng = dict.getWord(chinese);
+		if ( eng === '?' ) {
+			console.log('Remove from dictionary:', chinese);
+			dict.removeWord(chinese);
+		}
+	})
 	dict.missing().forEach((chinese)=> {
 		var english = getEnglish(chinese).slice(0, 3).join(';');
-		dict.saveWord( chinese, english );
-		console.log('added', chinese, english);
+		if ( english && english !== '?' ) {
+			dict.saveWord( chinese, english );
+			console.log('added', chinese, english);
+		}
 	});
 	var mapper = {
-		'𥫗': '⺮'
+		'⺮': '𥫗'
 	};
 
 	// Remove things that decompose to itself.
