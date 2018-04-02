@@ -163,7 +163,9 @@ const reducer = (state={}, action) => {
         case actionTypes.CHEAT_ANSWER_ALL:
             state.cards.forEach((card) =>
                 actionAnswerCard(state, {
-                    type: actionTypes.GUESS_FLASHCARD_WRONG,
+                    type: action.isCorrect ?
+                        actionTypes.GUESS_FLASHCARD_RIGHT :
+                        actionTypes.GUESS_FLASHCARD_WRONG,
                     character: card.character
                 })
             );

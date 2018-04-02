@@ -54,7 +54,10 @@ const store = createStore(reducer,
         const code = keys.join('');
         if (code.indexOf('JRG') > -1) {
             keys = [];
-            store.dispatch(answerAllCardsInRound());
+            store.dispatch(answerAllCardsInRound(false));
+        } else if (code.indexOf('JRH') > -1) {
+            keys = [];
+            store.dispatch(answerAllCardsInRound(true));
         } else if ( code.indexOf( 'LC' ) > -1 ) {
             const char = code.slice(code.indexOf( 'LC' )+2);
             if ( char ) {
