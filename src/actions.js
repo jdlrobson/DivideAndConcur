@@ -1,6 +1,8 @@
 import actionTypes from './actionTypes';
 import { getAllCardsWithUserDifficulty } from './helpers/cards';
-import { ALLOW_DECK_SELECTION, DECK_NEW } from './constants';
+import { ALLOW_DECK_SELECTION, DECK_NEW,
+  MATCH_SOUND
+} from './constants';
 import { random } from './utils';
 
 export function dismountCurrentGame() {
@@ -55,10 +57,17 @@ export function endRound() {
 
             setTimeout(() => {
                 let followup = { type: actionTypes.START_ROUND };
+                const state = getState();
                 if ( !ALLOW_DECK_SELECTION ) {
-                    // if reviewing new codes change game with 1 in 3 chance
-                    if ( getState().deck === DECK_NEW ) {
-                        if ( random( [1, 2, 3] ) === 2 ) {
+                    // if reviewing new characters change game with 1 in 2 chance
+                    if ( state.deck === DECK_NEW ) {
+                        if ( random( [1, 2] ) === 2 ) {
+                            followup = dismountDeck();
+                        }
+                    } else if ( state.game === MATCH_SOUND ) {
+                        // Since match sound is a short game only change the other games in
+                        // 1 in 10 chance
+                        if ( random( [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] ) === 5 ) {
                             followup = dismountDeck();
                         }
                     } else {
