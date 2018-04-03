@@ -22,6 +22,8 @@ class DeckSelection extends Component {
             }
             if (props.isDifficultWordsAvailable) {
                 options.push(DECK_UNKNOWN);
+                // increase chances of this happening
+                options.push(DECK_UNKNOWN);
             }
             if (props.isFamiliarWordsAvailable) {
                 options.push(DECK_KNOWN);
