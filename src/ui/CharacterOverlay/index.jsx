@@ -41,7 +41,7 @@ class CharacterOverlay extends Component {
         const decomp = props.decompositions || [];
         return (
             <div className='app__overlay'>
-                <FlashCard {...props} isSmall={false} isSelected isFrozen
+                <FlashCard {...props} isSmall={false} isSelected isFrozen debug={false}
                     className='app__overlay__card' />
                 <a href={`https://en.wiktionary.org/wiki/${props.character}`}
                     className='app__overlay__link'>wiktionary</a>
