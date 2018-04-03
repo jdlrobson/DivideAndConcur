@@ -1,5 +1,6 @@
 import actionTypes from './actionTypes';
 import { getAllCardsWithUserDifficulty } from './helpers/cards';
+import { getKnownWordCount, getUnKnownWordCount } from './helpers/difficulty-ratings';
 import { ALLOW_DECK_SELECTION, DECK_NEW,
   MATCH_SOUND
 } from './constants';
@@ -59,9 +60,11 @@ export function endRound() {
                 let followup = { type: actionTypes.START_ROUND };
                 const state = getState();
                 if ( !ALLOW_DECK_SELECTION ) {
-                    // if reviewing new characters change game with 1 in 2 chance
                     if ( state.deck === DECK_NEW ) {
-                        if ( random( [1, 2] ) === 2 ) {
+                        // If the user has more unknown words than known, stop giving them new cards!
+                        if ( getUnKnownWordCount(state.answers) > getKnownWordCount(state.answers) ) {
+                            followup = dismountDeck();
+                        } else if ( random( [1, 2] ) === 2 ) {
                             followup = dismountDeck();
                         }
                     } else if ( state.game === MATCH_SOUND ) {

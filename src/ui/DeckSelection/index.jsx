@@ -7,6 +7,7 @@ import { DECK_NEW, DECK_KNOWN, DECK_UNKNOWN,
 } from './../../constants';
 import { random } from './../../utils';
 import Button from './../Button';
+import { getKnownWordCount, getUnKnownWordCount } from './../../helpers/difficulty-ratings';
 import ButtonGroup from './../ButtonGroup';
 
 import './styles.less';
@@ -57,6 +58,26 @@ class DeckSelection extends Component {
     }
 }
 
+const mapStateToProps = (state, props) => {
+    const {
+        answers,
+        words
+    } = state;
+
+    const maxSize = words.length;
+    const unknown = getUnKnownWordCount(answers);
+    const known = getKnownWordCount(answers);
+    const isNewWordsAvailable = unknown <= known;
+    const isDifficultWordsAvailable = unknown > 0 && unknown < maxSize;
+    const isFamiliarWordsAvailable = known > 0;
+
+    return Object.assign({}, props, {
+        isNewWordsAvailable,
+        isFamiliarWordsAvailable,
+        isDifficultWordsAvailable
+    });
+};
+
 const mapDispatchToProps = (dispatch, props) => {
     return {
         setDeck: (deck) => {
@@ -65,4 +86,4 @@ const mapDispatchToProps = (dispatch, props) => {
     };
 };
 
-export default connect(undefined, mapDispatchToProps)(DeckSelection);
+export default connect(mapStateToProps, mapDispatchToProps)(DeckSelection);

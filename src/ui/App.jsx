@@ -81,13 +81,7 @@ class App extends Component {
         } else if (props.deck) {
             workflow = <GameSelection />;
         } else {
-            const isNewWordsAvailable = props.maxSize - props.knownWordCount -
-              props.unknownWordCount > 0;
             workflow = <DeckSelection
-                isNewWordsAvailable={isNewWordsAvailable}
-                isDifficultWordsAvailable={props.unknownWordCount > 0 &&
-                    props.unknownWordCount < props.maxSize}
-                isFamiliarWordsAvailable={props.knownWordCount > 0}
                 maxSize={props.maxSize}
             />;
         }
