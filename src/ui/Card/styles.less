@@ -86,6 +86,8 @@
 	width: @cardSizeSmall * 2;
 }
 
+@difficultyBlockSize: (@cardSizeSmall - @cardBorder - @cardBorder) / 5;
+
 .card__difficulty-bar {
   float: left;
   height: 10px;
@@ -97,9 +99,10 @@
   }
 
   div {
+		@block-margin-right: 1px;
     float: left;
-    margin-right: 1px;
-    width: 10px;
+    margin-right: @block-margin-right;
+    width: @difficultyBlockSize - @block-margin-right;
     height: 10px;
     background-color: red;
     &.easy {
