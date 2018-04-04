@@ -110,7 +110,7 @@ class App extends Component {
                     <div className='app__component--floated'>
                         {
                             props.isBooted && props.highlighted.map((props) => {
-                                return <FlashCard {...props} isHighlighted
+                                return <FlashCard {...props} isHighlighted debug={false}
                                     onClick={onHighlightedCardClick}
                                     key={`card-highlighted-${props.character}`} isSmall />;
                             })
