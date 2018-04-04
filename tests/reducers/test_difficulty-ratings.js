@@ -31,6 +31,12 @@ describe('Reducer: difficulty-ratings', () => {
         answers = markWordAsDifficult({ answers }, 'A');
         assert.ok(answers.A === 5, 'rating cannot go higher than 5');
     });
+    it('can be 0', () => {
+        const state = {answers: {}};
+        const answers =  markWordAsDifficult(state, 'B');
+        const newAnswers = markWordAsEasy({ answers }, 'B');
+        assert.equal(newAnswers.B, 0, 'it was difficult then easy, now it is 0');
+    });
     it('markWordAsEasy (capped)', () => {
         const ratings = markWordAsEasy({ answers: { B: -5 } }, 'B');
         assert.ok(ratings.B === -5, 'a rating cannot go lower than -5');
