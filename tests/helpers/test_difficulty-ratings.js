@@ -12,6 +12,7 @@ describe('Helper:difficulty-ratings', () => {
         const data = { A: 5, B: 0, C: -1 };
         assert.ok(knowsWord(data, 'C'));
         assert.ok(!knowsWord(data, 'B'));
+        assert.ok(!knowsWord(data, 'D'), 'Where rating is undefined it is not known');
         assert.ok(!knowsWord(data, 'A'));
     });
     it('getKnownWordCount', () => {

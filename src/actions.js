@@ -18,8 +18,9 @@ export function init(userData) {
     return (dispatch, getState) => {
         dispatch({ type: actionTypes.INIT, userData });
         window.requestIdleCallback(() => {
-            const words = getAllCardsWithUserDifficulty(userData.answers);
-            dispatch({ type: actionTypes.INIT_END, words });
+            const answers = userData.answers;
+            const words = getAllCardsWithUserDifficulty(answers);
+            dispatch({ type: actionTypes.INIT_END, words, answers });
         });
     };
 }

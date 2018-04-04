@@ -25,8 +25,14 @@ describe('Reducer: difficulty-ratings', () => {
         answers = markWordAsDifficult({ answers }, 'A');
         assert.ok(answers.A === 2);
     });
-    it('markWordAsEasy', () => {
+    it('markWordAsDifficult (capped)', () => {
+        let answers = { A: 5 };
+        answers = markWordAsDifficult({ answers }, 'A');
+        answers = markWordAsDifficult({ answers }, 'A');
+        assert.ok(answers.A === 5, 'rating cannot go higher than 5');
+    });
+    it('markWordAsEasy (capped)', () => {
         const ratings = markWordAsEasy({ answers: { B: -5 } }, 'B');
-        assert.ok(ratings.B === -6);
+        assert.ok(ratings.B === -5, 'a rating cannot go lower than -5');
     });
 });

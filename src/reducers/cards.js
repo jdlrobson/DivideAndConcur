@@ -44,15 +44,12 @@ export function freezeCards(state) {
 }
 
 export function getUnknownCards(state, total) {
-    const words = state.words.filter(word => !isTooEasy(state.answers, word.character) &&
+    const ratings = getDifficultyRatings(state);
+    const cards = state.words.filter((word) => ratings[word.character] === undefined &&
         isCardInGame(word)
     );
-    // find first unanswered
-    const firstUnknown = words.findIndex(word => state.answers[word.character] === undefined);
-    const cards = words.slice(firstUnknown, firstUnknown + total)
-        .map(word => mapCard(state, word.character));
 
-    return cards;
+    return cards.slice(0, total);
 }
 
 export function cloneCards(state) {
@@ -60,19 +57,21 @@ export function cloneCards(state) {
 }
 
 export function getKnownCards(state, total) {
+    const ratings = getDifficultyRatings(state);
     return shuffle(
-        state.words.filter(word => word.difficultyLevel < 0)
+        state.words.filter(word => knowsWord(ratings, word.character))
             .filter(isCardInGame)
             .map(word => mapCard(state, word.character))
     );
 }
 
 export function getHardCards(state, total) {
+    const ratings = getDifficultyRatings(state);
     return shuffle(
-            state.words.filter(word =>
-                state.answers[word.character] &&
-                !knowsWord(getDifficultyRatings(state), word.character)
-            )
+            state.words.filter((word) => {
+                const char = word.character;
+                return ratings[char] !== undefined && !knowsWord(ratings, char)
+            } )
         ).slice(0, total)
         .map(word => mapCard(state, word.character));
 }
@@ -100,7 +99,8 @@ export default (state=[], action) => {
         case actionTypes.INIT_END:
             // Load known cards into cache
             const words = action.words;
-            getKnownCards( Object.assign( {}, state, { words } ) );
+            const answers = action.answers;
+            getKnownCards( Object.assign( {}, state, { words, answers } ) );
             break;
         default:
             break;
