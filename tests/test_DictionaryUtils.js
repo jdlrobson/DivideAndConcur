@@ -13,6 +13,10 @@ const words = {};
 const utils = new DictionaryUtils(words, decompositions, difficulties);
 
 describe('DictionaryUtils', () => {
+    it('getPinyin', () => {
+        const utils = new DictionaryUtils( words, decompositions, difficulties );
+        assert.equal(utils.getPinyin('𥫗'), 'shì' );
+    });
     it('getDifficultyRating', () => {
         assert.ok(utils.getDifficultyRating('回') === 6);
         assert.ok(utils.getDifficultyRating('会') === 6);

@@ -121,10 +121,8 @@ function newRound(state) {
 
     switch (state.game) {
         case MATCH_SOUND:
-            // The first word will be the one we guess the sound for.
-            // exclude some words we know don't have pinyin
-            cards = cards.filter(card => ['⺶','𥫗', '⺮'].indexOf(card.character) === -1)
-                .slice(0, 5);
+            // 5 cards will be used in the game.
+            cards = cards.slice(0, 5);
 
             // Pick card to play the game with
             const card = cards[0];

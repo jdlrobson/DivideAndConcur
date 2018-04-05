@@ -5,6 +5,8 @@ function DictionaryUtils( words, decompositions, difficulties ) {
   this.decompositions = decompositions;
   this.difficulties = difficulties;
   this.pinyin = {};
+  // Provide definitions for pinyin not covered inside chinese-to-pinyin
+  this.pinyin['𥫗'] = 'shì';
   this.levelCache = {};
 }
 DictionaryUtils.prototype = {
