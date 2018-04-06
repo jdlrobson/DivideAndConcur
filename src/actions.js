@@ -1,7 +1,7 @@
 import actionTypes from './actionTypes';
 import { getAllCardsWithUserDifficulty } from './helpers/cards';
 import { getKnownWordCount, getUnKnownWordCount } from './helpers/difficulty-ratings';
-import { ALLOW_DECK_SELECTION, DECK_NEW,
+import { ALLOW_DECK_SELECTION, DECK_NEW, DECK_UNKNOWN, DECK_KNOWN,
   MATCH_SOUND
 } from './constants';
 import { random } from './utils';
@@ -52,18 +52,25 @@ export function startRound() {
     return { type: actionTypes.START_ROUND };
 }
 
-export function endRound() {
+export function endRound( callback ) {
+    callback = callback || setTimeout;
     return (dispatch, getState) => {
         if (!getState().endRound) {
             dispatch({ type: actionTypes.END_ROUND });
 
-            setTimeout(() => {
-                let followup = { type: actionTypes.START_ROUND };
+            callback(() => {
+                let followup = startRound();
                 const state = getState();
                 if ( !ALLOW_DECK_SELECTION ) {
-                    if ( state.deck === DECK_NEW ) {
+                    const unknown = getUnKnownWordCount(state.answers);
+                    const known = getKnownWordCount(state.answers);
+                    if ( state.deck === DECK_KNOWN && known === 0 ) {
+                        followup = dismountDeck();
+                    } else if ( state.deck === DECK_UNKNOWN && unknown === 0 ) {
+                        followup = dismountDeck();
+                    } else if ( state.deck === DECK_NEW ) {
                         // If the user has more unknown words than known, stop giving them new cards!
-                        if ( getUnKnownWordCount(state.answers) > getKnownWordCount(state.answers) ) {
+                        if ( unknown < known || state.words.length === unknown + known ) {
                             followup = dismountDeck();
                         } else if ( random( [1, 2] ) === 2 ) {
                             followup = dismountDeck();
