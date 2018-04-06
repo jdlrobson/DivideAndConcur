@@ -67,8 +67,9 @@ function save() {
 	return new Promise((resolve) => {
 		// update the utils
 		reload();
+		const modified = new Date();
 		fs.writeFile(DICTIONARY_FILE,
-			JSON.stringify({ words, decompositions, difficulty }),
+			JSON.stringify({ words, decompositions, difficulty, modified }),
 			function( err ) {
 				if ( !err ) {
 					resolve();

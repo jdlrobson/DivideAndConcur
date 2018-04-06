@@ -5,6 +5,7 @@ import { getDifficultyRating, knowsWord,
     getDifficultyRatings } from './difficulty-ratings';
 import { MAX_DIFFICULTY } from './../constants';
 
+export const DATA_MODIFIED_LAST = dictJson.modified;
 export const dictUtils = new DictionaryUtils(dictJson.words,
     dictJson.decompositions, dictJson.difficulty, dictJson.pinyin);
 
