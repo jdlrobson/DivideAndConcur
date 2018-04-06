@@ -1,4 +1,7 @@
 import actionTypes from './../actionTypes';
+import { MATCH_SOUND, MATCH_PAIRS, REVISE,
+    ENGLISH_TO_CHINESE, PINYIN_TO_CHINESE
+} from './../constants';
 import { mapCard, shuffle, isCardInGame, freezeCards as freezeCardsHelper } from './../helpers/cards';
 import { isTooEasy, knowsWord, getDifficultyRatings } from './../helpers/difficulty-ratings';
 
@@ -75,6 +78,32 @@ export function getHardCards(state, total) {
         ).slice(0, total)
         .map(word => mapCard(state, word.character));
 }
+
+export function pickCardsForGame( cards, action ) {
+    switch (action.game) {
+        case MATCH_SOUND:
+            // 4 cards will be used in the game.
+            cards = cards.slice(0, 4);
+
+            // Pick card to play the game with
+            const card = cards[0];
+            // shuffle them again
+            cards = shuffleCards({ cards });
+            // add the goal card at the front
+            cards.unshift(card);
+            break;
+        case PINYIN_TO_CHINESE:
+        case ENGLISH_TO_CHINESE:
+        case MATCH_PAIRS:
+            cards = cutCardDeck({ cards }, 6);
+            cards = cloneCards({ cards });
+            cards = shuffleCards({ cards });
+            break;
+        default:
+            break;
+    }
+    return cards;
+};
 
 export function cutCardDeck(state, total) {
     return state.cards.slice(0,total);

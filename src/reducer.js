@@ -10,6 +10,7 @@ import { shuffle, getSelectedUnansweredCards, getAnsweredCards,
 import { getUnknownCards, getKnownCards, getHardCards,
     flipCards, cloneCards, answerCard,
     freezeCards, selectAndAnswerAll,
+    pickCardsForGame,
     selectCard, deselectUnansweredCards, markCardsAsAnswered,
     cutCardDeck, shuffleCards, addIndexToCards } from './reducers/cards';
 import _answers, { markWordAsDifficult, markWordAsEasy } from './reducers/difficulty-ratings';
@@ -118,26 +119,14 @@ function chooseDeck(state) {
 }
 function newRound(state) {
     let cards = chooseDeck(state);
+    const game = state.game;
     cards = shuffleCards({ cards });
+    cards = pickCardsForGame( cards, { game } );
 
-    switch (state.game) {
-        case MATCH_SOUND:
-            // 5 cards will be used in the game.
-            cards = cards.slice(0, 5);
-
-            // Pick card to play the game with
-            const card = cards[0];
-            // shuffle them again
-            cards = shuffleCards({ cards });
-            // add the goal card at the front
-            cards.unshift(card);
-            break;
+    switch (game) {
         case PINYIN_TO_CHINESE:
         case ENGLISH_TO_CHINESE:
         case MATCH_PAIRS:
-            cards = cutCardDeck({ cards }, 6);
-            cards = cloneCards({ cards });
-            cards = shuffleCards({ cards });
             state = Object.assign({}, state, { cards, isFlipped: false });
             break;
         default:
