@@ -267,7 +267,8 @@ function menu() {
 		'11: Delete word',
 		'12: Auto-assign difficulty',
 		'13: Clean',
-		'14: Add blurb'
+		'14: Add blurb',
+		'15: View cards with difficulty range'
 	];
 	getUserInput( '**********************\n' + options.join('\n') + '\n**********************' )
 		.then( ( val ) => {
@@ -363,6 +364,30 @@ function menu() {
 						} );
 					} );
 					break;
+				case 15:
+					getUserInput('Word length?').then((wl) => {
+						const wordL = parseInt(wl, 10);
+						getUserInput('What is the range? e.g. 0,10').then((rangeStr) => {
+							let range = rangeStr.split(',').map((str) => str ? parseInt(str, 10) : 0);
+							if ( range.length === 1) {
+								range.push(range[0]);
+							}
+							console.log(`Looking in range ${range[0]} - ${range[1]}`);
+							dict.all().filter((word) => {
+								const rating = dict.getDifficultyRating(word);
+								//console.log('giot', rating, rating > range[0], rating <= range[1]);
+								return rating >= range[0] && rating <= range[1];
+							}).filter(
+								(a)=>dict.getWordLength(a) === wordL
+							).sort(
+								(a,b)=>dict.getWordLength(a)<dict.getWordLength(b) ? -1 : 1
+							).forEach((word) => {
+								console.log(word, dict.getWord(word), 'word length=', dict.getWordLength(word));
+							});
+							return menu();
+						} );
+					} );
+					break
 				default:
 					feedback('Huh?');
 					menu();
