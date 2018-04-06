@@ -181,6 +181,30 @@ function getEnglish(char) {
 }
 
 function clean() {
+	loadHanzi();
+	dict.all().forEach((char) => {
+		const decomp = dict.decompose(char);
+		if ( decomp.indexOf( '?' ) > -1 ) {
+			// reduce the hanzi decomposition to real characters
+			const hanz = hanzi.decompose(char).components1.filter((c) => {
+					return c !== 'No glyph available'
+				});
+			if ( hanz.length === 2 ) {
+				console.log('Add decomposition', char, decomp, hanz);
+				dict.addDecomposition(char, hanz);
+			} else {
+				const hanzUnique = hanz.filter((char) => decomp.indexOf(char) === -1);
+				if ( hanzUnique.length ) {
+					const newDecomp = decomp.map((char, i) => char === '?' ? hanzUnique[0] : char);
+					console.log('Decom issue', char, decomp, hanzUnique, newDecomp);
+					dict.addDecomposition(char, newDecomp);
+				} else {
+					dict.addDecomposition(char, decomp.filter((char) => char !== '?'));
+					console.log('Removed ? from decomp', char);
+				}
+			}
+		}
+	})
 	dict.all().forEach((chinese) => {
 		const eng = dict.getWord(chinese);
 		if ( eng === '?' ) {
