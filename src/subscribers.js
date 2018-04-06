@@ -1,5 +1,10 @@
-import { endRound, saveComplete, dismountDeck } from './actions';
+import { endRound, saveComplete, dismountDeck, renderComplete } from './actions';
 import { DECK_NEW } from './constants';
+import App from './ui/App';
+import { h, render } from 'preact';
+import { Provider } from 'preact-redux';
+// Tell Babel to transform JSX into h() calls:
+/** @jsx h */
 
 /**
  * Return a subscriber bound to the Redux store that
@@ -14,6 +19,25 @@ export function checkForSave(store) {
                 answers: state.answers
             }));
             store.dispatch(saveComplete());
+        }
+    };
+}
+
+export function checkForBoot(store) {
+    return () => {
+        const state = store.getState();
+        if ( state.isBooted && !state.isRendered ) {
+            store.dispatch(renderComplete());
+            const provider = (
+                <Provider store={store}>
+                    <App />
+                </Provider>
+            );
+            document.getElementById('container').innerHTML = '';
+            render(
+                provider,
+                document.getElementById('container')
+            );
         }
     };
 }

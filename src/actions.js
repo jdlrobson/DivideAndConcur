@@ -6,6 +6,10 @@ import { ALLOW_DECK_SELECTION, DECK_NEW, DECK_UNKNOWN, DECK_KNOWN,
 } from './constants';
 import { random } from './utils';
 
+export function renderComplete() {
+    return { type: actionTypes.RENDER_COMPLETE };
+}
+
 export function dismountCurrentGame() {
     return { type: actionTypes.DISMOUNT_GAME };
 }

@@ -1,0 +1,56 @@
+body {
+  margin: 0;
+  background: #ffcf5b;
+}
+
+.chrome {
+  background: white;
+  max-width: 465px;
+  border: solid 1px #aaa;
+  margin: auto;
+  padding: 8px;
+}
+
+.chrome__header__home {
+  float: none;
+  width: 100%;
+  border-bottom: solid 1px #aaa;
+  padding-bottom: 10px;
+  margin: 0px 0px 10px;
+}
+
+.chrome__header__home__logo {
+  vertical-align: middle;
+}
+
+.chrome__boot-screen {
+  clear: both;
+  text-align: left;
+}
+
+.chrome__boot-screen__msg {
+  margin: 10px 0;
+  font-weight: bold;
+  font-size: 2em;
+}
+
+.chrome__boot-screen__source-link {
+  font-size: 0.8em;
+  display: block;
+}
+
+footer {
+  text-align: center;
+  font-weight: bold;
+  font-size: 0.8em;
+  margin-top: 20px;
+  color: #333;
+  border-top: solid 1px #aaa;
+  padding-top: 10px;
+}
+
+@media all and ( min-width: 500px ) {
+  .chrome {
+    min-height: 500px;
+  }
+}

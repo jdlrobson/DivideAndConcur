@@ -15,6 +15,7 @@ import { getUnknownCards, getKnownCards, getHardCards,
 import _answers, { markWordAsDifficult, markWordAsEasy } from './reducers/difficulty-ratings';
 import _deck from './reducers/deck';
 import _highlighted from './reducers/highlighted';
+import _isRendered from './reducers/isRendered';
 import _paused from './reducers/paused';
 import _cards from './reducers/cards';
 import actionTypes from './actionTypes';
@@ -153,10 +154,11 @@ function flipCardStart(state, action) {
 const reducer = (state={}, action) => {
     const highlighted = _highlighted(state.highlighted, action);
     const paused = _paused(state.paused, action);
+    const isRendered = _isRendered(state.isRendered, action);
     const deck = _deck(state.deck, action);
     const answers = _answers(state.answers, action);
     const cards = _cards(state.cards, action);
-    state = Object.assign({}, state, { paused, highlighted, deck, answers, cards });
+    state = Object.assign({}, state, { paused, highlighted, deck, answers, cards, isRendered });
     switch (action.type) {
         case actionTypes.CHEAT_ANSWER_ALL:
             state.cards.forEach((card) =>

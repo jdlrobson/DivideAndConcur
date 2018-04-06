@@ -1,21 +1,15 @@
 import 'preact/devtools';
 
 import { applyMiddleware, compose, createStore } from 'redux';
-import { checkForSave,
+import { checkForSave, checkForBoot,
     checkForTimedAction, checkIfEndOfRound } from './subscribers';
-import { h, render } from 'preact';
 
-import App from './ui/App';
-import { Provider } from 'preact-redux';
 import { init, answerAllCardsInRound, highlightCharacter } from './actions';
 import reducer from './reducer';
 import thunkMiddleware from 'redux-thunk';
 
-import img from './ui/BootScreen/panda.gif';
-import logo from './ui/logo.png';
-
-// Tell Babel to transform JSX into h() calls:
-/** @jsx h */
+import img from './../panda.gif';
+import logo from './../logo.png';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(reducer,
@@ -30,19 +24,6 @@ const store = createStore(reducer,
    * SUBSCRIBERS to all state changes
    *******************************************
    */
-    const renderGame = () => {
-        document.getElementById('container').innerHTML = '';
-        const provider = (
-            <Provider store={store}>
-                <App />
-            </Provider>
-        );
-        render(
-            provider,
-            document.getElementById('container')
-        );
-    };
-
     let keys = [];
 
     function checkCheatCode(ev) {
@@ -78,6 +59,7 @@ const store = createStore(reducer,
     // setup subscribers
     store.subscribe(checkIfEndOfRound(store));
     store.subscribe(checkForSave(store));
+    store.subscribe(checkForBoot(store));
 
     /**
    *******************************************
@@ -103,7 +85,6 @@ const store = createStore(reducer,
             })
         );
     }
-    renderGame();
     const boot = () => {
         setTimeout(() => {
             store.dispatch(init(userData))

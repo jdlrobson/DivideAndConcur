@@ -10,7 +10,6 @@ import DeckSelection from './DeckSelection';
 import GameMatchSound from './GameMatchSound';
 import ProgressBar from './ProgressBar';
 import CharacterOverlay from './CharacterOverlay';
-import BootScreen from './BootScreen';
 import Button from './Button';
 import { getKnownWordCount, getUnKnownWordCount } from './../helpers/difficulty-ratings';
 import { dismountCurrentGame, dismountDeck } from './../actions';
@@ -21,7 +20,6 @@ import { MATCH_PAIRS, REVISE,
     DECK_UNKNOWN,
     ALLOW_DECK_SELECTION
 } from './../constants';
-import logoUrl from './logo.png';
 
 class App extends Component {
     clearOverlay() {
@@ -57,9 +55,7 @@ class App extends Component {
         }
 
         const isDeckEmpty = props.isDeckEmpty;
-        if (!props.isBooted) {
-            workflow = <BootScreen className='app__content' />;
-        } else if (game && !isDeckEmpty) {
+        if (game && !isDeckEmpty) {
             workflow = (
                 <div className='app__content'>
                     { (game === REVISE) &&
@@ -90,16 +86,12 @@ class App extends Component {
             <div className='app'>
                 {this.state && this.state.overlay}
                 <div className='app__header'>
+                    { ALLOW_DECK_SELECTION &&
                     <div className='app__header__home'>
-                        { ALLOW_DECK_SELECTION &&
-                            <Button onClick={() => { props.onBackClick(props); }}
-                                disabled={props.isPaused || !props.deck}>Back</Button>
-                        }
-                        <img src={logoUrl} alt='Divide and concur'
-                            width='220'
-                            className='app__header__home__logo'
-                        />
+                        <Button onClick={() => { props.onBackClick(props); }}
+                            disabled={props.isPaused || !props.deck}>Back</Button>
                     </div>
+                    }
                     <div className='app__component--floated'>
                         {
                             props.maxSize &&
