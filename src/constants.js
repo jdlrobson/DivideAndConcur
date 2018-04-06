@@ -11,3 +11,5 @@ export const DECK_KNOWN = 'known';
 export const DECK_UNKNOWN = 'unknown';
 
 export const ALLOW_DECK_SELECTION = false;
+
+export const VERSION = '0.6.0';

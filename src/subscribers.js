@@ -1,5 +1,5 @@
 import { endRound, saveComplete, dismountDeck, renderComplete } from './actions';
-import { DECK_NEW } from './constants';
+import { DECK_NEW, VERSION } from './constants';
 import App from './ui/App';
 import { h, render } from 'preact';
 import { Provider } from 'preact-redux';
@@ -33,6 +33,7 @@ export function checkForBoot(store) {
                     <App />
                 </Provider>
             );
+            document.getElementById('version').innerHTML = VERSION;
             document.getElementById('container').innerHTML = '';
             render(
                 provider,
