@@ -3,6 +3,7 @@ import { Component, h } from 'preact';
 import { connect } from 'preact-redux';
 import Card from './Card';
 import GameDescription from './GameDescription';
+import { DECK_NEW } from './../constants';
 import { flipCardsAfter, answerFlashcard } from './../actions';
 
 class GameMatchPairs extends Component {
@@ -13,7 +14,7 @@ class GameMatchPairs extends Component {
     }
     componentDidUpdate() {
         if (!this.props.isFlipped) {
-            this.props.onStart();
+            this.props.onStart(this.props.delayStart);
         }
     }
     componentWillReceiveProps(nextProps) {
@@ -39,9 +40,12 @@ class GameMatchPairs extends Component {
     }
     render(props) {
         const isFrozen = !this.canSelect();
-        const msg = props.isFlipped ?
-            'Match the pairs to win the cards!' :
-            'Flipping soon!';
+        const isSelected = !isFrozen &&  !props.isFlipped;
+        const flipMsgs = props.flipMessages || [
+            'Flipping soon!',
+            'Match the pairs!'
+        ];
+        const msg = props.isFlipped ? flipMsgs[1] : flipMsgs[0];
         const className = props.isFlipped ? 'game-match-pairs__card' :
             'game-match-pairs__card--pending';
         let cards;
@@ -50,7 +54,7 @@ class GameMatchPairs extends Component {
         if (mode === 0) {
             cards = props.cards.map((card) => {
                 return (
-                    <Card className={className}
+                    <Card className={className} isSelected={isSelected}
                         selectedControls={false} {...card} isFrozen={isFrozen} />
                 );
             });
@@ -63,6 +67,7 @@ class GameMatchPairs extends Component {
                 return (
                     <Card className={className}
                         {...card}
+                        isSelected={isSelected}
                         pinyin={false}
                         english={false}
                         label={pairIndex === index ? undefined : card.english}
@@ -78,6 +83,7 @@ class GameMatchPairs extends Component {
                 return (
                     <Card className={className}
                         {...card}
+                        isSelected={isSelected}
                         english={false}
                         pinyin={false}
                         label={pairIndex === index ? undefined : card.pinyin}
@@ -103,9 +109,22 @@ GameMatchPairs.defaultProps = {
 };
 
 const mapStateToProps = (state, props) => {
-    const { cards, isFlipped } = state;
+    const { cards, isFlipped, deck } = state;
+    let flipMessages;
+    let delayStart = 5000;
+    switch (deck) {
+        case DECK_NEW:
+            delayStart = 10000;
+            flipMessages = [
+                'Here\'s some new cards to get acquainted with.',
+                'Match the pairs until you become familiar with them!'
+            ];
+            break;
+        default:
+            break;
+    }
 
-    return Object.assign({}, props, { cards, isFlipped });
+    return Object.assign({}, props, { cards, isFlipped, flipMessages, delayStart });
 };
 
 const mapDispatchToProps = (dispatch, props) => {
@@ -116,8 +135,8 @@ const mapDispatchToProps = (dispatch, props) => {
         onCorrect: (char) => {
             dispatch(answerFlashcard(true, char, false));
         },
-        onStart: () => {
-            dispatch(flipCardsAfter(5000));
+        onStart: (delay) => {
+            dispatch(flipCardsAfter(delay || 5000));
         }
     };
 };

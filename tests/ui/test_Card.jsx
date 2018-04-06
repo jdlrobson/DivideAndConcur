@@ -7,7 +7,7 @@ chai.use(assertJsx);
 
 describe('Card', () => {
     it('if two characters a card is wide', () => {
-        const card = <Card character='国语' isSmall />;
+        const card = <Card character='国语' isSmall={true} />;
         expect(
             card
         ).to.contain(
@@ -20,7 +20,7 @@ describe('Card', () => {
         );
     });
     it('special haracters with string length greater than 1 are not wide', () => {
-        const card = <Card character='𥫗' isSmall />;
+        const card = <Card character='𥫗' isSmall={true} />;
         expect(
             card
         ).to.contain(

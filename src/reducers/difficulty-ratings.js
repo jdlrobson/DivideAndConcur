@@ -3,7 +3,7 @@ import { getDifficultyRatings } from './../helpers/difficulty-ratings';
 
 export function markWordAsEasy(state, char) {
     const difficultyRatings = getDifficultyRatings(state);
-    const newRating = difficultyRatings[char] !== undefined ? difficultyRatings[char] - 1 : -1;
+    const newRating = difficultyRatings[char] !== undefined ? difficultyRatings[char] - 1 : 0;
     difficultyRatings[char] = Math.max( -5, newRating );
     return Object.assign({}, difficultyRatings);
 }

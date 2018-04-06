@@ -19,7 +19,7 @@ class GameSelection extends Component {
                 MATCH_PAIRS, MATCH_SOUND, ENGLISH_TO_CHINESE, PINYIN_TO_CHINESE
             ];
             if (props.deck === DECK_NEW) {
-                props.setGame(REVISE);
+                props.setGame(MATCH_PAIRS);
             } else {
                 props.setGame(random(games));
             }

@@ -3,5 +3,8 @@
   "globals": {
     "it": true,
     "describe": true
+  },
+  "rules": {
+    "react/jsx-boolean-value": 0
   }
 }
