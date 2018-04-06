@@ -1,6 +1,5 @@
-import { endRound, startRound, dismountDeck } from './../src/actions';
-import actionTypes from './../src/actionTypes';
-import { MATCH_SOUND, DECK_UNKNOWN, DECK_KNOWN, DECK_NEW } from './../src/constants';
+import { DECK_KNOWN, DECK_NEW, DECK_UNKNOWN, MATCH_SOUND } from './../src/constants';
+import { dismountDeck, endRound } from './../src/actions';
 import assert from 'assert';
 import sinon from 'sinon';
 
@@ -8,7 +7,7 @@ const words = [
     { character: 'a' },
     { character: 'b' },
     { character: 'c' }
-]
+];
 describe('actions', () => {
     it('endRound - noop if endRound already being processed', () => {
         const getState = () => ({
@@ -16,9 +15,9 @@ describe('actions', () => {
         });
         const timeoutSpy = sinon.spy(setTimeout);
         const dispatch = sinon.spy();
-        endRound( timeoutSpy )(dispatch, getState);
-        assert.ok( timeoutSpy.notCalled );
-        assert.ok( dispatch.notCalled );
+        endRound(timeoutSpy)(dispatch, getState);
+        assert.ok(timeoutSpy.notCalled);
+        assert.ok(dispatch.notCalled);
     });
     it('endRound - if unknown deck is exhausted dismount', () => {
         const getState = () => ({
@@ -29,10 +28,10 @@ describe('actions', () => {
                 b: -1
             }
         });
-        const setTimeoutSync = (fn) => fn();
+        const setTimeoutSync = fn => fn();
         const dispatch = sinon.spy();
-        endRound( setTimeoutSync )(dispatch, getState);
-        assert.ok( dispatch.calledWith( dismountDeck() ) );
+        endRound(setTimeoutSync)(dispatch, getState);
+        assert.ok(dispatch.calledWith(dismountDeck()));
     });
     it('endRound - if known deck is exhausted dismount', () => {
         const getState = () => ({
@@ -43,10 +42,10 @@ describe('actions', () => {
                 b: 1
             }
         });
-        const setTimeoutSync = (fn) => fn();
+        const setTimeoutSync = fn => fn();
         const dispatch = sinon.spy();
-        endRound( setTimeoutSync )(dispatch, getState);
-        assert.ok( dispatch.calledWith( dismountDeck() ) );
+        endRound(setTimeoutSync)(dispatch, getState);
+        assert.ok(dispatch.calledWith(dismountDeck()));
     });
     it('endRound - if all words are answered and in NEW deck dismount', () => {
         const getState = () => ({
@@ -59,10 +58,10 @@ describe('actions', () => {
                 c: 1
             }
         });
-        const setTimeoutSync = (fn) => fn();
+        const setTimeoutSync = fn => fn();
         const dispatch = sinon.spy();
-        endRound( setTimeoutSync )(dispatch, getState);
+        endRound(setTimeoutSync)(dispatch, getState);
         // Note there is a random element to this test.
-        assert.ok( dispatch.calledWith( dismountDeck() ) );
+        assert.ok(dispatch.calledWith(dismountDeck()));
     });
 });

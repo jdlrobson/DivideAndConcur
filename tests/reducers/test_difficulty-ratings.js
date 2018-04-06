@@ -32,7 +32,7 @@ describe('Reducer: difficulty-ratings', () => {
         assert.ok(answers.A === 5, 'rating cannot go higher than 5');
     });
     it('can be 0', () => {
-        const state = {answers: {}};
+        const state = { answers: {} };
         const answers =  markWordAsDifficult(state, 'B');
         const newAnswers = markWordAsEasy({ answers }, 'B');
         assert.equal(newAnswers.B, 0, 'it was difficult then easy, now it is 0');
