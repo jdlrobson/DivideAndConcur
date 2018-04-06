@@ -5,14 +5,18 @@ import assert from 'assert';
 
 describe('Reducer: difficulty-ratings', () => {
     it('clean', () => {
-        const answers = { a: 1, b: 2, c: 3 };
+        const answers = { a: 1, b: 2, c: 3, e: 5 };
         const ratings = clean(answers, { words: [
-            { character: 'a' },
-            { character: 'd' },
-            { character: 'b' }
+            { character: 'a', wordLength: 1, rating: 0 },
+            { character: 'd', wordLength: 1, rating: 0 },
+            { character: 'b', wordLength: 1, rating: 0 },
+            { character: 'd', wordLength: 2, rating: 0 },
+            { character: 'e', wordLength: 5, rating: 0 }
         ] });
         assert.ok(ratings.c === undefined, 'words not in the wordlist are ignored');
         assert.ok(ratings.a === 1);
+        assert.ok(ratings.e === undefined,
+            'since d is unknown e cannot be possibly known given wordLength is higher');
     });
     it('markWordAsDifficult', () => {
         const answers = {};

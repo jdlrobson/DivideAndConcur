@@ -1,5 +1,6 @@
 import actionTypes from './../actionTypes';
 import { getDifficultyRatings } from './../helpers/difficulty-ratings';
+import { getUnknownCards } from './cards';
 
 export function markWordAsEasy(state, char) {
     const difficultyRatings = getDifficultyRatings(state);
@@ -17,9 +18,23 @@ export function markWordAsDifficult(state, char) {
 
 export function clean(state, action) {
     const words = action.words;
+    const nextWord = getUnknownCards( { answers: state, words }, 1 )[0];
+    const maxWordLength = nextWord.wordLength;
+    const maxDifficulty = nextWord.rating;
+
     Object.keys(state).forEach((char) => {
-        if ( words.findIndex(word => word.character === char) === -1 ) {
+        const wordPos = words.findIndex(word => word.character === char);
+        if ( wordPos === -1 ) {
             delete state[char];
+        } else {
+            // Cleanup words which are more difficulty then the next known word
+            // (ratings sometimes change)
+            const w = words[wordPos];
+            if ( w.wordLength > maxWordLength ) {
+                 delete state[char];
+            } else if ( w.wordLength === maxWordLength && w.rating > maxDifficulty ) {
+                delete state[char];
+            }
         }
     });
     return Object.assign({}, state);
