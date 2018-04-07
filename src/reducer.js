@@ -19,6 +19,7 @@ import _highlighted from './reducers/highlighted';
 import _isRendered from './reducers/isRendered';
 import _paused from './reducers/paused';
 import _cards from './reducers/cards';
+import _game from './reducers/game';
 import _isDirty from './reducers/isDirty';
 import _isBooted from './reducers/isBooted';
 import _words from './reducers/words';
@@ -46,12 +47,6 @@ function actionAnswerCard(state, action) {
     return Object.assign({}, state, {
         answers,
         cards
-    });
-}
-
-function setGame(state, action) {
-    return Object.assign({}, state, {
-        game: action.game
     });
 }
 
@@ -89,15 +84,15 @@ function revealFlashcardDecompose(state, action) {
     return Object.assign({}, state, { answers, cards });
 }
 function revealedFlashcard(state, action) {
-    if (state.game === MATCH_SOUND) {
+    if (action.game === MATCH_SOUND) {
         return revealCardInAction(revealFlashcardDecompose(state, action), action);
     }  else {
         return revealCardInAction(state, action);
     }
 }
 
-function newRound(state) {
-    const game = state.game;
+function newRound(state, action) {
+    const game = action.game;
     const answers = state.answers;
     const words = state.words;
     const deck = state.deck;
@@ -134,9 +129,10 @@ const reducer = (state={}, action) => {
     const answers = _answers(state.answers, action);
     const cards = _cards(state.cards, action);
     const isDirty = _isDirty(state.isDirty, action);
+    const game = _game(state.game, action);
     state = Object.assign({}, state, {
         paused, highlighted, deck, answers, cards,
-        isRendered, isDirty, isBooted, words
+        isRendered, isDirty, isBooted, words, game
     });
     switch (action.type) {
         case actionTypes.CHEAT_ANSWER_ALL:
@@ -162,13 +158,10 @@ const reducer = (state={}, action) => {
         case actionTypes.END_ROUND:
             return Object.assign({}, state, { cards: freezeCards(state), endRound: true });
         case actionTypes.START_ROUND:
-            return Object.assign({}, newRound(state), { endRound: false });
+            return Object.assign({}, newRound(state, { game }), { endRound: false });
         case actionTypes.GUESS_FLASHCARD_WRONG:
         case actionTypes.GUESS_FLASHCARD_RIGHT:
             return actionAnswerCard(state, action);
-        case actionTypes.DISMOUNT_DECK:
-        case actionTypes.DISMOUNT_GAME:
-            return setGame(state, { game: false });
         default:
             break;
     }
@@ -176,9 +169,7 @@ const reducer = (state={}, action) => {
     if (!paused) {
         switch (action.type) {
             case actionTypes.REVEAL_FLASHCARD:
-                return revealedFlashcard(state, action);
-            case actionTypes.SWITCH_GAME:
-                return setGame(state, action);
+                return revealedFlashcard(state, Object.assign( action, { game } ));
             case actionTypes.GUESS_FLASHCARD_WRONG:
             case actionTypes.GUESS_FLASHCARD_RIGHT:
                 return actionAnswerCard(state, action);
