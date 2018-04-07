@@ -1,4 +1,4 @@
-import { MATCH_PAIRS, MATCH_SOUND } from './../../src/constants';
+import { DECK_NEW, MATCH_PAIRS, MATCH_SOUND } from './../../src/constants';
 import { getHardCards, getKnownCards, getUnknownCards,
     pickCardsForGame
 } from './../../src/reducers/cards';
@@ -15,21 +15,30 @@ const words = [
 ];
 describe('Reducer: cards', () => {
     it('pickCardsForGame (chooses the right number of cards based on game)', () => {
-        const cards = [
-            { character: 'A' },
-            { character: 'B' },
-            { character: 'C' },
-            { character: 'D' },
-            { character: 'E' },
-            { character: 'F' },
-            { character: 'G' },
-            { character: 'H' },
-            { character: 'I' },
-            { character: 'J' },
-            { character: 'K' }
+        const rating = 0;
+        const wordLength = 0;
+        const cards =  [
+            { character: 'A', rating, wordLength },
+            { character: 'B', rating, wordLength },
+            { character: 'C', rating, wordLength },
+            { character: 'D', rating, wordLength },
+            { character: 'E', rating, wordLength },
+            { character: 'F', rating, wordLength },
+            { character: 'G', rating, wordLength },
+            { character: 'H', rating, wordLength },
+            { character: 'I', rating, wordLength },
+            { character: 'J', rating, wordLength },
+            { character: 'K', rating, wordLength }
         ];
-        const matchPairCards = pickCardsForGame(cards, { game: MATCH_PAIRS });
-        const matchSoundCards = pickCardsForGame(cards, { game: MATCH_SOUND });
+        const words = cards;
+        const answers = {};
+        const deck = DECK_NEW;
+        const matchPairCards = pickCardsForGame(cards,
+            { game: MATCH_PAIRS, answers, deck, words }
+        );
+        const matchSoundCards = pickCardsForGame(cards,
+            { game: MATCH_SOUND, answers, deck, words }
+        );
         assert.equal(
             matchPairCards.length,
             12,

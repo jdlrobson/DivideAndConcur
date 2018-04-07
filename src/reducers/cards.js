@@ -1,6 +1,7 @@
 import actionTypes from './../actionTypes';
 import { MATCH_SOUND, MATCH_PAIRS, REVISE,
-    ENGLISH_TO_CHINESE, PINYIN_TO_CHINESE
+    ENGLISH_TO_CHINESE, PINYIN_TO_CHINESE,
+    DECK_UNKNOWN, DECK_NEW, DECK_KNOWN
 } from './../constants';
 import { mapCard, shuffle, isCardInGame, freezeCards as freezeCardsHelper } from './../helpers/cards';
 import { isTooEasy, knowsWord, getDifficultyRatings } from './../helpers/difficulty-ratings';
@@ -79,7 +80,27 @@ export function getHardCards(state, total) {
         .map(word => mapCard(state, word.character));
 }
 
-export function pickCardsForGame( cards, action ) {
+function chooseDeck( _cards, action ) {
+    let cards = [];
+    const state = { words: action.words, answers: action.answers };
+    switch (action.deck) {
+        case DECK_UNKNOWN:
+            cards = getHardCards(state, 9);
+            break;
+        case DECK_NEW:
+            cards = getUnknownCards(state, 9);
+            break;
+        case DECK_KNOWN:
+            cards = getKnownCards(state);
+            break;
+        default:
+            break;
+    }
+    return cards;
+}
+
+export function pickCardsForGame( _cards, action ) {
+    let cards = chooseDeck( _cards, action );
     switch (action.game) {
         case MATCH_SOUND:
             // 4 cards will be used in the game.
@@ -100,6 +121,7 @@ export function pickCardsForGame( cards, action ) {
             cards = shuffleCards({ cards });
             break;
         default:
+            cards = shuffleCards({ cards });
             break;
     }
     return cards;

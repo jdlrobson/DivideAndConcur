@@ -100,28 +100,16 @@ function saveDone(state) {
     return Object.assign({}, state, { isDirty: false });
 }
 
-function chooseDeck(state) {
-    let cards = [];
-    switch (state.deck) {
-        case DECK_UNKNOWN:
-            cards = getHardCards(state, 9);
-            break;
-        case DECK_NEW:
-            cards = getUnknownCards(state, 9);
-            break;
-        case DECK_KNOWN:
-            cards = getKnownCards(state);
-            break;
-        default:
-            break;
-    }
-    return cards;
-}
 function newRound(state) {
-    let cards = chooseDeck(state);
     const game = state.game;
-    cards = shuffleCards({ cards });
-    cards = pickCardsForGame( cards, { game } );
+    const answers = state.answers;
+    const words = state.words;
+    const deck = state.deck;
+    const cards = addIndexToCards(
+        {
+            cards: pickCardsForGame( cards, { game, answers, words, deck } )
+        }
+    );
 
     switch (game) {
         case PINYIN_TO_CHINESE:
@@ -133,7 +121,7 @@ function newRound(state) {
             break;
     }
     const previous = getKnownCards(state).slice(-50).reverse();
-    return Object.assign({}, state, { cards: addIndexToCards({ cards }), previous });
+    return Object.assign({}, state, { cards, previous });
 }
 
 function flipCardStart(state, action) {
