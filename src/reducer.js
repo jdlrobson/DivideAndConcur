@@ -44,7 +44,7 @@ function actionAnswerCard(state, action) {
             break;
     }
 
-    const cards = answerCard(state, char, action.index, isKnown);
+    const cards = answerCard(state.cards, char, action.index, isKnown);
     return Object.assign({}, state, {
         answers,
         cards
@@ -142,7 +142,7 @@ const reducer = (state={}, action) => {
                 })
             );
             return Object.assign({}, state, {
-                cards: selectAndAnswerAll(state, false)
+                cards: selectAndAnswerAll(state.cards, false)
             });
         case actionTypes.FLIP_CARDS_START:
             return flipCardStart(state, action);

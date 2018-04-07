@@ -15,7 +15,7 @@ function updateCardInCards(cards, character, index, props) {
 }
 
 export function selectAndAnswerAll(state, isKnown) {
-    return state.cards.map(card => Object.assign({}, card, { isAnswered: true,
+    return state.map(card => Object.assign({}, card, { isAnswered: true,
         isSelected: true,
         isKnown }));
 }
@@ -25,7 +25,7 @@ export function markCardsAsAnswered(state, character, isKnown) {
 }
 
 export function answerCard(state, character, index, isKnown) {
-    return updateCardInCards(state.cards, character, index, { isAnswered: true, isKnown });
+    return updateCardInCards(state, character, index, { isAnswered: true, isKnown });
 }
 
 export function deselectUnansweredCards(state) {
