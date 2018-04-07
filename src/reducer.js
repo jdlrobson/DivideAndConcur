@@ -30,25 +30,30 @@ import actionTypes from './actionTypes';
 function actionAnswerCard(state, action) {
     const char = action.character;
     let isKnown = true;
-    let answers;
-
-    switch (action.type) {
-        case actionTypes.GUESS_FLASHCARD_WRONG:
-            answers = markWordAsDifficult(state, char);
-            isKnown = false;
-            break;
-        case actionTypes.GUESS_FLASHCARD_RIGHT:
-            answers = markWordAsEasy(state, char);
-            break;
-        default:
-            break;
-    }
+    let answers = actionAnswerUpdate(state.answers, action);
 
     const cards = answerCard(state.cards, char, action.index, isKnown);
     return Object.assign({}, state, {
         answers,
         cards
     });
+}
+
+function actionAnswerUpdate(answers, action) {
+    const char = action.character;
+
+    switch (action.type) {
+        case actionTypes.GUESS_FLASHCARD_WRONG:
+            answers = markWordAsDifficult({ answers }, char);
+            break;
+        case actionTypes.GUESS_FLASHCARD_RIGHT:
+            answers = markWordAsEasy({ answers }, char);
+            break;
+        default:
+            break;
+    }
+
+    return answers;
 }
 
 function revealCardInAction(state, action) {
