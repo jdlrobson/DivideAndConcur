@@ -63,19 +63,16 @@ function revealedFlashcard(state, action) {
     }
 }
 
-function newRound(state, action) {
+function newRound(cards, action) {
     const game = action.game;
-    const answers = state.answers;
-    const words = state.words;
-    const deck = state.deck;
-    const cards = addIndexToCards(
+    const answers = action.answers;
+    const words = action.words;
+    const deck = action.deck;
+    return addIndexToCards(
         {
             cards: pickCardsForGame( cards, { game, answers, words, deck } )
         }
     );
-
-    const previous = getKnownCards(state).slice(-50).reverse();
-    return Object.assign({}, state, { cards, previous });
 }
 
 const reducer = (state={}, action) => {
@@ -99,7 +96,9 @@ const reducer = (state={}, action) => {
     });
     switch (action.type) {
         case actionTypes.START_ROUND:
-            return Object.assign({}, newRound(state, { game }));
+            return Object.assign({}, state, {
+                cards: newRound(state.cards, action)
+            });
         default:
             break;
     }

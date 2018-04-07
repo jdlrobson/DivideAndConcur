@@ -52,8 +52,12 @@ export function dismountDeck() {
     return { type: actionTypes.DISMOUNT_DECK };
 }
 
-export function startRound( game ) {
-    return { type: actionTypes.START_ROUND, game };
+export function startRound() {
+    return (dispatch, getState) => {
+        const state = getState();
+        const { game, deck, answers, words } = state;
+        dispatch( { type: actionTypes.START_ROUND, deck, game, answers, words } );
+    };
 }
 
 export function endRound( callback ) {
@@ -64,7 +68,7 @@ export function endRound( callback ) {
             dispatch({ type: actionTypes.END_ROUND });
 
             callback(() => {
-                let followup = startRound( state.game );
+                let followup = startRound();
                 const state = getState();
                 if ( !ALLOW_DECK_SELECTION ) {
                     const unknown = getUnKnownWordCount(state.answers);

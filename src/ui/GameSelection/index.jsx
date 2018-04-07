@@ -65,7 +65,7 @@ const mapDispatchToProps = (dispatch, props) => {
     return {
         setGame: (game) => {
             dispatch(switchGame(game));
-            dispatch(startRound(game));
+            dispatch(startRound());
         }
     };
 };

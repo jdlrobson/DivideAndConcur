@@ -81,7 +81,7 @@ export function makeCardsFromCharacters(state, chars, withDecompositions, withBl
 export function dealKnownCards(state) {
     const known = ALL_WORDS.filter(char => knowsWord(getDifficultyRatings(state), char));
     const cards = makeCardsFromCharacters(state, known);
-    return Object.assign({}, state, { cards, previous: [] });
+    return Object.assign({}, state, { cards });
 }
 
 export function shuffle(arr) {
