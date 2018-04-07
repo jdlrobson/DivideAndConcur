@@ -35,8 +35,8 @@ export function deselectUnansweredCards(state) {
     });
 }
 
-export function selectCard(state, character, index) {
-    return updateCardInCards(state.cards, character, index, { isSelected: true, isFlipped: false });
+export function selectCard(cards, character, index) {
+    return updateCardInCards(cards, character, index, { isSelected: true, isFlipped: false });
 }
 export function addIndexToCards(state) {
     return state.cards.map((card, i) => Object.assign({}, card, { index: i }));
@@ -140,8 +140,30 @@ export function flipCards(state) {
     });
 }
 
+// Reducer for when a card is answered
+function actionAnswerCard(state, action) {
+    const char = action.character;
+    let isKnown = true;
+
+    return answerCard(state, char, action.index, isKnown);
+}
+
 export default (state=[], action) => {
     switch (action.type) {
+        case actionTypes.GUESS_FLASHCARD_WRONG:
+        case actionTypes.GUESS_FLASHCARD_RIGHT:
+            return actionAnswerCard(state, action);
+        case actionTypes.CHEAT_ANSWER_ALL:
+            let cards;
+            state.forEach((card) =>
+                cards = actionAnswerCard(state, {
+                    type: action.isCorrect ?
+                        actionTypes.GUESS_FLASHCARD_RIGHT :
+                        actionTypes.GUESS_FLASHCARD_WRONG,
+                    character: card.character
+                })
+            );
+            return selectAndAnswerAll(cards, false);
         case actionTypes.DESELECT_ALL_UNANSWERED_CARDS:
             return deselectUnansweredCards(state);
         case actionTypes.FLIP_CARDS_END:

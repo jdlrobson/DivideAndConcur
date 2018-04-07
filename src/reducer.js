@@ -26,19 +26,8 @@ import _words from './reducers/words';
 import _endRound from './reducers/endRound';
 import actionTypes from './actionTypes';
 
-// Reducer for when a card is answered
-function actionAnswerCard(state, action) {
-    const char = action.character;
-    let isKnown = true;
-
-    const cards = answerCard(state.cards, char, action.index, isKnown);
-    return Object.assign({}, state, {
-        cards
-    });
-}
-
 function revealCardInAction(state, action) {
-    const cards = selectCard(state, action.character, action.index);
+    const cards = selectCard(state.cards, action.character, action.index);
     return Object.assign({}, state, {
         cards
     });
@@ -118,27 +107,12 @@ const reducer = (state={}, action) => {
         endRound
     });
     switch (action.type) {
-        case actionTypes.CHEAT_ANSWER_ALL:
-            action.cards.forEach((card) =>
-                actionAnswerCard(state, {
-                    type: action.isCorrect ?
-                        actionTypes.GUESS_FLASHCARD_RIGHT :
-                        actionTypes.GUESS_FLASHCARD_WRONG,
-                    character: card.character
-                })
-            );
-            return Object.assign({}, state, {
-                cards: selectAndAnswerAll(state.cards, false)
-            });
         case actionTypes.FLIP_CARDS_START:
             return flipCardStart(state, action);
         case actionTypes.FLIP_CARDS_END:
             return Object.assign({}, state, { isFlipped: true, isFlipping: false });
         case actionTypes.START_ROUND:
             return Object.assign({}, newRound(state, { game }));
-        case actionTypes.GUESS_FLASHCARD_WRONG:
-        case actionTypes.GUESS_FLASHCARD_RIGHT:
-            return actionAnswerCard(state, action);
         default:
             break;
     }
@@ -147,9 +121,6 @@ const reducer = (state={}, action) => {
         switch (action.type) {
             case actionTypes.REVEAL_FLASHCARD:
                 return revealedFlashcard(state, Object.assign( action, { game } ));
-            case actionTypes.GUESS_FLASHCARD_WRONG:
-            case actionTypes.GUESS_FLASHCARD_RIGHT:
-                return actionAnswerCard(state, action);
             default:
                 break;
         }
