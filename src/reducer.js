@@ -21,6 +21,7 @@ import _paused from './reducers/paused';
 import _cards from './reducers/cards';
 import _isDirty from './reducers/isDirty';
 import _isBooted from './reducers/isBooted';
+import _words from './reducers/words';
 import actionTypes from './actionTypes';
 
 // Reducer for when a card is answered
@@ -129,12 +130,13 @@ const reducer = (state={}, action) => {
     const isRendered = _isRendered(state.isRendered, action);
     const deck = _deck(state.deck, action);
     const isBooted = _isBooted(state.isBooted, action);
+    const words = _words(state.words, action);
     const answers = _answers(state.answers, action);
     const cards = _cards(state.cards, action);
     const isDirty = _isDirty(state.isDirty, action);
     state = Object.assign({}, state, {
         paused, highlighted, deck, answers, cards,
-        isRendered, isDirty, isBooted
+        isRendered, isDirty, isBooted, words
     });
     switch (action.type) {
         case actionTypes.CHEAT_ANSWER_ALL:
@@ -149,8 +151,6 @@ const reducer = (state={}, action) => {
             return Object.assign({}, state, {
                 cards: selectAndAnswerAll(state, false)
             });
-        case actionTypes.INIT_END:
-            return Object.assign({}, state, { words: action.words });
         case actionTypes.FLIP_CARDS_START:
             return flipCardStart(state, action);
         case actionTypes.FLIP_CARDS_END:
