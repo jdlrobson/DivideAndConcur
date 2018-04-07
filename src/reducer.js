@@ -19,6 +19,7 @@ import _highlighted from './reducers/highlighted';
 import _isRendered from './reducers/isRendered';
 import _paused from './reducers/paused';
 import _cards from './reducers/cards';
+import _isDirty from './reducers/isDirty';
 import actionTypes from './actionTypes';
 
 // Reducer for when a card is answered
@@ -93,13 +94,6 @@ function revealedFlashcard(state, action) {
     }
 }
 
-function requestSave(state) {
-    return Object.assign({}, state, { isDirty: true });
-}
-function saveDone(state) {
-    return Object.assign({}, state, { isDirty: false });
-}
-
 function newRound(state) {
     const game = state.game;
     const answers = state.answers;
@@ -135,7 +129,11 @@ const reducer = (state={}, action) => {
     const deck = _deck(state.deck, action);
     const answers = _answers(state.answers, action);
     const cards = _cards(state.cards, action);
-    state = Object.assign({}, state, { paused, highlighted, deck, answers, cards, isRendered });
+    const isDirty = _isDirty(state.isDirty, action);
+    state = Object.assign({}, state, {
+        paused, highlighted, deck, answers, cards,
+        isRendered, isDirty
+    });
     switch (action.type) {
         case actionTypes.CHEAT_ANSWER_ALL:
             state.cards.forEach((card) =>
@@ -159,14 +157,10 @@ const reducer = (state={}, action) => {
             return Object.assign({}, state, { isFlipped: true, isFlipping: false,
                 cards: flipCards(state) }
             );
-        case actionTypes.SAVE_COMPLETE:
-            return saveDone(state);
         case actionTypes.DESELECT_ALL_UNANSWERED_CARDS:
             return actionDeselectUnansweredCards(state, action);
         case actionTypes.END_ROUND:
-            return requestSave(
-                Object.assign({}, state, { cards: freezeCards(state), endRound: true })
-            );
+            return Object.assign({}, state, { cards: freezeCards(state), endRound: true });
         case actionTypes.START_ROUND:
             return Object.assign({}, newRound(state), { endRound: false });
         case actionTypes.GUESS_FLASHCARD_WRONG:
