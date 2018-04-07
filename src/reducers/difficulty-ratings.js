@@ -40,8 +40,35 @@ export function clean(state, action) {
     return Object.assign({}, state);
 }
 
+function actionAnswerUpdate(answers, action) {
+    const char = action.character;
+
+    switch (action.type) {
+        case actionTypes.GUESS_FLASHCARD_WRONG:
+            return markWordAsDifficult({ answers }, char);
+        case actionTypes.GUESS_FLASHCARD_RIGHT:
+            return markWordAsEasy({ answers }, char);
+        default:
+            return answers;
+    }
+}
+
 export default (state={}, action) => {
     switch (action.type) {
+        case actionTypes.GUESS_FLASHCARD_WRONG:
+        case actionTypes.GUESS_FLASHCARD_RIGHT:
+            return actionAnswerUpdate(state, action);
+        case actionTypes.CHEAT_ANSWER_ALL:
+            let answers;
+            action.cards.forEach((card) =>
+                answers = actionAnswerUpdate(state, {
+                    type: action.isCorrect ?
+                        actionTypes.GUESS_FLASHCARD_RIGHT :
+                        actionTypes.GUESS_FLASHCARD_WRONG,
+                    character: card.character
+                })
+            );
+        return answers;
         case actionTypes.INIT:
             return Object.assign({}, action.userData.answers);
         case actionTypes.INIT_END:

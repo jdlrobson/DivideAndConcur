@@ -29,8 +29,8 @@ export function init(userData) {
     };
 }
 
-export function answerAllCardsInRound( isCorrect ) {
-    return { type: actionTypes.CHEAT_ANSWER_ALL, isCorrect };
+export function answerAllCardsInRound( isCorrect, cards ) {
+    return { type: actionTypes.CHEAT_ANSWER_ALL, isCorrect, cards };
 }
 
 export function flipCardsAfter(milliseconds) {

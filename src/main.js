@@ -33,12 +33,13 @@ const store = createStore(reducer,
            keys.push(ev.key); 
         }
         const code = keys.join('');
+        const cards = store.getState().cards;
         if (code.indexOf('JRG') > -1) {
             keys = [];
-            store.dispatch(answerAllCardsInRound(false));
+            store.dispatch(answerAllCardsInRound(false, cards));
         } else if (code.indexOf('JRH') > -1) {
             keys = [];
-            store.dispatch(answerAllCardsInRound(true));
+            store.dispatch(answerAllCardsInRound(true, cards));
         } else if ( code.indexOf( 'LC' ) > -1 ) {
             const char = code.slice(code.indexOf( 'LC' )+2);
             if ( char ) {

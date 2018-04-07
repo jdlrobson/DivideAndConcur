@@ -30,30 +30,11 @@ import actionTypes from './actionTypes';
 function actionAnswerCard(state, action) {
     const char = action.character;
     let isKnown = true;
-    let answers = actionAnswerUpdate(state.answers, action);
 
     const cards = answerCard(state.cards, char, action.index, isKnown);
     return Object.assign({}, state, {
-        answers,
         cards
     });
-}
-
-function actionAnswerUpdate(answers, action) {
-    const char = action.character;
-
-    switch (action.type) {
-        case actionTypes.GUESS_FLASHCARD_WRONG:
-            answers = markWordAsDifficult({ answers }, char);
-            break;
-        case actionTypes.GUESS_FLASHCARD_RIGHT:
-            answers = markWordAsEasy({ answers }, char);
-            break;
-        default:
-            break;
-    }
-
-    return answers;
 }
 
 function revealCardInAction(state, action) {
@@ -138,7 +119,7 @@ const reducer = (state={}, action) => {
     });
     switch (action.type) {
         case actionTypes.CHEAT_ANSWER_ALL:
-            state.cards.forEach((card) =>
+            action.cards.forEach((card) =>
                 actionAnswerCard(state, {
                     type: action.isCorrect ?
                         actionTypes.GUESS_FLASHCARD_RIGHT :
