@@ -22,13 +22,14 @@ class GameDecompose extends Component {
                 <p>Match the card with its sound!</p>
                 <Card {...card} isLarge isSelected={this.isFinished(props)}
                     pinyin={this.isFinished(props) ? false : card.pinyin} isFrozen debug={false} />
-                {
+                <div className='game-decompose__choices'>{
                     props.cards.slice(1).map((cardProps) => {
                         return <Card {...cardProps} isSmall label={cardProps.pinyin}
                             selectedControls={false}
                             english={false} debug={false} />;
                     })
                 }
+                </div>
                 <div className='game-decompose__end-marker' />
             </div>
         );
