@@ -20,6 +20,8 @@ import _isRendered from './reducers/isRendered';
 import _paused from './reducers/paused';
 import _cards from './reducers/cards';
 import _game from './reducers/game';
+import _isFlipping from './reducers/isFlipping';
+import _isFlipped from './reducers/isFlipped';
 import _isDirty from './reducers/isDirty';
 import _isBooted from './reducers/isBooted';
 import _words from './reducers/words';
@@ -72,21 +74,8 @@ function newRound(state, action) {
         }
     );
 
-    switch (game) {
-        case PINYIN_TO_CHINESE:
-        case ENGLISH_TO_CHINESE:
-        case MATCH_PAIRS:
-            state = Object.assign({}, state, { cards, isFlipped: false });
-            break;
-        default:
-            break;
-    }
     const previous = getKnownCards(state).slice(-50).reverse();
     return Object.assign({}, state, { cards, previous });
-}
-
-function flipCardStart(state, action) {
-    return Object.assign({}, state, { isFlipped: false, isFlipping: true });
 }
 
 const reducer = (state={}, action) => {
@@ -101,16 +90,14 @@ const reducer = (state={}, action) => {
     const isDirty = _isDirty(state.isDirty, action);
     const game = _game(state.game, action);
     const endRound = _endRound(state.endRound, action);
+    const isFlipped = _isFlipped(state.isFlipped, action);
+    const isFlipping = _isFlipping(state.isFlipping, action);
     state = Object.assign({}, state, {
         paused, highlighted, deck, answers, cards,
         isRendered, isDirty, isBooted, words, game,
-        endRound
+        endRound, isFlipping, isFlipped
     });
     switch (action.type) {
-        case actionTypes.FLIP_CARDS_START:
-            return flipCardStart(state, action);
-        case actionTypes.FLIP_CARDS_END:
-            return Object.assign({}, state, { isFlipped: true, isFlipping: false });
         case actionTypes.START_ROUND:
             return Object.assign({}, newRound(state, { game }));
         default:

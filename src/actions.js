@@ -52,18 +52,19 @@ export function dismountDeck() {
     return { type: actionTypes.DISMOUNT_DECK };
 }
 
-export function startRound() {
-    return { type: actionTypes.START_ROUND };
+export function startRound( game ) {
+    return { type: actionTypes.START_ROUND, game };
 }
 
 export function endRound( callback ) {
     callback = callback || setTimeout;
     return (dispatch, getState) => {
-        if (!getState().endRound) {
+        const state = getState();
+        if (!state.endRound) {
             dispatch({ type: actionTypes.END_ROUND });
 
             callback(() => {
-                let followup = startRound();
+                let followup = startRound( state.game );
                 const state = getState();
                 if ( !ALLOW_DECK_SELECTION ) {
                     const unknown = getUnKnownWordCount(state.answers);
