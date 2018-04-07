@@ -160,8 +160,27 @@ function newRound(cards, action) {
     );
 }
 
+function revealCardInAction(cards, action) {
+    return selectCard(cards, action.character, action.index);
+}
+
+function revealedFlashcard(state, action) {
+    if ( action.paused ) {
+        return state;
+    } else if (action.game === MATCH_SOUND) {
+        return revealCardInAction(
+            markCardsAsAnswered({ cards: state }, action.character, action.isKnown),
+            action
+        );
+    }  else {
+        return revealCardInAction(state, action);
+    }
+}
+
 export default (state=[], action) => {
     switch (action.type) {
+        case actionTypes.REVEAL_FLASHCARD:
+            return revealedFlashcard(state, action);
         case actionTypes.START_ROUND:
             return newRound(state, action);
         case actionTypes.GUESS_FLASHCARD_WRONG:

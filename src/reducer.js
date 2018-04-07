@@ -28,10 +28,6 @@ import _words from './reducers/words';
 import _endRound from './reducers/endRound';
 import actionTypes from './actionTypes';
 
-function revealCardInAction(cards, action) {
-    return selectCard(cards, action.character, action.index);
-}
-
 function revealedFlashcard(state, action) {
     if ( action.paused ) {
         return state;
@@ -44,17 +40,10 @@ function revealedFlashcard(state, action) {
                 answers = markWordAsDifficult(state, action.character);
             }
         }
-        // Mark selected card as answered
-        const cards = revealCardInAction(
-            markCardsAsAnswered(state, action.character, action.isKnown),
-            action
-        );
 
-        return Object.assign({}, state, { answers, cards });
-    }  else {
-        return Object.assign({}, state, {
-            cards: revealCardInAction(state.cards, action)
-        } );
+        return Object.assign({}, state, { answers });
+    } else {
+        return state;
     }
 }
 
