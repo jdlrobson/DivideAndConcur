@@ -148,8 +148,22 @@ function actionAnswerCard(state, action) {
     return answerCard(state, char, action.index, isKnown);
 }
 
+function newRound(cards, action) {
+    const game = action.game;
+    const answers = action.answers;
+    const words = action.words;
+    const deck = action.deck;
+    return addIndexToCards(
+        {
+            cards: pickCardsForGame( cards, { game, answers, words, deck } )
+        }
+    );
+}
+
 export default (state=[], action) => {
     switch (action.type) {
+        case actionTypes.START_ROUND:
+            return newRound(state, action);
         case actionTypes.GUESS_FLASHCARD_WRONG:
         case actionTypes.GUESS_FLASHCARD_RIGHT:
             return actionAnswerCard(state, action);

@@ -63,17 +63,7 @@ function revealedFlashcard(state, action) {
     }
 }
 
-function newRound(cards, action) {
-    const game = action.game;
-    const answers = action.answers;
-    const words = action.words;
-    const deck = action.deck;
-    return addIndexToCards(
-        {
-            cards: pickCardsForGame( cards, { game, answers, words, deck } )
-        }
-    );
-}
+
 
 const reducer = (state={}, action) => {
     const highlighted = _highlighted(state.highlighted, action);
@@ -94,14 +84,6 @@ const reducer = (state={}, action) => {
         isRendered, isDirty, isBooted, words, game,
         endRound, isFlipping, isFlipped
     });
-    switch (action.type) {
-        case actionTypes.START_ROUND:
-            return Object.assign({}, state, {
-                cards: newRound(state.cards, action)
-            });
-        default:
-            break;
-    }
     // All these actions are user driven and will not work if paused.
     if (!paused) {
         switch (action.type) {
