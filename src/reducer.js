@@ -28,38 +28,33 @@ import _words from './reducers/words';
 import _endRound from './reducers/endRound';
 import actionTypes from './actionTypes';
 
-function revealCardInAction(state, action) {
-    const cards = selectCard(state.cards, action.character, action.index);
-    return Object.assign({}, state, {
-        cards
-    });
+function revealCardInAction(cards, action) {
+    return selectCard(cards, action.character, action.index);
 }
 
-function revealFlashcardDecompose(state, action) {
-    const card = state.cards[0];
-    const isEnd = getAnsweredCards(state).length === 1;
-    const char = action.character;
-    const isKnown = card.character === char;
-    let answers = getDifficultyRatings(state);
-    let cards = state.cards;
-
-    if (!isEnd) {
-        if (isKnown) {
-            answers = markWordAsEasy(state, char);
-        } else {
-            answers = markWordAsDifficult(state, char);
-        }
-    }
-    // Mark selected card as answered
-    cards = markCardsAsAnswered(state, action.character, isKnown);
-
-    return Object.assign({}, state, { answers, cards });
-}
 function revealedFlashcard(state, action) {
-    if (action.game === MATCH_SOUND) {
-        return revealCardInAction(revealFlashcardDecompose(state, action), action);
+    if ( action.paused ) {
+        return state;
+    } else if (action.game === MATCH_SOUND) {
+        let answers = state.answers;
+        if (!action.isEnd) {
+            if (action.isKnown) {
+                answers = markWordAsEasy(state, action.character);
+            } else {
+                answers = markWordAsDifficult(state, action.character);
+            }
+        }
+        // Mark selected card as answered
+        const cards = revealCardInAction(
+            markCardsAsAnswered(state, action.character, action.isKnown),
+            action
+        );
+
+        return Object.assign({}, state, { answers, cards });
     }  else {
-        return revealCardInAction(state, action);
+        return Object.assign({}, state, {
+            cards: revealCardInAction(state.cards, action)
+        } );
     }
 }
 
@@ -84,14 +79,17 @@ const reducer = (state={}, action) => {
         isRendered, isDirty, isBooted, words, game,
         endRound, isFlipping, isFlipped
     });
-    // All these actions are user driven and will not work if paused.
-    if (!paused) {
-        switch (action.type) {
-            case actionTypes.REVEAL_FLASHCARD:
-                return revealedFlashcard(state, Object.assign( action, { game } ));
-            default:
-                break;
-        }
+    switch (action.type) {
+        case actionTypes.REVEAL_FLASHCARD:
+            const isEnd = getAnsweredCards(state).length === 1;
+            const card = state.cards[0];
+            const char = action.character;
+            const isKnown = card.character === char;
+            return revealedFlashcard(state, Object.assign( action, {
+                game, paused, isEnd, isKnown
+            } ));
+        default:
+            break;
     }
     return state;
 };
