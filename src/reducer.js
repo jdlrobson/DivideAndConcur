@@ -81,13 +81,7 @@ const reducer = (state={}, action) => {
     });
     switch (action.type) {
         case actionTypes.REVEAL_FLASHCARD:
-            const isEnd = getAnsweredCards(state).length === 1;
-            const card = state.cards[0];
-            const char = action.character;
-            const isKnown = card.character === char;
-            return revealedFlashcard(state, Object.assign( action, {
-                game, paused, isEnd, isKnown
-            } ));
+            return revealedFlashcard(state, action);
         default:
             break;
     }

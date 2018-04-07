@@ -1,5 +1,5 @@
 import actionTypes from './actionTypes';
-import { getAllCardsWithUserDifficulty } from './helpers/cards';
+import { getAllCardsWithUserDifficulty, getAnsweredCards } from './helpers/cards';
 import { getKnownWordCount, getUnKnownWordCount } from './helpers/difficulty-ratings';
 import { ALLOW_DECK_SELECTION, DECK_NEW, DECK_UNKNOWN, DECK_KNOWN,
   MATCH_SOUND
@@ -109,9 +109,19 @@ export function saveComplete() {
 }
 
 export function revealFlashcard(character, index) {
-    return { type: actionTypes.REVEAL_FLASHCARD,
-        character,
-        index };
+    return (dispatch, getState) => {
+        const state = getState();
+        const isEnd = getAnsweredCards(state).length === 1;
+        const paused = state.paused;
+        const game = state.game;
+        const isKnown = state.cards[0].character === character;
+        dispatch( {
+            type: actionTypes.REVEAL_FLASHCARD,
+            character,
+            isEnd, isKnown, paused, game,
+            index
+        } );
+    };
 }
 
 export function answerFlashcard(isCorrect, character, index) {
