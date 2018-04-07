@@ -28,27 +28,6 @@ import _words from './reducers/words';
 import _endRound from './reducers/endRound';
 import actionTypes from './actionTypes';
 
-function revealedFlashcard(state, action) {
-    if ( action.paused ) {
-        return state;
-    } else if (action.game === MATCH_SOUND) {
-        let answers = state.answers;
-        if (!action.isEnd) {
-            if (action.isKnown) {
-                answers = markWordAsEasy(state, action.character);
-            } else {
-                answers = markWordAsDifficult(state, action.character);
-            }
-        }
-
-        return Object.assign({}, state, { answers });
-    } else {
-        return state;
-    }
-}
-
-
-
 const reducer = (state={}, action) => {
     const highlighted = _highlighted(state.highlighted, action);
     const paused = _paused(state.paused, action);
@@ -63,18 +42,11 @@ const reducer = (state={}, action) => {
     const endRound = _endRound(state.endRound, action);
     const isFlipped = _isFlipped(state.isFlipped, action);
     const isFlipping = _isFlipping(state.isFlipping, action);
-    state = Object.assign({}, state, {
+    return Object.assign({}, state, {
         paused, highlighted, deck, answers, cards,
         isRendered, isDirty, isBooted, words, game,
         endRound, isFlipping, isFlipped
     });
-    switch (action.type) {
-        case actionTypes.REVEAL_FLASHCARD:
-            return revealedFlashcard(state, action);
-        default:
-            break;
-    }
-    return state;
 };
 
 const reducerWithPerf = function(state, action) {

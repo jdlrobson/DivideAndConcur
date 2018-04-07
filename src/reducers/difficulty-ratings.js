@@ -1,4 +1,5 @@
 import actionTypes from './../actionTypes';
+import { MATCH_SOUND } from './../constants';
 import { getDifficultyRatings } from './../helpers/difficulty-ratings';
 import { getUnknownCards } from './cards';
 
@@ -53,8 +54,26 @@ function actionAnswerUpdate(answers, action) {
     }
 }
 
+function revealedFlashcard(state, action) {
+    if ( !action.paused && action.game === MATCH_SOUND) {
+        if (!action.isEnd) {
+            if (action.isKnown) {
+                return markWordAsEasy({ answers: state }, action.character);
+            } else {
+                return markWordAsDifficult({ answers: state }, action.character);
+            }
+        } else {
+            return state;
+        }
+    } else {
+        return state;
+    }
+}
+
 export default (state={}, action) => {
     switch (action.type) {
+        case actionTypes.REVEAL_FLASHCARD:
+            return revealedFlashcard(state, action);
         case actionTypes.GUESS_FLASHCARD_WRONG:
         case actionTypes.GUESS_FLASHCARD_RIGHT:
             return actionAnswerUpdate(state, action);
