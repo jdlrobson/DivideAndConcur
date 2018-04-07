@@ -23,6 +23,7 @@ import _game from './reducers/game';
 import _isDirty from './reducers/isDirty';
 import _isBooted from './reducers/isBooted';
 import _words from './reducers/words';
+import _endRound from './reducers/endRound';
 import actionTypes from './actionTypes';
 
 // Reducer for when a card is answered
@@ -130,9 +131,11 @@ const reducer = (state={}, action) => {
     const cards = _cards(state.cards, action);
     const isDirty = _isDirty(state.isDirty, action);
     const game = _game(state.game, action);
+    const endRound = _endRound(state.endRound, action);
     state = Object.assign({}, state, {
         paused, highlighted, deck, answers, cards,
-        isRendered, isDirty, isBooted, words, game
+        isRendered, isDirty, isBooted, words, game,
+        endRound
     });
     switch (action.type) {
         case actionTypes.CHEAT_ANSWER_ALL:
@@ -156,9 +159,9 @@ const reducer = (state={}, action) => {
         case actionTypes.DESELECT_ALL_UNANSWERED_CARDS:
             return actionDeselectUnansweredCards(state, action);
         case actionTypes.END_ROUND:
-            return Object.assign({}, state, { cards: freezeCards(state), endRound: true });
+            return Object.assign({}, state, { cards: freezeCards(state) });
         case actionTypes.START_ROUND:
-            return Object.assign({}, newRound(state, { game }), { endRound: false });
+            return Object.assign({}, newRound(state, { game }));
         case actionTypes.GUESS_FLASHCARD_WRONG:
         case actionTypes.GUESS_FLASHCARD_RIGHT:
             return actionAnswerCard(state, action);
