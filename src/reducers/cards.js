@@ -29,8 +29,7 @@ export function answerCard(state, character, index, isKnown) {
 }
 
 export function deselectUnansweredCards(state) {
-    const cards = state.cards;
-    return cards.map((card, i) => {
+    return state.map((card, i) => {
         return card.isSelected && !card.isAnswered ?
             Object.assign({}, card,  { isSelected: false }) : card;
     });
@@ -41,10 +40,6 @@ export function selectCard(state, character, index) {
 }
 export function addIndexToCards(state) {
     return state.cards.map((card, i) => Object.assign({}, card, { index: i }));
-}
-
-export function freezeCards(state) {
-    return freezeCardsHelper(state.cards);
 }
 
 export function getUnknownCards(state, total) {
@@ -136,7 +131,7 @@ export function shuffleCards(state) {
 }
 
 export function flipCards(state) {
-    return state.cards.map(card => {
+    return state.map(card => {
         if ( card.isAnswered ) {
             return card;
         } else {
@@ -147,6 +142,12 @@ export function flipCards(state) {
 
 export default (state=[], action) => {
     switch (action.type) {
+        case actionTypes.DESELECT_ALL_UNANSWERED_CARDS:
+            return deselectUnansweredCards(state);
+        case actionTypes.FLIP_CARDS_END:
+            return flipCards(state);
+        case actionTypes.END_ROUND:
+            return freezeCardsHelper( state );
         case actionTypes.INIT_END:
             // Load known cards into cache
             const words = action.words;

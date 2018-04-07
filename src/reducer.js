@@ -9,7 +9,7 @@ import { shuffle, getSelectedUnansweredCards, getAnsweredCards,
     makeCardsFromCharacters  } from './helpers/cards';
 import { getUnknownCards, getKnownCards, getHardCards,
     flipCards, cloneCards, answerCard,
-    freezeCards, selectAndAnswerAll,
+    selectAndAnswerAll,
     pickCardsForGame,
     selectCard, deselectUnansweredCards, markCardsAsAnswered,
     cutCardDeck, shuffleCards, addIndexToCards } from './reducers/cards';
@@ -48,12 +48,6 @@ function actionAnswerCard(state, action) {
     return Object.assign({}, state, {
         answers,
         cards
-    });
-}
-
-function actionDeselectUnansweredCards(state) {
-    return Object.assign({}, state, {
-        cards: deselectUnansweredCards(state)
     });
 }
 
@@ -153,13 +147,7 @@ const reducer = (state={}, action) => {
         case actionTypes.FLIP_CARDS_START:
             return flipCardStart(state, action);
         case actionTypes.FLIP_CARDS_END:
-            return Object.assign({}, state, { isFlipped: true, isFlipping: false,
-                cards: flipCards(state) }
-            );
-        case actionTypes.DESELECT_ALL_UNANSWERED_CARDS:
-            return actionDeselectUnansweredCards(state, action);
-        case actionTypes.END_ROUND:
-            return Object.assign({}, state, { cards: freezeCards(state) });
+            return Object.assign({}, state, { isFlipped: true, isFlipping: false });
         case actionTypes.START_ROUND:
             return Object.assign({}, newRound(state, { game }));
         case actionTypes.GUESS_FLASHCARD_WRONG:
