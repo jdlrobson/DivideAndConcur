@@ -19,6 +19,10 @@ body {
   margin: 0px 0px 10px;
 }
 
+.chrome__content {
+  height: 85vh;
+}
+
 .chrome__header__home__logo {
   vertical-align: middle;
 }
