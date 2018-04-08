@@ -39,7 +39,7 @@
     "eslint-plugin-react": "^7.6.1",
     "hanzi": "^2.1.0",
     "isomorphic-fetch": "^2.2.1",
-    "parcel-bundler": "^1.6.2",
+    "parcel-bundler": "^1.7.0",
     "preact": "^8.2.6",
     "preact-jsx-chai": "^2.2.1",
     "redux-thunk": "^2.2.0",
