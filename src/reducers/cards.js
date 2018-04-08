@@ -48,7 +48,8 @@ export function getUnknownCards(state, total) {
         isCardInGame(word)
     );
 
-    return cards.slice(0, total);
+    return cards.slice(0, total)
+        .map(word => mapCard(state, word.character));
 }
 
 export function cloneCards(state) {
