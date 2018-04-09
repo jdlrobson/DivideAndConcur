@@ -7,7 +7,7 @@ import GameMatchPairs from './GameMatchPairs';
 import ExhaustedDeck from './ExhaustedDeck';
 import GameSelection from './GameSelection';
 import DeckSelection from './DeckSelection';
-import GameMatchSound from './GameMatchSound';
+import GameOneInFour from './GameOneInFour';
 import ProgressBar from './ProgressBar';
 import CharacterOverlay from './CharacterOverlay';
 import Button from './Button';
@@ -15,7 +15,7 @@ import { getKnownWordCount, getUnKnownWordCount } from './../helpers/difficulty-
 import { dismountCurrentGame, dismountDeck } from './../actions';
 import { MATCH_PAIRS, REVISE,
     ENGLISH_TO_CHINESE, PINYIN_TO_CHINESE,
-    MATCH_SOUND,
+    MATCH_SOUND, MATCH_DEFINITION,
     DECK_NEW,
     DECK_UNKNOWN,
     ALLOW_DECK_SELECTION
@@ -64,8 +64,8 @@ class App extends Component {
                         && <GameMatchPairs /> }
                     { (game === PINYIN_TO_CHINESE) && <GameMatchPairs mode={2} /> }
                     { (game === ENGLISH_TO_CHINESE) && <GameMatchPairs mode={1} /> }
-                    { (game === MATCH_SOUND)
-                        && <GameMatchSound /> }
+                    { (game === MATCH_SOUND || game === MATCH_DEFINITION)
+                        && <GameOneInFour /> }
                 </div>
             );
         } else if (game && isDeckEmpty) {

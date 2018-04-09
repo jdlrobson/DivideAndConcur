@@ -1,11 +1,12 @@
 /** @jsx h */
 import { Component, h } from 'preact';
 import Card from './../Card';
+import { MATCH_DEFINITION } from './../../constants';
 import { connect } from 'preact-redux';
 import { endRound } from './../../actions';
 import './styles.less';
 
-class GameDecompose extends Component {
+class GameOneInFour extends Component {
     componentWillUpdate(props) {
     // if all cards frozen and answered.. then trigger end round
         if (props.onFinished && this.isFinished(props)) {
@@ -17,6 +18,8 @@ class GameDecompose extends Component {
     }
     render(props) {
         const card = props.cards[0];
+        const mode = props.mode;
+
         return (
             <div className='game-decompose'>
                 <p>Match the card with its sound!</p>
@@ -24,9 +27,12 @@ class GameDecompose extends Component {
                     pinyin={this.isFinished(props) ? false : card.pinyin} isFrozen debug={false} />
                 <div className='game-decompose__choices'>{
                     props.cards.slice(1).map((cardProps) => {
-                        return <Card {...cardProps} isSmall label={cardProps.pinyin}
+                        const modeBasedCardData = mode === 0 ?
+                            { english: false, label: cardProps.pinyin } :
+                            { pinyin: false, label: cardProps.english };
+                        return <Card {...cardProps} isSmall
                             selectedControls={false}
-                            english={false} debug={false} />;
+                            {...modeBasedCardData} debug={false} />;
                     })
                 }
                 </div>
@@ -48,10 +54,12 @@ const mapStateToProps = (state, props) => {
     const {
         card,
         goal,
-        cards
+        game,
+        cards,
     } = state;
+    const mode = game === MATCH_DEFINITION ? 1 : 0;
 
-    return Object.assign({}, props, { cards, card, goal });
+    return Object.assign({}, props, { cards, card, goal, mode });
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(GameDecompose);
+export default connect(mapStateToProps, mapDispatchToProps)(GameOneInFour);
