@@ -1,10 +1,12 @@
 import actionTypes from './../actionTypes';
 import { MATCH_SOUND, MATCH_PAIRS, REVISE,
     ENGLISH_TO_CHINESE, PINYIN_TO_CHINESE,
+    MATCH_DEFINITION,
     DECK_UNKNOWN, DECK_NEW, DECK_KNOWN
 } from './../constants';
 import { mapCard, shuffle, isCardInGame, freezeCards as freezeCardsHelper } from './../helpers/cards';
 import { isTooEasy, knowsWord, getDifficultyRatings } from './../helpers/difficulty-ratings';
+import { isMatchOneGame } from './../helpers/game';
 
 function updateCardInCards(cards, character, index, props) {
     return cards.map((card, i) => {
@@ -98,6 +100,7 @@ function chooseDeck( _cards, action ) {
 export function pickCardsForGame( _cards, action ) {
     let cards = chooseDeck( _cards, action );
     switch (action.game) {
+        case MATCH_DEFINITION:
         case MATCH_SOUND:
             // 4 cards will be used in the game.
             cards = cards.slice(0, 4);
@@ -168,7 +171,7 @@ function revealCardInAction(cards, action) {
 function revealedFlashcard(state, action) {
     if ( action.paused ) {
         return state;
-    } else if (action.game === MATCH_SOUND) {
+    } else if (isMatchOneGame(action.game)) {
         return revealCardInAction(
             markCardsAsAnswered({ cards: state }, action.character, action.isKnown),
             action

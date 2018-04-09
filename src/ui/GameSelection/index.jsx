@@ -4,6 +4,7 @@ import { connect } from 'preact-redux';
 import { switchGame, startRound } from './../../actions';
 import { MATCH_PAIRS, REVISE,
     ENGLISH_TO_CHINESE, PINYIN_TO_CHINESE, MATCH_SOUND,
+    MATCH_DEFINITION,
     DECK_NEW, DECK_KNOWN, DECK_UNKNOWN,
     ALLOW_DECK_SELECTION
 } from './../../constants';
@@ -16,7 +17,8 @@ class GameSelection extends Component {
         if (!ALLOW_DECK_SELECTION) {
             const props = this.props;
             const games = [
-                MATCH_SOUND, ENGLISH_TO_CHINESE, PINYIN_TO_CHINESE
+                MATCH_SOUND, ENGLISH_TO_CHINESE, PINYIN_TO_CHINESE,
+                MATCH_DEFINITION
             ];
             if (props.deck === DECK_NEW) {
                 props.setGame(MATCH_PAIRS);

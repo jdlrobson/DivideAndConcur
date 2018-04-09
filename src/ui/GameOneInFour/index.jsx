@@ -24,12 +24,12 @@ class GameOneInFour extends Component {
             <div className='game-decompose'>
                 <p>Match the card with its sound!</p>
                 <Card {...card} isLarge isSelected={this.isFinished(props)}
-                    pinyin={this.isFinished(props) ? false : card.pinyin} isFrozen debug={false} />
+                    isFrozen debug={false} />
                 <div className='game-decompose__choices'>{
                     props.cards.slice(1).map((cardProps) => {
                         const modeBasedCardData = mode === 0 ?
                             { english: false, label: cardProps.pinyin } :
-                            { pinyin: false, label: cardProps.english };
+                            { pinyin: false, label: cardProps.english, isWide: true };
                         return <Card {...cardProps} isSmall
                             selectedControls={false}
                             {...modeBasedCardData} debug={false} />;

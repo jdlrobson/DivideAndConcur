@@ -5,6 +5,7 @@ import { ALLOW_DECK_SELECTION, DECK_NEW, DECK_UNKNOWN, DECK_KNOWN,
   MATCH_SOUND
 } from './constants';
 import { random } from './utils';
+import { isMatchOneGame } from './helpers/game';
 
 export function renderComplete() {
     return { type: actionTypes.RENDER_COMPLETE };
@@ -84,7 +85,7 @@ export function endRound( callback ) {
                         } else if ( random( [1, 2] ) === 2 ) {
                             followup = dismountDeck();
                         }
-                    } else if ( state.game === MATCH_SOUND ) {
+                    } else if ( isMatchOneGame(state.game) ) {
                         // Since match sound is a short game only change the other games in
                         // 1 in 10 chance
                         if ( random( [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] ) === 5 ) {
