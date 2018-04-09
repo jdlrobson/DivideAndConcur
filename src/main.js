@@ -89,7 +89,7 @@ const store = createStore(reducer,
     const boot = () => {
         setTimeout(() => {
             store.dispatch(init(userData))
-        }, 1000);
+        }, 3000);
     };
     loadImages([img,logo]).then(boot);
 }());
