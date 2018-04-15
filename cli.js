@@ -7,6 +7,7 @@ const strokeCount = require('./strokeCount' );
 var hanzi = require("hanzi");
 var hanziLoaded = false;
 const blurb = require('./data/blurb.js');
+const pinyin = require( 'chinese-to-pinyin' );
 
 function addDictionaryItem() {
 	return new Promise( ( resolve ) => {
@@ -210,10 +211,23 @@ function clean() {
 		if ( eng === '?' ) {
 			console.log('Remove from dictionary:', chinese);
 			dict.removeWord(chinese);
+		} else if ( eng.match(/;[^ ]/) ) {
+			const newEng = eng.replace(/;([^ ])/g, '; $1');
+			console.log('Add spaces after ; in ' + newEng);
+			dict.saveWord(chinese, newEng);
+		}
+		// update pinyin for one characters
+		if ( Array.from(chinese).length === 1 ) {
+			const p = dict.getPinyin(chinese);
+			if ( !p ) {
+				const _pinyin = pinyin(chinese);
+				dict.savePinyin(chinese, _pinyin);
+				console.log('Add pinyin', chinese, '=', _pinyin);
+			}
 		}
 	})
 	dict.missing().forEach((chinese)=> {
-		var english = getEnglish(chinese).slice(0, 3).join(';');
+		var english = getEnglish(chinese).slice(0, 3).join('; ');
 		if ( english && english !== '?' ) {
 			dict.saveWord( chinese, english );
 			console.log('added', chinese, english);
@@ -334,7 +348,10 @@ function menu() {
 					const missing = dict.missing();
 					console.log( `There are ${missing.length} words missing definitions without decompositions` );
 					console.log( missing.sort(()=>Math.random() > 0.5 ? -1 : 1 ).join('   ' ) );
-					menu();
+					menu().then(()=> {
+						dict.reload();
+						return dict.save();
+					} );
 					break;
 				case 9:
 					changeDifficulty(1).then(()=>menu());

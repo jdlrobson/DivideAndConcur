@@ -3,6 +3,7 @@ var fs = require('fs');
 var words = {};
 var difficulty = {};
 var decompositions = {};
+var pinyin = {};
 const DICTIONARY_FILE = './data/dictionary.json';
 const DictionaryUtils = require( './DictionaryUtils' );
 
@@ -41,7 +42,7 @@ function getWords(wordLength, difficultyLevel, max) {
 }
 
 function reload() {
-	utils = new DictionaryUtils( words, decompositions, difficulty );
+	utils = new DictionaryUtils( words, decompositions, difficulty, pinyin );
 }
 
 function load() {
@@ -54,6 +55,7 @@ function load() {
 				words = data.words;
 				decompositions = data.decompositions;
 				difficulty = data.difficulty || {};
+				pinyin = data.pinyin || {};
 			} else {
 				words = data;
 			}
@@ -69,7 +71,7 @@ function save() {
 		reload();
 		const modified = new Date();
 		fs.writeFile(DICTIONARY_FILE,
-			JSON.stringify({ words, decompositions, difficulty, modified }),
+			JSON.stringify({ words, decompositions, difficulty, modified, pinyin }),
 			function( err ) {
 				if ( !err ) {
 					resolve();
@@ -134,13 +136,19 @@ function missing() {
 function getWordLength(w) {
 	return utils.getWordLength(w);
 }
+function savePinyin(word, pin) {
+	pinyin[word] = pin;
+}
+
 module.exports = {
 	missing,
 	getWordLength,
 	getPinyin,
 	all,
+	reload,
 	usedBy,
 	removeWord,
+	savePinyin,
 	getDecompositions: getDecompositions,
 	decompose: decompose,
 	rateWord: rateWord,

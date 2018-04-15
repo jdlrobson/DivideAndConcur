@@ -1,10 +1,8 @@
-var pinyin = require( 'chinese-to-pinyin' );
-
-function DictionaryUtils( words, decompositions, difficulties ) {
+function DictionaryUtils( words, decompositions, difficulties, pinyin = {} ) {
   this.words = words;
   this.decompositions = decompositions;
   this.difficulties = difficulties;
-  this.pinyin = {};
+  this.pinyin = pinyin;
   // Provide definitions for pinyin not covered inside chinese-to-pinyin
   this.pinyin['𥫗'] = 'shì';
   this.levelCache = {};
@@ -21,13 +19,7 @@ DictionaryUtils.prototype = {
       .filter((word) => ( ( !this.words[word] || this.words[word] === '?' ) || !this.words[word] ));
   },
   getPinyin: function ( word ) {
-    if ( this.pinyin[word] ) {
-      return this.pinyin[word];
-    } else {
-      const _pinyin = pinyin(word);
-      this.pinyin[word] = _pinyin;
-      return _pinyin;
-    }
+    return Array.from(word).map((w) => this.pinyin[w] || '').join( ' ' );
   },
   getWord: function ( word ) {
     return this.words[word];
