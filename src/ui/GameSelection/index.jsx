@@ -17,8 +17,10 @@ class GameSelection extends Component {
         if (!ALLOW_DECK_SELECTION) {
             const props = this.props;
             const games = [
-                MATCH_SOUND, ENGLISH_TO_CHINESE, PINYIN_TO_CHINESE,
-                MATCH_DEFINITION
+                ENGLISH_TO_CHINESE, PINYIN_TO_CHINESE,
+                // More chances of playing the quicker games
+                MATCH_DEFINITION, MATCH_DEFINITION, MATCH_DEFINITION,
+                MATCH_SOUND, MATCH_SOUND, MATCH_SOUND
             ];
             if (props.deck === DECK_NEW) {
                 props.setGame(MATCH_PAIRS);
