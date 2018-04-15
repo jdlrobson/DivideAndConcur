@@ -14,7 +14,7 @@ class GameMatchPairs extends Component {
     componentDidMount() {
         if (!this.props.isFlipped) {
             this.props.onStart();
-            this.setState( { numFlips: 1 })
+            this.setState({ numFlips: 1 });
         }
     }
     componentDidUpdate() {
@@ -36,7 +36,7 @@ class GameMatchPairs extends Component {
     checkForFlip(props) {
         const selectedCards = this.getSelectedCards(props);
         if (selectedCards.length === 2) {
-            this.setState( { numFlips: this.state.numFlips + 1 })
+            this.setState({ numFlips: this.state.numFlips + 1 });
             if (selectedCards[0].character === selectedCards[1].character) {
                 this.props.onCorrect(selectedCards[0].character);
             } else if (this.props.isFlipped) {
@@ -51,9 +51,8 @@ class GameMatchPairs extends Component {
             'Flipping soon!',
             'Match the pairs!'
         ];
-        const incorrectMsg = '不幸!';
         let msg;
-        if ( this.state.numFlips > 1 ) {
+        if (this.state.numFlips > 1) {
             msg = props.isFlipped ? flipMsgs[1] : '不幸!';
         } else {
             msg = props.isFlipped ? flipMsgs[1] : flipMsgs[0];

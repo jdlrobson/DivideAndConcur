@@ -22,7 +22,7 @@ class GameOneInFour extends Component {
 
         return (<div className='game-one-four'>
             <p>Match the cards</p>
-            <div className="game-one-four__cards">
+            <div className='game-one-four__cards'>
                 <Card {...card} isLarge isSelected={this.isFinished(props)}
                     isFrozen debug={false} />
                 <div className='game-one-four__choices'>{
@@ -31,7 +31,7 @@ class GameOneInFour extends Component {
                             { english: false, label: cardProps.pinyin } :
                             { pinyin: false, label: cardProps.english, isWide: true };
                         return <Card {...cardProps} isSmall
-                            className="game-one-four__choices__card"
+                            className='game-one-four__choices__card'
                             selectedControls={false} hideDifficulty={true}
                             {...modeBasedCardData} debug={false} />;
                     })
