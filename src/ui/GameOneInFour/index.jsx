@@ -32,7 +32,7 @@ class GameOneInFour extends Component {
                             { pinyin: false, label: cardProps.english, isWide: true };
                         return <Card {...cardProps} isSmall
                             className="game-one-four__choices__card"
-                            selectedControls={false}
+                            selectedControls={false} hideDifficulty={true}
                             {...modeBasedCardData} debug={false} />;
                     })
                 }

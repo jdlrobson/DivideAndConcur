@@ -95,14 +95,13 @@ class FlashCard extends Component {
             dLevel = -dLevel;
         }
 
-        const difficultyBar = props.debug ? (
+        const difficultyBar =  (
             <div className={className(BLOCK_NAME, 'difficulty-bar')}>
-                {
+                { props.hideDifficulty ? null :
                     new Array(dLevel).fill((<div className={isEasy ? 'easy' : ''} />))
                 }
-                { props.level }
             </div>
-        ) : [];
+        );
 
         const translations = [
             <div key='lang' className={className(BLOCK_NAME, 'english')}
@@ -135,6 +134,9 @@ class FlashCard extends Component {
                     className={className(BLOCK_NAME, 'label', labelModifiers)}
                 >{label}</div>
                 {components}
+                <span className="card__debug">
+                { props.debug ? props.level : null }
+                </span>
             </Card>
         );
     }
