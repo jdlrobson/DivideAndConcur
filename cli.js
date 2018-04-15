@@ -399,9 +399,7 @@ function rateWordsDifficultyByStrokeCount(words) {
 	return new Promise((resolve) => {
 		strokeCount(words).then((counts) => {
 			Object.keys(counts).forEach((key) => {
-				if ( !dict.getDifficultyRating(key) ) {
-					dict.rateWord(key, counts[key]);
-				}
+				dict.rateWord(key, counts[key]);
 			});
 			resolve();
 		});
