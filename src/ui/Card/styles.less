@@ -9,7 +9,7 @@
   height: @cardSize;
   background: @someday-orange;
   float: left;
-  margin-right: 10px;
+  margin-right: 5px;
   text-align: center;
   position: relative;
   font-size: 0.8em;
@@ -52,6 +52,7 @@
   background: #ccc;
   /* for firefox 31 */
   transform: rotateY(0deg);
+  line-height: 1.3;
 }
 
 .card--flipped {
@@ -88,6 +89,10 @@
   float: left;
   height: 10px;
   width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+
   &:after {
     content: "";
     display: block;
@@ -99,7 +104,7 @@
     float: left;
     margin-right: @block-margin-right;
     width: @difficultyBlockSize - @block-margin-right;
-    height: 10px;
+    height: 3px;
     background-color: red;
     &.easy {
       background-color: green;
@@ -136,6 +141,7 @@
 
 .card__label--custom {
   font-size: 1em;
+  line-height: 4em;
   &.card__label--long {
     font-size: 0.8em;
   }

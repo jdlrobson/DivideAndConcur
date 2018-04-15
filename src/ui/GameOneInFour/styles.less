@@ -1,15 +1,21 @@
 @import './../Card/variables.less';
-.game-decompose__end-marker {
+.game-one-fourgame-one-four__end-marker {
   clear: both;
 }
 
-.game-decompose__choices {
+.game-one-four__choices {
 	width: (@cardSizeSmall * 2) + 10px;
 	float: left;
 }
 
+.game-one-four__cards {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
 @media all and (min-width: 500px) {
-	.game-decompose__choices {
+	.game-one-four__choices {
 		width: ((@cardSizeSmall * 2) * 2) + 20px;
 	}
 }

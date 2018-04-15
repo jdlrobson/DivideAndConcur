@@ -20,7 +20,7 @@ body {
 }
 
 .chrome__content {
-  height: 85vh;
+  min-height: 80vh;
 }
 
 .chrome__header__home__logo {

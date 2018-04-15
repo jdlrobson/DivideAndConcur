@@ -20,25 +20,26 @@ class GameOneInFour extends Component {
         const card = props.cards[0];
         const mode = props.mode;
 
-        return (
-            <div className='game-decompose'>
-                <p>Match the card with its sound!</p>
+        return (<div className='game-one-four'>
+            <p>Match the cards</p>
+            <div className="game-one-four__cards">
                 <Card {...card} isLarge isSelected={this.isFinished(props)}
                     isFrozen debug={false} />
-                <div className='game-decompose__choices'>{
+                <div className='game-one-four__choices'>{
                     props.cards.slice(1).map((cardProps) => {
                         const modeBasedCardData = mode === 0 ?
                             { english: false, label: cardProps.pinyin } :
                             { pinyin: false, label: cardProps.english, isWide: true };
                         return <Card {...cardProps} isSmall
+                            className="game-one-four__choices__card"
                             selectedControls={false}
                             {...modeBasedCardData} debug={false} />;
                     })
                 }
                 </div>
-                <div className='game-decompose__end-marker' />
             </div>
-        );
+            <div className='game-one-four__end-marker' />
+        </div>);
     }
 }
 
