@@ -74,14 +74,20 @@ DictionaryUtils.prototype = {
     return forWordAlone ? thisWord : Math.max( thisWord, combinedDifficulties );
   },
   getWordLength: function ( word ) {
-    var strLen = word.length;
-    if ( strLen === 1 ) {
-      // returning 1 nearly all the time
-      return !this.decompositions[word] ? 0 : this.decompose(word, true).length;
+    const decompose = this.decompose.bind(this);
+    const chars = Array.from(word);
+    const len = chars.
+        map(
+          (word) => decompose(word, true).
+            filter((char) => char !== word )
+        ).
+        reduce((acc, decompositions) => {
+          return decompositions.length + acc;
+        }, 0 );
+    if ( chars.length > 1 && len === 0 ) {
+      return 1;
     } else {
-      return Array.from(word).
-        filter((char) => char !== word ).
-        reduce((acc, char) => this.getWordLength(char) + acc + strLen, 0 );
+      return len;
     }
   },
   /**
@@ -114,7 +120,7 @@ DictionaryUtils.prototype = {
       } );
   },
   decompose: function( word, isRecursive ) {
-    if ( word.length > 1 && !isRecursive ) {
+    if ( Array.from(word).length > 1 && !isRecursive ) {
       return word.split('');
     }
     var decompose = this.decompose.bind( this );
@@ -131,8 +137,8 @@ DictionaryUtils.prototype = {
         // this radical itself is composed of different parts
         Array.from( decomp ).forEach((decomposedRadical) => {
           if ( decomposedRadical !== word ) {
-            var _decomposition = decompose( decomposedRadical );
-            parts = parts.concat( decompose( decomposedRadical ) );
+            var _decomposition = decompose( decomposedRadical, true );
+            parts = parts.concat( _decomposition );
           } else {
             console.log('warning ' + word + ' decomposes to nothing or itself')
           }
