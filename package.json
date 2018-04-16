@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "precommit": "npm run fixlint && npm run node:test",
     "start": "parcel index.html",
     "lint:ui": "eslint src/ui/**/*.jsx",
     "lint": "eslint \"src/**/*.js[x]\" \"tests/**\"",
@@ -38,6 +39,7 @@
     "eslint-plugin-json": "^1.2.0",
     "eslint-plugin-react": "^7.6.1",
     "hanzi": "^2.1.0",
+    "husky": "^0.14.3",
     "isomorphic-fetch": "^2.2.1",
     "parcel-bundler": "^1.7.0",
     "preact": "^8.2.6",
