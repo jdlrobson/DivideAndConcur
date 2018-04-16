@@ -1,6 +1,7 @@
 import { clean,
-    markWordAsDifficult, markWordAsEasy
+    markWordAsDifficult, markWordAsEasy, revealedFlashcard
 } from './../../src/reducers/difficulty-ratings';
+import { MATCH_DEFINITION } from './../../src/constants';
 import assert from 'assert';
 
 describe('Reducer: difficulty-ratings', () => {
@@ -48,5 +49,12 @@ describe('Reducer: difficulty-ratings', () => {
     it('markWordAsEasy (capped)', () => {
         const ratings = markWordAsEasy({ answers: { B: -5 } }, 'B');
         assert.ok(ratings.B === -5, 'a rating cannot go lower than -5');
+    });
+    it('revealedFlashcard', () => {
+        const ratings = revealedFlashcard(
+            { B: -5 },
+            { character: 'B', game: MATCH_DEFINITION, isKnown: false }
+        );
+        assert.ok(ratings.B === -4, 'rating updated');
     });
 });

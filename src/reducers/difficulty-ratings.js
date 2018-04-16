@@ -1,7 +1,7 @@
 import actionTypes from './../actionTypes';
-import { MATCH_SOUND } from './../constants';
 import { getDifficultyRatings } from './../helpers/difficulty-ratings';
 import { getUnknownCards } from './cards';
+import { isMatchOneGame } from './../helpers/game';
 
 export function markWordAsEasy(state, char) {
     const difficultyRatings = getDifficultyRatings(state);
@@ -58,8 +58,8 @@ function actionAnswerUpdate(answers, action) {
     }
 }
 
-function revealedFlashcard(state, action) {
-    if ( !action.paused && action.game === MATCH_SOUND) {
+export function revealedFlashcard(state, action) {
+    if ( !action.paused && isMatchOneGame(action.game)) {
         if (!action.isEnd) {
             if (action.isKnown) {
                 return markWordAsEasy({ answers: state }, action.character);
