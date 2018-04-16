@@ -183,6 +183,25 @@ function getEnglish(char) {
 
 function clean() {
 	loadHanzi();
+	const decomps = dict.getDecompositions();
+	Object.keys( decomps ).map((key) => {
+		const decomp = decomps[key];
+		if ( decomp.indexOf( '?' ) > -1 ) {
+			console.log(`Warning: ${key} has ? decomposition.`, decomp);
+		}
+		decomp.forEach((char) => {
+			Array.from(char).forEach((chinese)=> {
+				const p = dict.getPinyin(chinese);
+				if ( !p ) {
+					const _pinyin = pinyin(chinese);
+					if ( _pinyin ) {
+						dict.savePinyin(chinese, _pinyin);
+						console.log('Add pinyin', chinese, '=', _pinyin);
+					}
+				}
+			});
+		});
+	});
 	dict.all().forEach((char) => {
 		const decomp = dict.decompose(char);
 		if ( decomp.indexOf( '?' ) > -1 ) {
@@ -217,14 +236,14 @@ function clean() {
 			dict.saveWord(chinese, newEng);
 		}
 		// update pinyin for one characters
-		if ( Array.from(chinese).length === 1 ) {
-			const p = dict.getPinyin(chinese);
+		Array.from(chinese).forEach((char) => {
+			const p = dict.getPinyin(char);
 			if ( !p ) {
-				const _pinyin = pinyin(chinese);
-				dict.savePinyin(chinese, _pinyin);
-				console.log('Add pinyin', chinese, '=', _pinyin);
+				const _pinyin = pinyin(char);
+				dict.savePinyin(char, _pinyin);
+				console.log('Add pinyin', char, '=', _pinyin);
 			}
-		}
+		});
 	})
 	dict.missing().forEach((chinese)=> {
 		var english = getEnglish(chinese).slice(0, 3).join('; ');
