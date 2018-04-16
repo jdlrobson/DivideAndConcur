@@ -134,8 +134,8 @@ class FlashCard extends Component {
                     className={className(BLOCK_NAME, 'label', labelModifiers)}
                 >{label}</div>
                 {components}
-                <span className="card__debug">
-                { props.debug ? props.level : null }
+                <span className='card__debug'>
+                    { props.debug ? props.level : null }
                 </span>
             </Card>
         );

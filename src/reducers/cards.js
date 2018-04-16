@@ -131,7 +131,13 @@ export function cutCardDeck(state, total) {
 }
 
 export function shuffleCards(state) {
-    return shuffle(state.cards);
+    return addIndexToCards({ cards: shuffle(state.cards) });
+}
+
+export function resetCards(cards) {
+    return cards.map(card => {
+        return Object.assign({}, card, { isFlipped: false, isAnswered: false, isSelected: true });
+    });
 }
 
 export function flipCards(state) {
@@ -181,8 +187,24 @@ function revealedFlashcard(state, action) {
     }
 }
 
+function resetCurrentDeck(cards, action) {
+    switch (action.game) {
+        case PINYIN_TO_CHINESE:
+        case ENGLISH_TO_CHINESE:
+        case MATCH_PAIRS:
+            return shuffleCards({ cards: resetCards(cards) });
+            break;
+        default:
+            console.log('resetCurrentDeck is a noop if not the game');
+            break;
+    }
+    return cards;
+}
+
 export default (state=[], action) => {
     switch (action.type) {
+        case actionTypes.RESET_CURRENT_DECK:
+            return resetCurrentDeck(state, action);
         case actionTypes.REVEAL_FLASHCARD:
             return revealedFlashcard(state, action);
         case actionTypes.START_ROUND:

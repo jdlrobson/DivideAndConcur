@@ -11,8 +11,10 @@ import GameOneInFour from './GameOneInFour';
 import ProgressBar from './ProgressBar';
 import CharacterOverlay from './CharacterOverlay';
 import Button from './Button';
+import { getAnsweredCards } from './../helpers/cards';
+import { isMatchOneGame } from './../helpers/game';
 import { getKnownWordCount, getUnKnownWordCount } from './../helpers/difficulty-ratings';
-import { dismountCurrentGame, dismountDeck } from './../actions';
+import { dismountCurrentGame, dismountDeck, refresh } from './../actions';
 import { MATCH_PAIRS, REVISE,
     ENGLISH_TO_CHINESE, PINYIN_TO_CHINESE,
     MATCH_SOUND, MATCH_DEFINITION,
@@ -108,6 +110,12 @@ class App extends Component {
                             })
                         }
                     </div>
+                    <div className='app__component--floated'>
+                        {
+                            props.hasRefreshButton &&
+                               <Button onClick={props.onRefresh}>Refresh</Button>
+                        }
+                    </div>
                 </div>
                 {workflow}
             </div>
@@ -119,6 +127,9 @@ App.defaultProps = {};
 
 const mapDispatchToProps = (dispatch, props) => {
     return {
+        onRefresh:() => {
+            dispatch(refresh());
+        },
         onBackClick:(props) => {
             if (props.game) {
                 dispatch(dismountCurrentGame());
@@ -155,6 +166,7 @@ const mapStateToProps = (state, props) => {
         isBooted,
         isDeckEmpty: cards === undefined ? true : cards.length === 0,
         highlighted: highlighted || [],
+        hasRefreshButton: !isMatchOneGame(game) && getAnsweredCards({ cards }).length === 0,
         isPaused,
         game,
         deck,

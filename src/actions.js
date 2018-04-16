@@ -61,6 +61,14 @@ export function startRound() {
     };
 }
 
+export function refresh() {
+    return (dispatch, getState) => {
+        const game = getState().game;
+        dispatch( { type: actionTypes.RESET_CURRENT_DECK, game } );
+        flipCardsAfter(5000)(dispatch, getState);
+    };
+}
+
 export function endRound( callback ) {
     callback = callback || setTimeout;
     return (dispatch, getState) => {
