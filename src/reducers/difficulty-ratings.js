@@ -22,10 +22,14 @@ export function clean(state, action) {
     const nextWord = getUnknownCards( { answers: state, words }, 1 )[0];
     const maxWordLength = nextWord.wordLength;
     const maxDifficulty = nextWord.rating;
+    const nextIndex = words.findIndex(word => word.character === nextWord.character);
 
     Object.keys(state).forEach((char) => {
         const wordPos = words.findIndex(word => word.character === char);
-        if ( wordPos === -1 ) {
+        if ( wordPos === -1 ) {console.log('del1', char);
+            delete state[char];
+        } else if ( wordPos > nextIndex ) {
+            // If the word being looked at comes after the next card than it needs to be dropped
             delete state[char];
         } else {
             // Cleanup words which are more difficulty then the next known word
@@ -87,7 +91,7 @@ export default (state={}, action) => {
                     character: card.character
                 })
             );
-        return answers;
+            return answers;
         case actionTypes.INIT:
             return Object.assign({}, action.userData.answers);
         case actionTypes.INIT_END:
