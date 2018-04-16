@@ -66,13 +66,13 @@ function decomposeWord() {
 		var components = [];
 		getUserInput('What is the Chinese word you want to decompose?').then((answer) => {
 
-			getUserInput('What are the components (up to 2)?').then((radicals) => {
+			getUserInput('What are the components?').then((radicals) => {
 				const components = Array.from(radicals.trim().replace(/ /g, ''));
-				if ( components.length && components.length <= 2 ) {
+				if ( components.length ) {
 					dict.addDecomposition( answer, components );
 					dict.save().then(()=>resolve());
 				} else {
-					console.log('No more than 2 radicals please.');
+					console.log('Decomposition cannot be empty');
 					resolve();
 				}
 			});
