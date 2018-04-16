@@ -28,8 +28,11 @@ class GameOneInFour extends Component {
                 <div className='game-one-four__choices'>{
                     props.cards.slice(1).map((cardProps) => {
                         const modeBasedCardData = mode === 0 ?
-                            { english: false, label: cardProps.pinyin } :
-                            { pinyin: false, label: cardProps.english, isWide: true };
+                            { english: false, pinyin: false, label: cardProps.pinyin } :
+                            { pinyin: false,
+                                english: false,
+                                label: cardProps.english,
+                                isWide: true };
                         return <Card {...cardProps} isSmall
                             className='game-one-four__choices__card'
                             selectedControls={false} hideDifficulty={true}
