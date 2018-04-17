@@ -4,6 +4,7 @@ import DictionaryUtils from './../../data/DictionaryUtils';
 import { getDifficultyRating, knowsWord,
     getDifficultyRatings } from './difficulty-ratings';
 import { MAX_DIFFICULTY } from './../constants';
+import { random } from './../utils'
 
 export const DATA_MODIFIED_LAST = dictJson.modified;
 export const dictUtils = new DictionaryUtils(dictJson.words,
@@ -20,12 +21,23 @@ export function mapCard(state, character, withDecompositions, withBlurb) {
       ) : [];
 
     const text = withBlurb ? blurbs[character] : undefined;
+    const definition = dictUtils.getWord(character);
+    let translations = [];
+    if ( definition ) {
+        translations = definition.split(';');
+        if ( translations.length > 1 ) {
+            translations = translations.map((translation, i) =>
+                `[${i+1}/${translations.length}] ${translation.trim()}`);
+        }
+    }
+
     return {
         character,
         text,
         level: `${dictUtils.getWordLength(character)}.${dictUtils.getDifficultyRating(character)}`,
         pinyin: dictUtils.getPinyin(character),
-        english: dictUtils.getWord(character),
+        translations,
+        english: random(translations),
         decompositions
     };
 }
