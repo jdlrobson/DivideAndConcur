@@ -35,6 +35,46 @@ class Decompositions extends Component {
     }
 }
 
+class Tab extends Component {
+    render(props) {
+        return (
+            <div className='tab'>
+                {props.children}
+            </div>
+        );
+    }
+}
+
+class TabGroup extends Component {
+    constructor() {
+        super();
+        this.state = { activeTab: 0 };
+    }
+    switchTab(i) {
+        const setState = this.setState.bind(this);
+        return (ev) => {
+            setState({ activeTab: i });
+        };
+    }
+    render(props) {
+        const switchTab = this.switchTab.bind(this);
+        const active = this.state.activeTab;
+        const nonEmptyChildren = props.children.filter(child => Boolean(child));
+        return (
+            <div className='tab-group'>
+                <div>{
+                    nonEmptyChildren.map((child, i) => {
+                        return <span className={i === active ?
+                            "tabgroup__tab tabgroup__tab--active" : "tabgroup__tab"}
+                        onClick={switchTab(i)}>{child.attributes.name}</span>;
+                    })
+                }</div>
+                {nonEmptyChildren[active]}
+            </div>
+        );
+    }
+}
+
 class CharacterOverlay extends Component {
     render(props) {
         const blurb = props.text || '';
@@ -46,14 +86,36 @@ class CharacterOverlay extends Component {
                 <a href={`https://en.wiktionary.org/wiki/${props.character}`}
                     className='app__overlay__link'>wiktionary</a>
                 {props.children}
-                {
-                    decomp.length > 0 && (<h2>Decompositions</h2>)
-                }
-                <Decompositions decompositions={decomp} />
-                { Boolean(blurb) && <h2>Using this word</h2> }
-                <div className='app__overlay__blurb'>{
-                    blurb.split('\n').map(text => <p>{text}</p>)
-                }</div>
+                <TabGroup>
+                    {
+                        decomp.length > 0 && (
+                            <Tab name='Divide/Concur'>
+                                <Decompositions decompositions={decomp} />
+                            </Tab>
+                        )
+                    }
+                    {
+                        props.translations.length > 1 && (
+                            <Tab name='Translations'>
+                                <div className='translations'>
+                                    This word has multiple meanings:
+                                    <ul>{
+                                        props.translations.map(
+                                            translation => (<li>{translation}</li>)
+                                        )
+                                    }</ul>
+                                </div>
+                            </Tab>
+                        )
+                    }
+                    { Boolean(blurb) && (
+                        <Tab name='More info'>
+                            <div className='app__overlay__blurb'>{
+                                blurb.split('\n').map(text => <p>{text}</p>)
+                            }</div>
+                        </Tab>
+                    )}
+                </TabGroup>
             </div>
         );
     }

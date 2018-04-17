@@ -33,12 +33,31 @@
   margin: 8px 0;
 }
 
+.tabgroup__tab {
+  display: inline-block;
+  margin: 8px;
+  border-bottom: solid 1px #aaa;
+  padding-bottom: 8px;
+
+  &:hover {
+    border-bottom-color: #333;
+  }
+}
+
+.tabgroup__tab--active {
+  font-weight: bold;
+  border-bottom-color: #333;
+}
+
+.translations {
+  text-align: left;
+}
+
 .app__overlay__blurb,
 .app__overlay > .app__overlay__decompositions {
   text-align: center;
   margin-top: 10px;
   overflow: scroll;
-  height: 100px;
 }
 
 .app__overlay__decompositions__card {
@@ -55,11 +74,4 @@
 .app__overlay__card {
   margin: auto;
   float: none;
-}
-
-@media all and ( min-width: 500px ) {
-  .app__overlay__blurb,
-  .app__overlay > .app__overlay__decompositions {
-    height: 200px;
-  }
 }

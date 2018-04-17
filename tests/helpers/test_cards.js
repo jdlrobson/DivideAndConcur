@@ -10,7 +10,7 @@ describe('Helper:cards', () => {
         assert.ok(card.english !== undefined, 'has english');
         assert.ok(card.english.indexOf(';') === -1,
             'multiple definitions have been split up');
-        assert.ok(card.translations.length !== undefined, 'has a list of all the translations');
+        assert.ok(card.translations.length > 1, 'has a list of all the translations');
         assert.ok(card.decompositions.length !== undefined, 'has decompositions');
     });
 });
