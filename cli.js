@@ -230,9 +230,9 @@ function clean() {
 		if ( eng === '?' ) {
 			console.log('Remove from dictionary:', chinese);
 			dict.removeWord(chinese);
-		} else if ( eng.match(/;[^ ]/) ) {
-			const newEng = eng.replace(/;([^ ])/g, '; $1');
-			console.log('Add spaces after ; in ' + newEng);
+		} else if ( eng.match(/\//) ) {
+			const newEng = eng.replace(/\//g, '; ');
+			console.log('Switched / for ; in ' + newEng);
 			dict.saveWord(chinese, newEng);
 		}
 		// update pinyin for one characters
