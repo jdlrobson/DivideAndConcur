@@ -2,6 +2,7 @@ import 'preact/devtools';
 
 import { applyMiddleware, compose, createStore } from 'redux';
 import { checkForSave, checkForBoot,
+    speakHighlightedWord,
     checkForTimedAction, checkIfEndOfRound } from './subscribers';
 
 import { init, answerAllCardsInRound, highlightCharacter } from './actions';
@@ -61,6 +62,7 @@ const store = createStore(reducer,
     store.subscribe(checkIfEndOfRound(store));
     store.subscribe(checkForSave(store));
     store.subscribe(checkForBoot(store));
+    store.subscribe(speakHighlightedWord(store));
 
     /**
    *******************************************

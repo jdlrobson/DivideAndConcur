@@ -24,6 +24,31 @@ export function checkForSave(store) {
     };
 }
 
+function say(word) {
+    const synth = window.speechSynthesis;
+    const voices = synth.getVoices();
+    const voice = voices.filter((voice) => voice.lang.indexOf('zh') === 0)[0];
+    const utterThis = new SpeechSynthesisUtterance(word);
+    utterThis.voice = voice;
+    synth.speak(utterThis);
+}
+
+let lastSpoken;
+export function speakHighlightedWord(store) {
+    return () => {
+        if ( window.speechSynthesis && typeof SpeechSynthesisUtterance !== undefined ) {
+            const state = store.getState();
+            if ( state.highlighted ) {
+                const curCard = state.highlighted[0];
+                if ( curCard && curCard.character !== lastSpoken ) {
+                    lastSpoken = curCard.character;
+                    say(lastSpoken);
+                }
+            };
+        }
+    };
+}
+
 export function checkForBoot(store) {
     return () => {
         const state = store.getState();
