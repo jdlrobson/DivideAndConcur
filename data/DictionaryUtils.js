@@ -87,7 +87,7 @@ DictionaryUtils.prototype = {
     if ( chars.length > 1 && len === 0 ) {
       return 1;
     } else {
-      return len;
+      return chars.length === 2 ? len + 1 : len;
     }
   },
   /**

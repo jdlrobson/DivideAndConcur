@@ -4,6 +4,7 @@ import assert from 'assert';
 const difficulties = { '口': 3, '云': 5, '人': 1, '一': 0.5, '辶': 8, '车': 10 };
 const decompositions = { '回': ['口', '口'],
     '会': ['人', '云'],
+    '天': ['大','一'],
     '减': [ '冫', '咸'],
     '咸': ['戌', '口'],
     '戌': ['戊','一'],
@@ -43,5 +44,7 @@ describe('DictionaryUtils', () => {
             'Has 3 decompositions (戌 decompositions plus 口)');
         assert.ok(utils.getWordLength('减') === 4,
             'Has 4 decompositions (咸 decompositions plus 口)');
+        assert.ok(utils.getWordLength('天') === 2, 'Has 2 decompositions (大 and 一)');
+        assert.ok(utils.getWordLength('天人') === 3, 'Has 3 decompositions (大 and 一 and 人)');
     });
 });
