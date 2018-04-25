@@ -61,7 +61,7 @@ describe('Reducer: cards', () => {
         assert.ok(
             matchSoundCards.slice(1).findIndex(
                 card => card.character === matchSoundCards[0].character
-            ),
+            ) > -1,
             'and the first card is a duplicate of another card'
         );
     });
