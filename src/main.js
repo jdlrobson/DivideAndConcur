@@ -70,9 +70,19 @@ const store = createStore(reducer,
    *******************************************
    */
     const memory = localStorage.getItem('memory');
+    const SEEN_KEY = 'y-seen';
+    const seen = localStorage.getItem(SEEN_KEY);
     const userData = memory ? JSON.parse(memory) : { answers: {} };
 
-
+    function hide( domElement ) {
+        domElement.style.display = 'none';
+    }
+    function show( domElement ) {
+        domElement.style.display = '';
+    }
+    function focusWindow() {
+        setTimeout(()=>window.scrollTo(0,0), 0);
+    }
     function loadImages(imgs) {
         return Promise.all(
             imgs.map((src) => {
@@ -88,11 +98,29 @@ const store = createStore(reducer,
             })
         );
     }
+    const $ = (selector) => document.querySelectorAll(selector);
+    Array.from($('.panel__next')).forEach((node) => {
+        node.addEventListener('click', (ev) => {
+            ev.stopPropagation();
+            focusWindow();
+        });
+    })
     const boot = () => {
+        hide( $('#chrome__content__panel-one')[0] );
+        show( $('#chrome__content__panel-two')[0] );
+        localStorage.setItem(SEEN_KEY, '1');
+        focusWindow();
         setTimeout(() => {
-            store.dispatch(init(userData))
+            store.dispatch(init(userData));
+            focusWindow();
         }, 3000);
     };
-    loadImages([img,logo]).then(boot);
+    if ( !window.location.hash ) {
+        window.location.hash = seen ? '#panel-6' : '#panel-1';
+        focusWindow();
+    }
+    document.querySelector('#init-game').addEventListener('click', () => {
+        loadImages([img,logo]).then(boot);
+    });
 }());
 

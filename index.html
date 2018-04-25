@@ -11,21 +11,154 @@
 		<div class='chrome'>
 			<div class='chrome__header'>
 				<div class='chrome__header__home'>
-					<img src='logo.png' alt='Divide and concur'
-						width='220'
-						class='chrome__header__home__logo'>
+					<a href="/">
+						<img src='logo.png' alt='Divide and concur'
+							width='220'
+							class='chrome__header__home__logo'>
+					</a>
+				</div>
+			</div>
+			<div class="chrome__content" id="chrome__content__panel-one">
+				<div class="panel-wrapper">
+					<div id="panel-1" class="panel">
+						<p>There's no way on Earth I could learn Chinese. It's so different from any other language I have
+							seen. To read Chinese, I'll need to know at least 3000 characters. I don't know where to begin.</p>
+						<a class="panel__next" href="#panel-2">Next</a>
+					</div>
+					<div id="panel-2" class="panel">
+						<p>
+						I start looking at this character:
+						</p>
+						<div class="card panel__card">
+							<div class="card__front ">
+								<div class="card__label ">药</div>
+								<div class="card__pinyin ">yào</div>
+							</div>
+						</div>
+						<p>What could this strange character mean?</p>
+						<hr class="panel__break"/>
+						<p>Since I was a child, I've always been intrigued by the art of taking things apart.</p>
+						<p>I've disassembled typewriters; computers; stanzas in beautiful poems; to try and understand how they work. I wonder if it works with Chinese characters?</p>
+						<a class="panel__next"href="#panel-3">Next</a>
+					</div>
+					<div id="panel-3" class="panel">
+						<p>I divide the word apart until I can divide it no more.</p>
+						<div class="card panel__card">
+							<div class="card__front ">
+								<div class="card__label ">药</div>
+								<div class="card__english "></div>
+								<div class="card__pinyin ">yào</div>
+							</div>
+						</div>
+						<hr class="panel__break"/>
+						<p>Three new characters appear, that are much simpler to read; to remember; to learn. My dictionary tells me what they mean in my language.
+						</p>
+						<div class="card panel__card">
+							<div class="card__front ">
+								<div class="card__label ">纟</div>
+								<div class="card__english ">silk</div>
+								<div class="card__pinyin ">sī</div>
+							</div>
+						</div>
+						<div class="card panel__card">
+							<div class="card__front ">
+								<div class="card__label ">勺</div>
+								<div class="card__english ">spoon</div>
+								<div class="card__pinyin ">sháo</div>
+							</div>
+						</div>
+						<div class="card panel__card">
+							<div class="card__front ">
+								<div class="card__label ">艹</div>
+								<div class="card__english ">grass</div>
+								<div class="card__pinyin ">cǎo</div>
+							</div>
+						</div>
+						<a class="panel__next" href="#panel-4">Next</a>
+					</div>
+					<div id="panel-4" class="panel">
+						<p>I've learned my first word.</p>
+						<div class="card panel__card">
+							<div class="card__front ">
+								<div class="card__label ">药</div>
+								<div class="card__english ">medicine</div>
+								<div class="card__pinyin ">yào</div>
+							</div>
+						</div>
+						<p>I'll remember this as eating grass with a silk spoon.</p>
+						<hr class="panel__break"/>
+						<p>I put the silk spoon together and learn another new word:</p>
+						<div class="card panel__card">
+							<div class="card__front ">
+								<div class="card__label ">约</div>
+								<div class="card__english ">appointment</div>
+								<div class="card__pinyin ">yuē</div>
+							</div>
+						</div>
+						<p>
+						<hr class="panel__break"/>
+						<p>So, actually, medicine is an appointment with grass...?</p>
+						<a class="panel__next" href="#panel-5" href="#">Next</a>
+					</div>
+					<div id="panel-5" class="panel">
+						<p>I know <strong>five</strong> characters now!</p>
+						<div class="card panel__card card--small">
+							<div class="card__front ">
+								<div class="card__label ">艹</div>
+								<div class="card__english ">grass</div>
+							</div>
+						</div>
+						<div class="card panel__card card--small">
+							<div class="card__front ">
+								<div class="card__label ">纟</div>
+								<div class="card__english ">silk</div>
+							</div>
+						</div>
+						<div class="card panel__card card--small">
+							<div class="card__front ">
+								<div class="card__label ">勺</div>
+								<div class="card__english ">spoon</div>
+							</div>
+						</div>
+						<div class="card panel__card card--small">
+							<div class="card__front ">
+								<div class="card__label ">约</div>
+								<div class="card__english ">appointment</div>
+							</div>
+						</div>
+						<div class="card panel__card card--small">
+							<div class="card__front ">
+								<div class="card__label ">药</div>
+								<div class="card__english ">medicine</div>
+							</div>
+						</div>
+						<hr class="panel__break"/>
+						<p>Maybe if I learn all the smaller characters, I'll soon be able to
+							remember all the big ones.</p>
+						<p>Now, fired up with confidence I'm ready to learn some Chinese...</p>
+						<a class="panel__next"  href="#panel-6">Next</a>
+					</div>
+					<div id="panel-6" class="panel">
+						<p>Are you ready!?!</p>
+						<p>准备好了吗!?!</p>
+						<a href="#panel-1" class="button panel__button" id="init-game">Play the game!</a>
+						<a class="panel__next" class="button" href="#panel-1">Read story</a>
+					</div>
 				</div>
 			</div>
 			<div id="container" class="chrome__content">
-				<div class='chrome__boot-screen__msg'>Booting the game...</div>
-				<img class='chrome__boot-screen__img' style="border: solid 1px #aaa;"
-					width="288" height="162"
-					src="panda.gif" alt='panda rolling' />
-				<a class='chrome__boot-screen__source-link'
-					href='https://giphy.com/gifs/keep-rollin-EatwJZRUIv41G'>giphy</a>
+				<div id="chrome__content__panel-two" style="display: none;">
+					<p>洗牌!</p>
+					<img class='chrome__boot-screen__img' style="border: solid 1px #aaa;"
+						width="288" height="162"
+						src="panda.gif" alt='panda rolling' />
+					<a class='chrome__boot-screen__source-link'
+						href='https://giphy.com/gifs/keep-rollin-EatwJZRUIv41G'>giphy</a>
+				</div>
 			</div>
-			<footer>Version <span id="version">_._._</span>, <a href="https://github.com/jdlrobson/DivideAndConcur">Jdlrobson</a>,
-				<span id="modified"></span>
+			<footer>
+				<p>Version <span id="version">_._._</span>, <a href="https://github.com/jdlrobson/DivideAndConcur">Jdlrobson</a>,
+				<span id="modified"></span></p>
 			</footer>
 		</div>
 	</body>

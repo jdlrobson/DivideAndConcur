@@ -19,6 +19,7 @@ body {
   margin: 0px 0px 10px;
 }
 
+.panel,
 .chrome__content {
   min-height: 80vh;
 }
@@ -51,6 +52,48 @@ footer {
   color: #333;
   border-top: solid 1px #aaa;
   padding-top: 10px;
+}
+
+.panel-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.panel {
+  position: relative;
+  width: 100%;
+}
+
+.panel__button {
+  margin-bottom: 10px;
+  width: 120px;
+  height: auto !important;
+  padding: 12px !important;
+}
+
+.panel__break {
+  clear: both;
+  border-style: dotted;
+  border-color: #ccc;
+}
+
+.panel__card {
+  margin-right: 24px !important;
+  margin-bottom: 24px;
+}
+
+.panel:not(:target) {
+  display: none;
+}
+
+.panel:target {
+  display: block;
+}
+
+.panel__next {
+  display: block;
+  clear: both;
 }
 
 @media all and ( min-width: 500px ) {
