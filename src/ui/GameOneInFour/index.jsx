@@ -49,8 +49,8 @@ class GameOneInFour extends Component {
             <p>Match the cards</p>
             <div className='game-one-four__cards'>
                 <Card {...card} isLarge isSelected={this.isFinished(props)}
-                    isFrozen debug={false} />
-                <div className='game-one-four__choices'>{
+                    isFrozen debug={false}
+                /><div className='game-one-four__choices'>{
                     props.cards.slice(1)
                         .map(cardProps =>
                             <Card {...getCardProps(cardProps, props.mode, card)} />

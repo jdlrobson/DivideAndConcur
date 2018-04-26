@@ -5,6 +5,7 @@ import Card from './Card';
 import GameDescription from './GameDescription';
 import { DECK_NEW } from './../constants';
 import { flipCardsAfter, answerFlashcard } from './../actions';
+import './matchpairs.less';
 
 class GameMatchPairs extends Component {
     constructor() {
@@ -106,9 +107,9 @@ class GameMatchPairs extends Component {
         return (
             <div className='game-match-pairs'>
                 <GameDescription>{msg}</GameDescription>
-                {
+                <div>{
                     cards
-                }
+                }</div>
                 <div className='game-match-pairs__end-marker' />
             </div>
         );

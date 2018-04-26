@@ -4,18 +4,26 @@
 }
 
 .game-one-four__choices {
-	width: (@cardSizeSmall * 2) + 10px;
-	float: left;
+  width: (@cardSizeSmall * 2) + @card-gutter + @card-gutter;
+  float: left;
+  margin-top: -5px;
+  height: @cardSizeLarge + @card-gutter;
 }
 
 .game-one-four__cards {
   display: flex;
   flex-direction: row;
   align-items: center;
+  .card {
+    margin-bottom: @card-gutter;
+  }
+  .card--large {
+    margin-top: 0;
+  }
 }
 
 @media all and (min-width: 500px) {
-	.game-one-four__choices {
-		width: ((@cardSizeSmall * 2) * 2) + 20px;
-	}
+  .game-one-four__choices {
+    width: ((@cardSizeSmall * 2) * 2) + 20px;
+  }
 }
