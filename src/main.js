@@ -108,6 +108,7 @@ const store = createStore(reducer,
     const boot = () => {
         hide( $('#chrome__content__panel-one')[0] );
         show( $('#chrome__content__panel-two')[0] );
+        show( $('#chrome__content__panel-two')[0].parentNode );
         localStorage.setItem(SEEN_KEY, '1');
         focusWindow();
         setTimeout(() => {

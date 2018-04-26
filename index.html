@@ -13,7 +13,7 @@
 				<div class='chrome__header__home'>
 					<a href="/">
 						<img src='logo.png' alt='Divide and concur'
-							width='220'
+							width='320'
 							class='chrome__header__home__logo'>
 					</a>
 				</div>
@@ -22,7 +22,8 @@
 				<div class="panel-wrapper">
 					<div id="panel-1" class="panel">
 						<p>There's no way on Earth I could learn Chinese. It's so different from any other language I have
-							seen. To read Chinese, I'll need to know at least 3000 characters. I don't know where to begin.</p>
+							seen. To read Chinese, I'll need to know at least 3000 characters. I can't even think about speaking it!</p>
+						<p>I don't know where to begin.</p>
 						<a class="panel__next" href="#panel-2">Next</a>
 					</div>
 					<div id="panel-2" class="panel">
@@ -38,7 +39,8 @@
 						<p>What could this strange character mean?</p>
 						<hr class="panel__break"/>
 						<p>Since I was a child, I've always been intrigued by the art of taking things apart.</p>
-						<p>I've disassembled typewriters; computers; stanzas in beautiful poems; to try and understand how they work. I wonder if it works with Chinese characters?</p>
+						<p>I've disassembled typewriters; computers; stanzas in beautiful poems; to try and understand how they work.</p>
+						<p>I wonder if it works with Chinese characters?</p>
 						<a class="panel__next"href="#panel-3">Next</a>
 					</div>
 					<div id="panel-3" class="panel">
@@ -141,12 +143,12 @@
 					<div id="panel-6" class="panel">
 						<p>Are you ready!?!</p>
 						<p>准备好了吗!?!</p>
-						<a href="#panel-1" class="button panel__button" id="init-game">Play the game!</a>
-						<a class="panel__next" class="button" href="#panel-1">Read story</a>
+						<button class="button panel__button" id="init-game">Let's play!</button>
+						<a class="panel__next" class="button" href="#panel-1">Read why I made this game</a>
 					</div>
 				</div>
 			</div>
-			<div id="container" class="chrome__content">
+			<div id="container" class="chrome__content"  style="display: none;">
 				<div id="chrome__content__panel-two" style="display: none;">
 					<p>洗牌!</p>
 					<img class='chrome__boot-screen__img' style="border: solid 1px #aaa;"
@@ -157,10 +159,25 @@
 				</div>
 			</div>
 			<footer>
-				<p>Version <span id="version">_._._</span>, <a href="https://github.com/jdlrobson/DivideAndConcur">Jdlrobson</a>,
-				<span id="modified"></span></p>
+				<p>
+					<a href="http://jdlrobson.com">Jon Robson's</a>
+					<a href="https://github.com/jdlrobson/DivideAndConcur">Divide % Concur</a>
+					<span id="version">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+					<span id="modified"></span></p>
 			</footer>
 		</div>
 	</body>
 	<script type="text/javascript" src="src/main.js"></script>
+	<script type="text/javascript">
+		if ('serviceWorker' in navigator) {
+			navigator.serviceWorker.register('service-worker.js', {scope: '/'})
+			.then(function(reg) {
+			  // registration worked
+			  console.log('Registration succeeded. Scope is ' + reg.scope);
+			}).catch(function(error) {
+			  // registration failed
+			  console.log('Registration failed with ' + error);
+			});
+		}
+	</script>
 </html>
