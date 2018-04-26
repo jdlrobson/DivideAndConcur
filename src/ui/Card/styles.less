@@ -1,5 +1,8 @@
 @import './variables.less';
 
+@card-gutter: 5px;
+@card-border-width: 3px;
+
 .card {
   box-sizing: border-box;
   transition: 0.6s;
@@ -9,7 +12,7 @@
   height: @cardSize;
   background: @someday-orange;
   float: left;
-  margin-right: 5px;
+  margin-right: @card-gutter;
   text-align: center;
   position: relative;
   font-size: 0.8em;
@@ -104,7 +107,7 @@
     float: left;
     margin-right: @block-margin-right;
     width: @difficultyBlockSize - @block-margin-right;
-    height: 3px;
+    height: @card-border-width;
     background-color: red;
     &.easy {
       background-color: green;
@@ -153,10 +156,13 @@
   }
 }
 
-@media all and ( min-width: 500px ) {
+@app-width: 465px;
+@card-max-width: (@app-width / 3) - @card-gutter - (@card-border-width * 2);
+
+@media all and ( min-width: @app-width ) {
   .card {
-    width: @cardSize + 50;
-    height: @cardSize + 30;
+    width: @card-max-width;
+    height: @card-max-width;
     font-size: 1em;
   }
   .card--small {
