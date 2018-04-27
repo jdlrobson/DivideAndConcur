@@ -9,9 +9,6 @@ import { init, answerAllCardsInRound, highlightCharacter } from './actions';
 import reducer from './reducer';
 import thunkMiddleware from 'redux-thunk';
 
-import img from './../panda.gif';
-import logo from './../logo.png';
-
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(reducer,
     composeEnhancers(
@@ -83,21 +80,6 @@ const store = createStore(reducer,
     function focusWindow() {
         setTimeout(()=>window.scrollTo(0,0), 0);
     }
-    function loadImages(imgs) {
-        return Promise.all(
-            imgs.map((src) => {
-                return new Promise((resolve) => {
-                    const image = new Image();
-                    if ( image.loaded ) {
-                        resolve();
-                    }
-                    image.oncomplete = ()=>resolve();
-                    image.onload = ()=>resolve();
-                    image.src = src;
-                });
-            })
-        );
-    }
     const $ = (selector) => document.querySelectorAll(selector);
     Array.from($('.panel__next')).forEach((node) => {
         node.addEventListener('click', (ev) => {
@@ -121,7 +103,7 @@ const store = createStore(reducer,
         focusWindow();
     }
     document.querySelector('#init-game').addEventListener('click', () => {
-        loadImages([img,logo]).then(boot);
+        boot();
     });
 }());
 
