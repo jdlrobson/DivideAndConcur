@@ -21,6 +21,7 @@
     "babel-preset-env": "^1.6.1",
     "html-to-text": "^3.3.0",
     "less": "^3.0.1",
+    "parcel-plugin-sw-precache": "^0.4.2",
     "preact-redux": "^2.0.3",
     "prompt": "^1.0.0",
     "redux": "^3.7.2"
