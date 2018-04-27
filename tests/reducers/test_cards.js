@@ -5,31 +5,57 @@ import { getHardCards, getKnownCards, getUnknownCards,
 import assert from 'assert';
 
 const words = [
-    { character: '!', rating: 24, wordLength: 2 },
-    { character: 'A', rating: 24, wordLength: 2 },
-    { character: 'B', rating: 24, wordLength: 2 },
-    { character: 'c', rating: 24, wordLength: 2 },
-    { character: 'Z', rating: 24, wordLength: 2 },
-    { character: 'D', rating: 24, wordLength: 2 },
-    { character: 'E', rating: 24, wordLength: 2 },
+    { character: '!', pinyin: '!', rating: 24, wordLength: 2 },
+    { character: 'A', pinyin: 'A', rating: 24, wordLength: 2 },
+    { character: 'B', pinyin: 'B', rating: 24, wordLength: 2 },
+    { character: 'c', pinyin: 'c', rating: 24, wordLength: 2 },
+    { character: 'Z', pinyin: 'Z', rating: 24, wordLength: 2 },
+    { character: 'D', pinyin: 'D', rating: 24, wordLength: 2 },
+    { character: 'E', pinyin: 'E', rating: 24, wordLength: 2 },
 ];
 describe('Reducer: cards', () => {
+    it('pickCardsForGame (avoids duplicates)', () => {
+        const rating = 0;
+        const wordLength = 0;
+        const words = [
+            { character: '石', pinyin: 'shí', rating, wordLength },
+            { character: '十', pinyin: 'shí', rating, wordLength },
+            { character: '药', pinyin: 'yào', rating, wordLength },
+            { character: '纟', pinyin: 'sī', rating, wordLength },
+            { character: '勺', pinyin: 'sháo', rating, wordLength },
+        ];
+        const cards =  words.slice(0);
+        const answers = {};
+        const deck = DECK_NEW;
+        const matchSoundCards = pickCardsForGame(cards,
+            { game: MATCH_SOUND, answers, deck, words }
+        );
+        assert.equal(
+            matchSoundCards.length,
+            5,
+            '5 cards needed for the match sound game'
+        );
+        assert.ok(
+            matchSoundCards.filter(card => card.character === '十').length === 0,
+            'to avoid confusion two cards cannot have the same sound'
+        );
+    });
     it('pickCardsForGame (chooses the right number of cards based on game)', () => {
         const rating = 0;
         const wordLength = 0;
         const cards =  [
-            { character: 'A', rating, wordLength },
-            { character: 'B', rating, wordLength },
-            { character: 'C', rating, wordLength },
-            { character: 'D', rating, wordLength },
-            { character: 'E', rating, wordLength },
-            { character: 'F', rating, wordLength },
-            { character: 'G', rating, wordLength },
-            { character: 'H', rating, wordLength },
-            { character: 'I', rating, wordLength },
-            { character: 'J', rating, wordLength },
-            { character: 'K', rating, wordLength }
-        ];
+            { character: '石', rating, wordLength },
+            { character: '十', rating, wordLength },
+            { character: '药', rating, wordLength },
+            { character: '纟', rating, wordLength },
+            { character: '勺', rating, wordLength },
+            { character: '田', rating, wordLength },
+            { character: '四', rating, wordLength },
+            { character: '白', rating, wordLength },
+            { character: '马', rating, wordLength },
+            { character: '氵', rating, wordLength },
+            { character: '土', rating, wordLength }
+        ].map(card => Object.assign({}, card, { pinyin: card.character }));
         const words = cards;
         const answers = {};
         const deck = DECK_NEW;

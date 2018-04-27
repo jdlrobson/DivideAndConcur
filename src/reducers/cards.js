@@ -99,14 +99,18 @@ function chooseDeck( _cards, action ) {
 
 export function pickCardsForGame( _cards, action ) {
     let cards = chooseDeck( _cards, action );
+    // Pick card to play the game with
+    const card = cards[0];
     switch (action.game) {
+        case MATCH_SOUND:
+            const x = 1;
+            // Move out any duplicate sounds to avoid duplicate answers
+            cards = cards.filter((c, i) => c.character === card.character ||
+                c.pinyin !== card.pinyin);
         case MATCH_DEFINITION:
         case MATCH_SOUND:
             // 4 cards will be used in the game.
             cards = cards.slice(0, 4);
-
-            // Pick card to play the game with
-            const card = cards[0];
             // shuffle them again
             cards = shuffleCards({ cards });
             // add the goal card at the front
