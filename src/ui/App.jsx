@@ -110,14 +110,15 @@ class App extends Component {
                             })
                         }
                     </div>
-                    <div className='app__component--floated'>
-                        {
-                            props.hasRefreshButton &&
-                               <Button onClick={props.onRefresh}>Refresh</Button>
-                        }
-                    </div>
                 </div>
                 {workflow}
+                <div className='app__content'>
+                    {
+                        props.hasRefreshButton &&
+                           <Button onClick={props.onRefresh}
+                               className="app__content__button">Refresh</Button>
+                    }
+                </div>
             </div>
         );
     }
