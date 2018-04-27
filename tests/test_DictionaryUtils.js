@@ -3,6 +3,7 @@ import assert from 'assert';
 
 const difficulties = { '口': 3, '云': 5, '人': 1, '一': 0.5, '辶': 8, '车': 10 };
 const decompositions = { '回': ['口', '口'],
+    '𠮷': ['土', '口'],
     '会': ['人', '云'],
     '天': ['大','一'],
     '减': [ '冫', '咸'],
@@ -17,6 +18,10 @@ const words = {};
 const utils = new DictionaryUtils(words, decompositions, difficulties);
 
 describe('DictionaryUtils', () => {
+    it('translate', () => {
+        const utils = new DictionaryUtils(words, decompositions, difficulties);
+        assert.equal(utils.translate('𠮷'), '? (? · ?)');
+    });
     it('getPinyin', () => {
         const utils = new DictionaryUtils(words, decompositions, difficulties);
         assert.equal(utils.getPinyin('𥫗'), 'shì');

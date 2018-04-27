@@ -33,7 +33,7 @@ DictionaryUtils.prototype = {
     var composition = '';
     var decomp;
 
-    if ( word.length > 1 ) {
+    if ( Array.from(word).length > 1 ) {
       decomp = word;
     } else {
       decomp = decompositions[word]
