@@ -12,6 +12,18 @@ export const dictUtils = new DictionaryUtils(dictJson.words,
 
 export const ALL_WORDS = dictUtils.all();
 
+export function translationArray( definition ) {
+    let translations = [];
+    if ( definition ) {
+        translations = definition.trim().replace(/;$/, '').split(';');
+        if ( translations.length > 1 ) {
+            translations = translations.map((translation, i) =>
+                `[${i+1}/${translations.length}] ${translation.trim()}`);
+        }
+    }
+    return translations;
+}
+
 export function mapCard(state, character, withDecompositions, withBlurb) {
     let decompositions = withDecompositions ?
       makeCardsFromCharacters(
@@ -21,15 +33,7 @@ export function mapCard(state, character, withDecompositions, withBlurb) {
       ) : [];
 
     const text = withBlurb ? blurbs[character] : undefined;
-    const definition = dictUtils.getWord(character);
-    let translations = [];
-    if ( definition ) {
-        translations = definition.split(';');
-        if ( translations.length > 1 ) {
-            translations = translations.map((translation, i) =>
-                `[${i+1}/${translations.length}] ${translation.trim()}`);
-        }
-    }
+    const translations = translationArray(dictUtils.getWord(character));
 
     return {
         character,

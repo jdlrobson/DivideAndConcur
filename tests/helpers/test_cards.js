@@ -1,7 +1,12 @@
+import { mapCard, translationArray } from './../../src/helpers/cards';
 import assert from 'assert';
-import { mapCard } from './../../src/helpers/cards';
 
 describe('Helper:cards', () => {
+    it('translationArray', () => {
+        assert.ok(translationArray('foo;bar').length === 2, 'has 2 definitions');
+        assert.ok(translationArray('foo;bar;').length === 2, 'has 2 definitions');
+        assert.ok(translationArray('foo;bar; ').length === 2, 'has 2 definitions');
+    });
     it('mapCard', () => {
         const card = mapCard(false, '要', true);
 
