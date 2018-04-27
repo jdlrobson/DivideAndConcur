@@ -116,7 +116,7 @@ class App extends Component {
                     {
                         props.hasRefreshButton &&
                            <Button onClick={props.onRefresh}
-                               className="app__content__button">Refresh</Button>
+                               className='app__content__button'>Refresh</Button>
                     }
                 </div>
             </div>
