@@ -67,13 +67,28 @@ export function getKnownCards(state, total) {
     );
 }
 
+/**
+ * If the number of hard cards is less than the total, then cards
+ * will be added from unknown cards and then available cards.
+ */
 export function getHardCards(state, total) {
     const ratings = getDifficultyRatings(state);
+    let available = state.words.filter((word) => {
+        const char = word.character;
+        return ratings[char] !== undefined && !knowsWord(ratings, char)
+    } );
+    if ( available.length < total ) {
+       available = available.concat(
+           getUnknownCards(state, total - available.length )
+       );
+    }
+    if ( available.length < total ) {
+       available = available.concat(
+           getKnownCards(state, total - available.length )
+       );
+    }
     return shuffle(
-            state.words.filter((word) => {
-                const char = word.character;
-                return ratings[char] !== undefined && !knowsWord(ratings, char)
-            } )
+            available
         ).slice(0, total)
         .map(word => mapCard(state, word.character));
 }
@@ -89,7 +104,7 @@ function chooseDeck( _cards, action ) {
             cards = getUnknownCards(state, 9);
             break;
         case DECK_KNOWN:
-            cards = getKnownCards(state);
+            cards = getKnownCards(state, 9);
             break;
         default:
             break;

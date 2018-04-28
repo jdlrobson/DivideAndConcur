@@ -108,7 +108,10 @@ describe('Reducer: cards', () => {
             words
         };
         const cards = getHardCards(state);
+        const cardsMixed = getHardCards(state, 5);
         assert.equal(cards.length, 4, '4 cards have ratings >= than 0: A, B, and d');
+        assert.equal(cardsMixed.length, 5,
+            'When a total number of cards is needed we supplement it with the known cards');
     });
 
     it('getKnownCards', () => {
