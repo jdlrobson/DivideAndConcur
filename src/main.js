@@ -96,7 +96,7 @@ const store = createStore(reducer,
         setTimeout(() => {
             store.dispatch(init(userData));
             focusWindow();
-        }, 3000);
+        }, 5000);
     };
     if ( !window.location.hash ) {
         window.location.hash = seen ? '#panel-6' : '#panel-1';
