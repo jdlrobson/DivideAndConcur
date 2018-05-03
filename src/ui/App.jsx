@@ -2,7 +2,7 @@
 import { Component, h } from 'preact';
 import Game from './Game';
 import { connect } from 'preact-redux';
-import FlashCard from './Card';
+import FlashCard, { Card } from './Card';
 import GameMatchPairs from './GameMatchPairs';
 import ExhaustedDeck from './ExhaustedDeck';
 import GameSelection from './GameSelection';
@@ -108,6 +108,10 @@ class App extends Component {
                                     onClick={onHighlightedCardClick}
                                     key={`card-highlighted-${props.character}`} isSmall />;
                             })
+                        }
+                        {
+                            props.isBooted && props.highlighted.length === 0 &&
+                                <Card isSmall={true} />
                         }
                     </div>
                 </div>

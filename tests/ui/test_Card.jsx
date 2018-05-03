@@ -19,6 +19,19 @@ describe('Card', () => {
             'card--wide'
         );
     });
+    it('can render an empty card', () => {
+        const card = <Card isSmall={true} />;
+        expect(
+            card
+        ).to.contain(
+            'card card--small'
+        );
+        expect(
+            card
+        ).to.not.contain(
+            'card--wide'
+        );
+    });
     it('special haracters with string length greater than 1 are not wide', () => {
         const card = <Card character='𥫗' isSmall={true} />;
         expect(
