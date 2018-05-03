@@ -24,9 +24,12 @@ export function clean(state, action) {
     const maxDifficulty = nextWord.rating;
     const nextIndex = words.findIndex(word => word.character === nextWord.character);
 
+    if ( !action.cleanWordOrder ) {
+        return Object.assign({}, state);
+    }
     Object.keys(state).forEach((char) => {
         const wordPos = words.findIndex(word => word.character === char);
-        if ( wordPos === -1 ) {console.log('del1', char);
+        if ( wordPos === -1 ) {
             delete state[char];
         } else if ( wordPos > nextIndex ) {
             // If the word being looked at comes after the next card than it needs to be dropped
@@ -35,7 +38,7 @@ export function clean(state, action) {
             // Cleanup words which are more difficulty then the next known word
             // (ratings sometimes change)
             const w = words[wordPos];
-            if ( w.wordLength > maxWordLength ) {
+            if ( w.wordLength > maxWordLength && action.cleanWordOrder ) {
                  delete state[char];
             } else if ( w.wordLength === maxWordLength && w.rating > maxDifficulty ) {
                 delete state[char];

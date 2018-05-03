@@ -24,5 +24,10 @@ and then manually I'll go through the with the goal of learning them and somehow
 
 Gulp.
 
+== Configuration options
 
+=== Environment variables
 
+	export CLEAN_WORD_ORDER=1
+
+when set on boot up, the user will revert to any new words that have been unanswered meaning their number of word count will decrease. Mostly being used for testing.

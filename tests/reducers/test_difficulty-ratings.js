@@ -13,9 +13,11 @@ describe('Reducer: difficulty-ratings', () => {
             { character: 'b', wordLength: 1, rating: 0 },
             { character: 'd', wordLength: 2, rating: 0 },
             { character: 'e', wordLength: 5, rating: 0 }
-        ] });
+        ],
+        cleanWordOrder: true });
         assert.ok(ratings.c === undefined, 'words not in the wordlist are ignored');
         assert.ok(ratings.a === 1);
+        // Only wen cleanWordOrder is true
         assert.ok(ratings.e === undefined,
             'since d is unknown e cannot be possibly known given wordLength is higher');
     });

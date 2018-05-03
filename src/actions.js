@@ -20,12 +20,14 @@ export function switchGame(game) {
 }
 
 export function init(userData) {
+    const cleanWordOrder = process.env.CLEAN_WORD_ORDER === undefined ? false : true;
     return (dispatch, getState) => {
         dispatch({ type: actionTypes.INIT, userData });
         window.requestIdleCallback(() => {
             const answers = userData.answers;
             const words = getAllCardsWithUserDifficulty(answers);
-            dispatch({ type: actionTypes.INIT_END, words, answers });
+            dispatch({ type: actionTypes.INIT_END, words, answers,
+                cleanWordOrder });
         });
     };
 }
