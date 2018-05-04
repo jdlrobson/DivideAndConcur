@@ -219,9 +219,6 @@ function clean() {
 					const newDecomp = decomp.map((char, i) => char === '?' ? hanzUnique[0] : char);
 					console.log('Decom issue', char, decomp, hanzUnique, newDecomp);
 					dict.addDecomposition(char, newDecomp);
-				} else {
-					dict.addDecomposition(char, decomp.filter((char) => char !== '?'));
-					console.log('Removed ? from decomp', char);
 				}
 			}
 		}
