@@ -11,7 +11,7 @@ import GameOneInFour from './GameOneInFour';
 import ProgressBar from './ProgressBar';
 import CharacterOverlay from './CharacterOverlay';
 import Button from './Button';
-import { getAnsweredCards } from './../helpers/cards';
+import { getAnsweredCards, maxSize } from './../helpers/cards';
 import { isMatchOneGame } from './../helpers/game';
 import { getKnownWordCount, getUnKnownWordCount } from './../helpers/difficulty-ratings';
 import { dismountCurrentGame, dismountDeck, refresh } from './../actions';
@@ -154,15 +154,9 @@ const mapStateToProps = (state, props) => {
         deck,
         overlay,
         cards,
-        words,
         answers
     } = state;
 
-    let maxSize;
-
-    if (words) {
-        maxSize = words.length;
-    }
     const knownWordCount = getKnownWordCount(answers);
     // While we're building out the game it's possible I've removed words from the game
     // that are included in unknown word count.

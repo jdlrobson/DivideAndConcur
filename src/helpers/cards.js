@@ -9,6 +9,7 @@ import { random } from './../utils'
 export const DATA_MODIFIED_LAST = dictJson.modified;
 export const dictUtils = new DictionaryUtils(dictJson.words,
     dictJson.decompositions, dictJson.difficulty, dictJson.pinyin);
+export const maxSize = dictJson.total;
 
 export const ALL_WORDS = dictUtils.all();
 

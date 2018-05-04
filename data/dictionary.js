@@ -70,8 +70,10 @@ function save() {
 		// update the utils
 		reload();
 		const modified = new Date();
+		const total = Array.from(new Set(Array.from(Object.keys(words).join()))).length;
+		console.log(`${total} characters saved to dictionary.`);
 		fs.writeFile(DICTIONARY_FILE,
-			JSON.stringify({ words, decompositions, difficulty, modified, pinyin }),
+			JSON.stringify({ words, decompositions, difficulty, modified, pinyin, total }),
 			function( err ) {
 				if ( !err ) {
 					resolve();
