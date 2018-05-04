@@ -114,6 +114,7 @@ class App extends Component {
                                 <Card isSmall={true} />
                         }
                     </div>
+                    <div className='app__rounds'>{props.numRounds}</div>
                 </div>
                 {workflow}
                 <div className='app__content'>
@@ -153,6 +154,7 @@ const mapStateToProps = (state, props) => {
         game,
         deck,
         overlay,
+        numRounds,
         cards,
         answers
     } = state;
@@ -168,6 +170,7 @@ const mapStateToProps = (state, props) => {
         hasRefreshButton: !isMatchOneGame(game) && getAnsweredCards({ cards }).length === 0,
         isPaused,
         game,
+        numRounds,
         deck,
         overlay,
         unknownWordCount,

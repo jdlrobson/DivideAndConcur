@@ -11,6 +11,7 @@ import isDirty from './isDirty';
 import isBooted from './isBooted';
 import words from './words';
 import endRound from './endRound';
+import numRounds from './numRounds';
 
 export default {
     cards,
@@ -19,6 +20,7 @@ export default {
     highlighted,
     isRendered,
     paused,
+    numRounds,
     cards,
     game,
     isFlipping,
