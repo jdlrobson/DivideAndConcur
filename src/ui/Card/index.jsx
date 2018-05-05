@@ -103,11 +103,13 @@ class FlashCard extends Component {
             </div>
         );
 
+        const inPinyin = <div key='pinyin' className={className(BLOCK_NAME, 'pinyin')}
+            style={isSelected && props.pinyin !== false ? {} : hidden}>{props.pinyin}</div>;
+        const inEnglish = <div key='lang' className={className(BLOCK_NAME, 'english')}
+            style={isSelected && props.english !== false ? {} : hidden}>{props.english}</div>;
         const translations = [
-            <div key='lang' className={className(BLOCK_NAME, 'english')}
-                style={isSelected && props.english !== false ? {} : hidden}>{props.english}</div>,
-            <div key='pinyin' className={className(BLOCK_NAME, 'pinyin')}
-                style={isSelected && props.pinyin !== false ? {} : hidden}>{props.pinyin}</div>
+            inPinyin,
+            inEnglish
         ];
         const buttons = props.selectedControls ? [
             <div key='tick' className='tick card__control__button' onClick={this.tick.bind(this)}
