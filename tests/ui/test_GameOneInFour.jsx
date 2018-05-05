@@ -12,15 +12,15 @@ describe('GameOneInFour', () => {
         ];
         cards.forEach((cardProps) => {
             const props = getCardProps(cardProps, 0, { pinyin: 'huǒ shān' });
-            assert.equal(props.label.split(' ').length, 2,
-                `if the target card has 2 word pinyin other cards should too: (${props.label})`
+            assert.equal(props.pinyin.split(' ').length, 2,
+                `if the target card has 2 word pinyin other cards should too: (${props.pinyin})`
             );
             assert.ok(props.isWide, '2 chars long = wide');
         });
         cards.forEach((cardProps) => {
             const props = getCardProps(cardProps, 0, { pinyin: 'huǒ' });
-            assert.equal(props.label.split(' ').length, 1,
-                `if the target card has 1 word pinyin other cards should too: (${props.label})`
+            assert.equal(props.pinyin.split(' ').length, 1,
+                `if the target card has 1 word pinyin other cards should too: (${props.pinyin})`
             );
             assert.ok(props.isWide === false, '1 chars long != wide');
         });

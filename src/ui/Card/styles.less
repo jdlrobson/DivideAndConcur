@@ -38,6 +38,9 @@
 
 .card--unknown {
   opacity: 0.4;
+  .card__front {
+    background: @backSideColor;
+  }
 }
 
 .card__front,
@@ -140,6 +143,10 @@
   position: absolute;
   right: 10px;
   bottom: 0;
+}
+
+.card__label--hidden-character {
+  visibility: hidden;
 }
 
 .card__label {

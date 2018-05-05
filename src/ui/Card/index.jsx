@@ -104,9 +104,11 @@ class FlashCard extends Component {
         );
 
         const inPinyin = <div key='pinyin' className={className(BLOCK_NAME, 'pinyin')}
-            style={isSelected && props.pinyin !== false ? {} : hidden}>{props.pinyin}</div>;
+            style={(isSelected || props.hideCharacter) && props.pinyin !== false ?
+                {} : hidden}>{props.pinyin}</div>;
         const inEnglish = <div key='lang' className={className(BLOCK_NAME, 'english')}
-            style={isSelected && props.english !== false ? {} : hidden}>{props.english}</div>;
+            style={(isSelected || props.hideCharacter) && props.english !== false ?
+                {} : hidden}>{props.english}</div>;
         const translations = [
             inPinyin,
             inEnglish
@@ -124,6 +126,9 @@ class FlashCard extends Component {
         const labelModifiers = [];
         if (props.label) {
             labelModifiers.push('custom');
+        }
+        if (props.hideCharacter) {
+            labelModifiers.push('hidden-character');
         }
         if (label.length > 4) {
             labelModifiers.push('long');

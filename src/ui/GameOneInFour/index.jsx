@@ -6,7 +6,8 @@ import { connect } from 'preact-redux';
 import { endRound } from './../../actions';
 import './styles.less';
 
-export const getCardProps = (cardProps, mode, targetCard) => {
+export const getCardProps = (cardProps, mode, targetCard, isFinished) => {
+    const character = cardProps.character;
     let label = mode === 0 ? cardProps.pinyin : cardProps.english;
     if (mode === 0) {
         const targetPinyin = targetCard.pinyin.split(' ');
@@ -18,13 +19,14 @@ export const getCardProps = (cardProps, mode, targetCard) => {
         }
     }
     const modeBasedCardData = mode === 0 ?
-        { english: false, pinyin: false, isWide: label.split(' ').length > 1 } :
+        { english: false, pinyin: label, isWide: label.split(' ').length > 1, character } :
         { pinyin: false,
-            english: false,
+            character,
+            english: label,
             isWide: true };
     return Object.assign({}, cardProps, {
         isSmall: true,
-        label,
+        hideCharacter: !cardProps.isAnswered,
         className: 'game-one-four__choices__card',
         selectedControls: false,
         hideDifficulty: true,
@@ -44,16 +46,17 @@ class GameOneInFour extends Component {
     }
     render(props) {
         const card = props.cards[0];
+        const isFinished = this.isFinished(props);
 
         return (<div className='game-one-four'>
             <p>Match the cards</p>
             <div className='game-one-four__cards'>
-                <Card {...card} isLarge isSelected={this.isFinished(props)}
+                <Card {...card} isLarge isSelected={isFinished}
                     isFrozen debug={false}
                 /><div className='game-one-four__choices'>{
                     props.cards.slice(1)
                         .map(cardProps =>
-                            <Card {...getCardProps(cardProps, props.mode, card)} />
+                            <Card {...getCardProps(cardProps, props.mode, card, isFinished)} />
                         )
                 }
                 </div>
