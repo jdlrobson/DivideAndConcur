@@ -156,6 +156,7 @@ const mapStateToProps = (state, props) => {
         highlighted,
         game,
         deck,
+        seenWords,
         overlay,
         numRounds,
         cards,
@@ -170,7 +171,10 @@ const mapStateToProps = (state, props) => {
         isBooted,
         isDeckEmpty: cards === undefined ? true : cards.length === 0,
         highlighted: highlighted || [],
-        hasRefreshButton: game === MATCH_PAIRS && getAnsweredCards({ cards }).length === 0,
+        // Refresh button might confuse new users. To help them learn to click cards
+        // don't show it until they are into the swing of the game
+        hasRefreshButton: seenWords.length > 10 && game === MATCH_PAIRS &&
+            getAnsweredCards({ cards }).length === 0,
         isPaused,
         game,
         numRounds,
