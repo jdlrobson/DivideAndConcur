@@ -71,12 +71,18 @@ export function refresh() {
     };
 }
 
+export function resetNumRounds() {
+    return { type: actionTypes.RESET_ROUNDS };
+}
+
 export function endRound( callback ) {
     callback = callback || setTimeout;
     return (dispatch, getState) => {
         const state = getState();
+        const cards = state.cards;
+        const game = state.game;
         if (!state.endRound) {
-            dispatch({ type: actionTypes.END_ROUND });
+            dispatch({ type: actionTypes.END_ROUND, cards, game });
 
             callback(() => {
                 let followup = startRound();

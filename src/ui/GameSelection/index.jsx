@@ -5,6 +5,7 @@ import { switchGame, startRound } from './../../actions';
 import { MATCH_PAIRS, REVISE,
     ENGLISH_TO_CHINESE, PINYIN_TO_CHINESE, MATCH_SOUND,
     MATCH_DEFINITION,
+    TAKE_A_BREAK, BREAK_AFTER_ROUNDS,
     DECK_NEW, DECK_KNOWN, DECK_UNKNOWN,
     ALLOW_DECK_SELECTION
 } from './../../constants';
@@ -22,7 +23,9 @@ class GameSelection extends Component {
                 MATCH_DEFINITION, MATCH_DEFINITION, MATCH_DEFINITION,
                 MATCH_SOUND, MATCH_SOUND, MATCH_SOUND
             ];
-            if (props.deck === DECK_NEW) {
+            if (props.numRounds >= BREAK_AFTER_ROUNDS) {
+                props.setGame(TAKE_A_BREAK);
+            } else if (props.deck === DECK_NEW) {
                 props.setGame(MATCH_PAIRS);
             } else {
                 props.setGame(random(games));
@@ -76,10 +79,10 @@ const mapDispatchToProps = (dispatch, props) => {
 
 const mapStateToProps = (state, props) => {
     const {
-        deck
+        deck, numRounds
     } = state;
 
-    return Object.assign({}, props, { deck });
+    return Object.assign({}, props, { deck, numRounds });
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(GameSelection);

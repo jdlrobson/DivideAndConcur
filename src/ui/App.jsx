@@ -9,15 +9,16 @@ import GameSelection from './GameSelection';
 import DeckSelection from './DeckSelection';
 import GameOneInFour from './GameOneInFour';
 import ProgressBar from './ProgressBar';
+import TakeBreak from './TakeBreak';
 import CharacterOverlay from './CharacterOverlay';
 import Button from './Button';
 import { getAnsweredCards, maxSize } from './../helpers/cards';
-import { isMatchOneGame } from './../helpers/game';
 import { getKnownWordCount, getUnKnownWordCount } from './../helpers/difficulty-ratings';
 import { dismountCurrentGame, dismountDeck, refresh } from './../actions';
 import { MATCH_PAIRS, REVISE,
     ENGLISH_TO_CHINESE, PINYIN_TO_CHINESE,
     MATCH_SOUND, MATCH_DEFINITION,
+    TAKE_A_BREAK,
     DECK_NEW,
     DECK_UNKNOWN,
     ALLOW_DECK_SELECTION
@@ -60,6 +61,8 @@ class App extends Component {
         if (game && !isDeckEmpty) {
             workflow = (
                 <div className='app__content'>
+                    { (game === TAKE_A_BREAK) &&
+                        <TakeBreak /> }
                     { (game === REVISE) &&
                         <Game description={gameDescription} /> }
                     { (game === MATCH_PAIRS)
@@ -167,7 +170,7 @@ const mapStateToProps = (state, props) => {
         isBooted,
         isDeckEmpty: cards === undefined ? true : cards.length === 0,
         highlighted: highlighted || [],
-        hasRefreshButton: !isMatchOneGame(game) && getAnsweredCards({ cards }).length === 0,
+        hasRefreshButton: game === MATCH_PAIRS && getAnsweredCards({ cards }).length === 0,
         isPaused,
         game,
         numRounds,

@@ -8,6 +8,7 @@ import game from './game';
 import isFlipping from './isFlipping';
 import isFlipped from './isFlipped';
 import isDirty from './isDirty';
+import seenWords from './seenWords';
 import isBooted from './isBooted';
 import words from './words';
 import endRound from './endRound';
@@ -20,6 +21,7 @@ export default {
     highlighted,
     isRendered,
     paused,
+    seenWords,
     numRounds,
     cards,
     game,
