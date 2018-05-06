@@ -81,8 +81,8 @@ class GameMatchPairs extends Component {
                         {...card}
                         isSelected={isSelected}
                         pinyin={false}
-                        english={false}
-                        label={pairIndex === index ? undefined : card.english}
+                        hideCharacter={pairIndex !== index}
+                        english={pairIndex === index ? undefined : card.english}
                         selectedControls={false} isFrozen={isFrozen} />
                 );
             });
@@ -97,8 +97,8 @@ class GameMatchPairs extends Component {
                         {...card}
                         isSelected={isSelected}
                         english={false}
-                        pinyin={false}
-                        label={pairIndex === index ? undefined : card.pinyin}
+                        hideCharacter={pairIndex !== index}
+                        pinyin={pairIndex === index ? undefined : card.pinyin}
                         selectedControls={false} isFrozen={isFrozen} />
                 );
             });
