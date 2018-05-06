@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "deploy": "parcel build index.html --no-cache  --out-dir build/ --public-url /",
     "precommit": "npm run fixlint && npm run node:test",
-    "start": "parcel index.html",
+    "start": "parcel watch index.html",
     "lint:ui": "eslint src/ui/**/*.jsx",
     "lint": "eslint \"src/**/*.js[x]\" \"tests/**\"",
     "fixlint": "eslint \"src/**/*.js[x]\" \"tests/**\" --fix",
@@ -21,7 +22,7 @@
     "babel-preset-env": "^1.6.1",
     "html-to-text": "^3.3.0",
     "less": "^3.0.1",
-    "parcel-plugin-sw-precache": "^0.4.2",
+    "parcel-plugin-sw-precache": "github:jdlrobson/parcel-plugin-sw-precache",
     "preact-redux": "^2.0.3",
     "prompt": "^1.0.0",
     "redux": "^3.7.2"
