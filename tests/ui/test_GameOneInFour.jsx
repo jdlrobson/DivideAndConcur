@@ -11,14 +11,25 @@ describe('GameOneInFour', () => {
             { character: '西瓜', rating: 24, wordLength: 3, pinyin: 'xī guā' },
         ];
         cards.forEach((cardProps) => {
-            const props = getCardProps(cardProps, 0, { pinyin: 'huǒ shān' });
+            const props = getCardProps(cardProps, 0, { character: '火山', pinyin: 'huǒ shān' });
+            assert.ok(Array.from(props.character).length === 2,
+                'character is made up');
             assert.equal(props.pinyin.split(' ').length, 2,
                 `if the target card has 2 word pinyin other cards should too: (${props.pinyin})`
             );
             assert.ok(props.isWide, '2 chars long = wide');
         });
         cards.forEach((cardProps) => {
-            const props = getCardProps(cardProps, 0, { pinyin: 'huǒ' });
+            const props = getCardProps(cardProps, 0, { pinyin: 'huǒ', character: '火' });
+            assert.ok(Array.from(props.character).length === 1,
+                'character is split too');
+            assert.equal(props.pinyin.split(' ').length, 1,
+                `if the target card has 1 word pinyin other cards should too: (${props.pinyin})`
+            );
+            assert.ok(props.isWide === false, '1 chars long != wide');
+        });
+        cards.forEach((cardProps) => {
+            const props = getCardProps(cardProps, 0, { pinyin: 'huǒ', character: '火' });
             assert.equal(props.pinyin.split(' ').length, 1,
                 `if the target card has 1 word pinyin other cards should too: (${props.pinyin})`
             );

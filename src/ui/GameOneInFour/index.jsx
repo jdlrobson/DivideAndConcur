@@ -7,15 +7,18 @@ import { endRound } from './../../actions';
 import './styles.less';
 
 export const getCardProps = (cardProps, mode, targetCard, isFinished) => {
-    const character = cardProps.character;
+    let character = cardProps.character;
     let label = mode === 0 ? cardProps.pinyin : cardProps.english;
     if (mode === 0) {
+        const targetChar = Array.from(targetCard.character)[0];
         const targetPinyin = targetCard.pinyin.split(' ');
         // make sure pinyin is same length as target
         if (targetPinyin.length > label.split(' ').length) {
             label = `${targetPinyin[0]} ${label}`;
+            character = targetChar + character;
         } else if (targetPinyin.length < label.split(' ').length) {
             label = label.split(' ')[0];
+            character = Array.from(character)[0];
         }
     }
     const modeBasedCardData = mode === 0 ?
