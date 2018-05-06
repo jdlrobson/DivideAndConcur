@@ -3,6 +3,8 @@ import { isMatchOneGame } from './../helpers/game';
 
 export default (state=[], action) => {
     switch (action.type) {
+        case actionTypes.RESET_ROUNDS:
+            return [];
         case actionTypes.END_ROUND:
             const cards = action.cards;
             if ( isMatchOneGame(action.game) ) {
