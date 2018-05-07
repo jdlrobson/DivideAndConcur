@@ -6,9 +6,9 @@ import { checkForSave, checkForBoot,
     checkForTimedAction, checkIfEndOfRound } from './subscribers';
 
 import { init, answerAllCardsInRound, highlightCharacter } from './actions';
+import { STARTUP_WAIT_TIME } from './constants';
 import reducer from './reducer';
 import thunkMiddleware from 'redux-thunk';
-
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(reducer,
     composeEnhancers(
@@ -96,7 +96,7 @@ const store = createStore(reducer,
         setTimeout(() => {
             store.dispatch(init(userData));
             focusWindow();
-        }, 5000);
+        }, STARTUP_WAIT_TIME);
     };
     if ( !window.location.hash ) {
         window.location.hash = seen ? '#panel-6' : '#panel-1';

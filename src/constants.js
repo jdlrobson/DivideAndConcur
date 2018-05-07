@@ -15,4 +15,6 @@ export const DECK_UNKNOWN = 'unknown';
 export const ALLOW_DECK_SELECTION = false;
 
 export const VERSION = '0.6.0';
+
 export const BREAK_AFTER_ROUNDS = 100;
+export const STARTUP_WAIT_TIME = process.env.DEV ? 0 : 5000;

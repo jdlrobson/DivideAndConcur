@@ -6,7 +6,7 @@
   "scripts": {
     "deploy": "parcel build index.html --no-cache  --out-dir build/ --public-url /",
     "precommit": "npm run fixlint && npm run node:test",
-    "start": "parcel index.html",
+    "start": "export DEV=1 && parcel index.html",
     "lint:ui": "eslint src/ui/**/*.jsx",
     "lint": "eslint \"src/**/*.js[x]\" \"tests/**\"",
     "fixlint": "eslint \"src/**/*.js[x]\" \"tests/**\" --fix",
