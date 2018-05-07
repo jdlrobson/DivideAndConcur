@@ -39,10 +39,15 @@ export function answerAllCardsInRound( isCorrect, cards ) {
 export function flipCardsAfter(milliseconds) {
     return (dispatch, getState) => {
         if ( !getState().isFlipping ) {
+            const interval = setInterval(() => {
+              dispatch({ type: actionTypes.COUNT_DOWN });
+            }, 1000);
             setTimeout(() => {
+                clearInterval(interval);
                 dispatch({ type: actionTypes.FLIP_CARDS_END });
             }, milliseconds);
-            dispatch({ type: actionTypes.FLIP_CARDS_START });
+            dispatch({ type: actionTypes.FLIP_CARDS_START,
+              countdown: parseInt( milliseconds / 1000, 10 ) });
         }
     };
 }

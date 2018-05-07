@@ -1,3 +1,30 @@
+.game-match-pairs__countdown {
+  position: absolute;
+  top: 20px;
+  font-size: 100px;
+  color: #333;
+  left: 50%;
+  margin-left: -36px;
+  top: 40%;
+  z-index: 5;
+}
+
+.game-match-pairs__cards {
+  opacity: 1;
+}
+
+.game-match-pairs__countdown {
+  transition: opacity 1.5s;
+}
+.game-match-pairs__countdown--hidden {
+  opacity: 0;
+}
+
+.game-match-pairs__cards--countdown {
+  opacity: 0.3;
+  transition: opacity 1.5s;
+}
+
 .game-match-pairs__card {
   &:nth-child(3n) {
     margin-right: 0;
