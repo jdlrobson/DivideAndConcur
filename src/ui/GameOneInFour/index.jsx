@@ -64,7 +64,6 @@ class GameOneInFour extends Component {
                 }
                 </div>
             </div>
-            <div className='game-one-four__end-marker' />
         </div>);
     }
 }

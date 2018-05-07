@@ -89,6 +89,7 @@ footer {
 .panel__card {
   margin-right: 24px !important;
   margin-bottom: 24px;
+  float: left;
 }
 
 .panel:not(:target) {

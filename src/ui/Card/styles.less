@@ -10,11 +10,10 @@
   width: @cardSize;
   height: @cardSize;
   background: @backSideColor;
-  float: left;
-  margin-right: @card-gutter;
   text-align: center;
   position: relative;
   font-size: 0.8em;
+  justify-self: center;
 }
 
 .card--large {
@@ -169,9 +168,8 @@
   }
 }
 
-@app-width: 465px;
 @card-max-width: (@app-width / 3) - @card-gutter - (@card-border-width * 2);
-
+@card-small-max-width: (@card-max-width / 2) - (@card-gutter/2);
 @media all and ( min-width: @app-width ) {
   .card {
     width: @card-max-width;
@@ -180,8 +178,8 @@
   }
   .card--small {
     font-size: 0.7em;
-    width: @cardSizeSmall;
-    height: @cardSizeSmall;
+    width: @card-small-max-width;
+    height: @card-small-max-width;
   }
 	.card--wide {
 		width: @cardSizeSmall * 2;

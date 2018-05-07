@@ -1,29 +1,36 @@
 @import './../Card/variables.less';
-.game-one-fourgame-one-four__end-marker {
-  clear: both;
+.game-one-four__cards {
+  display: grid;
+  grid-template-columns: 150px 150px;
 }
 
 .game-one-four__choices {
-  width: (@cardSizeSmall * 2) + @card-gutter + @card-gutter + @card-gutter;
-  float: left;
-  margin-top: -5px;
-  height: @cardSizeLarge + @card-gutter;
-}
+  display: grid;
+  grid-column-gap: @card-gutter;
+  grid-row-gap: @card-gutter;
 
-.game-one-four__cards {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
   .card {
-    margin-bottom: @card-gutter;
+    justify-self: start;
+
+    &:nth-child(odd) {
+      grid-column: 1;
+    }
+    &:nth-child(even) {
+      grid-column: 2;
+    }
   }
-  .card--large {
-    margin-top: 0;
+
+  .card.card--wide {
+    grid-column: 1;
   }
 }
 
-@media all and (min-width: 500px) {
+@media all and ( min-width: @app-width ) {
   .game-one-four__choices {
-    width: ((@cardSizeSmall * 2) * 2) + 20px;
+    .card {
+      &:nth-child(even) {
+        grid-column: 2;
+      }
+    }
   }
 }

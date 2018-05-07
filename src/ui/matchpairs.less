@@ -1,3 +1,12 @@
+@import './Card/variables.less';
+
+.game-match-pairs__cards {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  grid-column-gap: @card-gutter;
+  grid-row-gap: @card-gutter;
+}
+
 .game-match-pairs__countdown {
   position: absolute;
   top: 20px;
@@ -23,12 +32,6 @@
 .game-match-pairs__cards--countdown {
   opacity: 0.3;
   transition: opacity 1.5s;
-}
-
-.game-match-pairs__card {
-  &:nth-child(3n) {
-    margin-right: 0;
-  }
 }
 
 .game-match-pairs__card,
