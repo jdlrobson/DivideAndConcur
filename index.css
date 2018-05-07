@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  background: #ffcf5b;
+  background: #594A42;
 }
 
 * {
@@ -17,7 +17,6 @@ body {
 .chrome__header__home {
   float: none;
   width: 100%;
-  border-bottom: solid 1px #aaa;
 }
 
 .chrome__content {
