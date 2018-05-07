@@ -1,8 +1,8 @@
+@import './../variables.less';
+
 .progress-bar {
-  border: solid 1px #333;
   box-sizing: border-box;
   width: 100%;
-  padding: 8px;
   max-width: 500px;
 
   * {
@@ -11,24 +11,23 @@
 }
 
 .progress-bar__bar {
-  height: 20px;
+  height: 31px;
   width: 100%;
-  border: solid 1px #333;
   margin-bottom: 8px;
+  display: grid;
+  grid-column-gap: 8px;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
 
   div {
-    height: 100%;
-    float: left;
-    &:first-child {
-       background-color: green;
-    }
-    &:last-child {
-       background-color: red;
-    }
+    height: 31px;
+    transition: background 1s ease-in;
   }
 }
 
-.progress-bar__label {
-  color: #333;
-  font-weight: bold;
+.progress-bar__bar__unlocked {
+  background: @someday-blue;
+}
+
+.progress-bar__bar__locked {
+  background: @someday-orange;
 }

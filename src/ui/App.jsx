@@ -90,6 +90,11 @@ class App extends Component {
         return (
             <div className='app'>
                 {this.state && this.state.overlay}
+                {
+                    props.maxSize &&
+                    <ProgressBar known={props.knownWordCount} total={props.maxSize}
+                        unknown={props.unknownWordCount} />
+                }
                 <div className='app__header'>
                     { ALLOW_DECK_SELECTION &&
                     <div className='app__header__home'>
@@ -97,13 +102,6 @@ class App extends Component {
                             disabled={props.isPaused || !props.deck}>Back</Button>
                     </div>
                     }
-                    <div className='app__component--floated'>
-                        {
-                            props.maxSize &&
-                            <ProgressBar known={props.knownWordCount} total={props.maxSize}
-                                unknown={props.unknownWordCount} />
-                        }
-                    </div>
                     <div className='app__component--floated'>
                         {
                             props.isBooted && props.highlighted.map((props) => {

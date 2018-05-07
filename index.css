@@ -19,7 +19,12 @@ body {
   width: 100%;
 }
 
-.chrome__content {
+.chrome__header__home a {
+  display: block;
+}
+
+.panel,
+.app__content {
   padding: 3px;
 }
 
