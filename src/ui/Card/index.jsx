@@ -61,7 +61,7 @@ export class Card extends Component {
     }
 }
 
-class FlashCard extends Component {
+export class FlashCard extends Component {
     onClick(ev) {
         const props = this.props;
         if (!props.isSelected && !props.isFrozen) {
