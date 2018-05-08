@@ -125,7 +125,7 @@ export function endRound( callback ) {
                     }
                 }
                 dispatch(followup);
-            }, 1000);
+            }, 3000);
         }
     };
 }

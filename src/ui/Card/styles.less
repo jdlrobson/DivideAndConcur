@@ -22,9 +22,9 @@
 .card__expand-button {
   cursor: pointer;
   line-height: 40px;
-  right: 2px;
+  right: -8px;
   position: absolute;
-  top: 0px;
+  top: -8px;
   font-size: 40px;
   display: block;
   width: 40px;
@@ -35,6 +35,22 @@
   width: @cardSizeLarge;
   height: @cardSizeLarge;
   font-size: 1.4em;
+
+  .card__front {
+    padding-top: 26px;
+  }
+  .card__english,
+  .card__pinyin {
+    height: 40px;
+  }
+}
+
+.card__pinyin--hide {
+  visibility: hidden;
+}
+
+.card__english--hide {
+  visibility: hidden;
 }
 
 .card--known {
@@ -77,6 +93,7 @@
   /* for firefox 31 */
   transform: rotateY(0deg);
   line-height: 1.3;
+  padding-top: 10px;
 }
 
 .card--flipped {
@@ -87,7 +104,7 @@
 .card__english {
   font-size: 0.8em;
   overflow: hidden;
-  height: 25px;
+  height: 18px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -95,6 +112,7 @@
 .card__pinyin {
   font-family: sans-serif;
   font-weight: bold;
+  color: #847b66;
 }
 
 .card__english {
@@ -141,9 +159,10 @@
 }
 
 .card__debug {
-	position: absolute;
-	bottom: 2px;
-	right: 2px;
+  position: absolute;
+  bottom: -6px;
+  right: 0;
+  left: 0;
 }
 
 .card__control__button {

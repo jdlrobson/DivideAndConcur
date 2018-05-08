@@ -69,9 +69,9 @@ class GameMatchPairs extends Component {
                     <Card className={className}
                         {...card}
                         isSelected={isSelected}
-                        pinyin={false}
-                        hideCharacter={pairIndex !== index}
-                        english={pairIndex === index ? undefined : card.english}
+                        hideCharacter={!card.isAnswered && pairIndex !== index}
+                        hideEnglish={!card.iAnswered && pairIndex === index}
+                        hidePinyin={!card.isAnswered}
                         selectedControls={false} isFrozen={isFrozen} />
                 );
             });
@@ -84,10 +84,10 @@ class GameMatchPairs extends Component {
                 return (
                     <Card className={className}
                         {...card}
+                        hideEnglish={!card.isAnswered}
+                        hidePinyin={!card.iAnswered && pairIndex === index}
+                        hideCharacter={!card.isAnswered && pairIndex !== index}
                         isSelected={isSelected}
-                        english={false}
-                        hideCharacter={pairIndex !== index}
-                        pinyin={pairIndex === index ? undefined : card.pinyin}
                         selectedControls={false} isFrozen={isFrozen} />
                 );
             });

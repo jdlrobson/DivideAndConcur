@@ -109,12 +109,20 @@ class FlashCard extends Component {
             </div>
         );
 
-        const inPinyin = <div key='pinyin' className={className(BLOCK_NAME, 'pinyin')}
-            style={(isSelected || props.hideCharacter) && props.pinyin !== false ?
-                {} : hidden}>{props.pinyin}</div>;
-        const inEnglish = <div key='lang' className={className(BLOCK_NAME, 'english')}
-            style={(isSelected || props.hideCharacter) && props.english !== false ?
-                {} : hidden}>{props.english}</div>;
+        const inPinyin = <div key='pinyin' className={
+            className(BLOCK_NAME, 'pinyin',
+                !done && props.hidePinyin ? [ 'hide' ] : []
+            )
+        }
+        style={props.pinyin !== false ?
+            {} : hidden}>{props.pinyin}</div>;
+        const inEnglish = <div key='lang' className={
+            className(BLOCK_NAME, 'english',
+                !done && props.hideEnglish ? [ 'hide' ] : []
+            )
+        }
+        style={props.english !== false ?
+            {} : hidden}>{props.english}</div>;
         const translations = [
             inPinyin,
             inEnglish

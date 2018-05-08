@@ -22,13 +22,11 @@ export const getCardProps = (cardProps, mode, targetCard, isFinished) => {
         }
     }
     const modeBasedCardData = mode === 0 ?
-        { english: false, pinyin: label, isWide: label.split(' ').length > 1, character } :
-        { pinyin: false,
+        { hideEnglish: true, pinyin: label, character } :
+        { hidePinyin: true,
             character,
-            english: label,
-            isWide: true };
+            english: label };
     return Object.assign({}, cardProps, {
-        isSmall: true,
         hideCharacter: !cardProps.isAnswered,
         className: 'game-one-four__choices__card',
         selectedControls: false,
@@ -54,11 +52,12 @@ class GameOneInFour extends Component {
         return (<div className='game-one-four'>
             <div className='game-one-four__cards'>
                 <Card {...card} isLarge isSelected={isFinished}
-                    isFrozen debug={false}
+                    isFrozen debug={false} hidePinyin={!isFinished} hideEnglish={!isFinished}
                 /><div className='game-one-four__choices'>{
                     props.cards.slice(1)
                         .map(cardProps =>
-                            <Card {...getCardProps(cardProps, props.mode, card, isFinished)} />
+                            <Card {...getCardProps(cardProps, props.mode, card, isFinished)}
+                                onExpandCard={false} />
                         )
                 }
                 </div>

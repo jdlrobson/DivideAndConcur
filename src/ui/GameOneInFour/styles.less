@@ -1,13 +1,19 @@
-@import './../Card/variables.less';
+@import './../variables.less';
 .game-one-four__cards {
-  display: grid;
-  grid-template-columns: 150px 150px;
+  margin-top: 20px;
+
+  .card--large {
+    margin: auto;
+  }
 }
 
 .game-one-four__choices {
   display: grid;
   grid-column-gap: @card-gutter;
   grid-row-gap: @card-gutter;
+  margin: @card-gutter auto;
+  grid-template-columns: 1fr 1fr;
+  width: @card-size-normal * 2;
 
   .card {
     justify-self: start;
