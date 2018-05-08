@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-		<title>Divide & Concur - Learn Chinese</title>
+		<title>qie qie</title>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" href="index.less">
@@ -20,16 +20,7 @@
 				</div>
 			</div>
 			<div class="chrome__content" id="chrome__content__panel-one">
-				<div class="progress-bar">
-					<div class="progress-bar__bar">
-						<!-- todo: generate from jsx component -->
-						<div class="progress-bar__bar__locked"></div>
-						<div class="progress-bar__bar__locked"></div>
-						<div class="progress-bar__bar__locked"></div>
-						<div class="progress-bar__bar__locked"></div><div class="progress-bar__bar__locked"></div><div class="progress-bar__bar__locked"></div><div class="progress-bar__bar__locked"></div><div class="progress-bar__bar__locked"></div><div class="progress-bar__bar__locked"></div>
-						<div class="progress-bar__bar__locked"></div><div class="progress-bar__bar__locked"></div><div class="progress-bar__bar__locked"></div><div class="progress-bar__bar__locked"></div><div class="progress-bar__bar__locked"></div><div class="progress-bar__bar__locked"></div><div class="progress-bar__bar__locked"></div>
-					</div>
-				</div>
+				<!-- PROGRESSBAR-START --><!-- PROGRESSBAR-END -->
 				<div class="panel-wrapper">
 					<div id="panel-1" class="panel">
 						<p>I made this game because I thought it would be impossible to learn Mandarin.</p>
@@ -163,16 +154,7 @@
 			</div>
 			<div id="container" class="chrome__content"  style="display: none;">
 				<div id="chrome__content__panel-two" style="display: none;">
-					<div class="progress-bar">
-						<div class="progress-bar__bar">
-							<!-- todo: generate from jsx component -->
-							<div class="progress-bar__bar__locked"></div>
-							<div class="progress-bar__bar__locked"></div>
-							<div class="progress-bar__bar__locked"></div>
-							<div class="progress-bar__bar__locked"></div><div class="progress-bar__bar__locked"></div><div class="progress-bar__bar__locked"></div><div class="progress-bar__bar__locked"></div><div class="progress-bar__bar__locked"></div><div class="progress-bar__bar__locked"></div>
-							<div class="progress-bar__bar__locked"></div><div class="progress-bar__bar__locked"></div><div class="progress-bar__bar__locked"></div><div class="progress-bar__bar__locked"></div><div class="progress-bar__bar__locked"></div><div class="progress-bar__bar__locked"></div><div class="progress-bar__bar__locked"></div>
-						</div>
-					</div>
+					<!-- PROGRESSBAR-START --><!-- PROGRESSBAR-END -->
 					<p>洗牌!</p>
 					<img class='chrome__boot-screen__img' style="border: solid 1px #aaa;"
 						width="288" height="162"

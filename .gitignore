@@ -3,3 +3,4 @@ node_modules
 dist
 strokecounter/strokecounts.txt
 strokecounter/datatocount.txt
+index.html
