@@ -72,7 +72,6 @@
 }
 
 .card__front {
-  padding-top: 20px;
   z-index: 2;
   background: @frontSideColor;
   /* for firefox 31 */
@@ -106,10 +105,6 @@
   width: @cardSizeSmall;
   height: @cardSizeSmall;
   font-size: 0.7em;
-
-  .card__front {
-    padding-top: 5px;
-  }
 }
 
 .card--wide {
@@ -199,10 +194,17 @@
     height: @card-max-width;
     font-size: 1em;
   }
+  .card__front {
+    padding-top: 20px;
+  }
   .card--small {
     font-size: 0.7em;
     width: @card-small-max-width;
     height: @card-small-max-width;
+
+    .card__front {
+      padding-top: 5px;
+    }
   }
 	.card--wide {
 		width: @cardSizeSmall * 2;
