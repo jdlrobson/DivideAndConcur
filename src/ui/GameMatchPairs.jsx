@@ -105,10 +105,15 @@ class GameMatchPairs extends Component {
         }
 
         const classModifiers = props.countdown > 0 ? 'game-match-pairs__cards--countdown' : '';
-        const modifier = props.countdown === 0 ? ' game-match-pairs__countdown--hidden' : '';
+        const modifier = props.countdown === 1 ? ' game-match-pairs__countdown--hidden' : '';
         return (
             <div className='game-match-pairs'>
-                <div className={`game-match-pairs__countdown${modifier}`}>{props.countdown}</div>
+                {
+                    props.countdown > 0 && (
+                        <div className={`game-match-pairs__countdown${modifier}`}>
+                            {props.countdown}</div>
+                    )
+                }
                 <GameDescription>{msg}</GameDescription>
                 <div className={`game-match-pairs__cards ${classModifiers}`}>{
                     cards
