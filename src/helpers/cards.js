@@ -47,6 +47,16 @@ export function mapCard(state, character, withDecompositions, withBlurb) {
     };
 }
 
+export function getHighlightedCards(state, char) {
+    return freezeCards(
+        makeCardsFromCharacters(state,
+            [ char ],
+            true,
+            true
+        )
+    );
+}
+
 export function getAnsweredCards(state) {
     return state.cards.filter(card => card.isAnswered);
 }

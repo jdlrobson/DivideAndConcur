@@ -2,7 +2,7 @@
 import { Component, h } from 'preact';
 import { connect } from 'preact-redux';
 import './styles.less';
-import { revealFlashcard, answerFlashcard } from './../../actions';
+import { revealFlashcard, answerFlashcard, showOverlay } from './../../actions';
 import { getDifficultyRating } from './../../helpers/difficulty-ratings';
 
 const BLOCK_NAME = 'card';
@@ -71,6 +71,12 @@ class FlashCard extends Component {
             props.onClick(ev, this.props);
         }
     }
+    onExpand(ev) {
+        const props = this.props;
+        if (props.onExpandCard) {
+            props.onExpandCard(ev, props.character);
+        }
+    }
     wrong(ev) {
         const props = this.props;
         props.onAnswered(props.character, props.index, false);
@@ -137,6 +143,11 @@ class FlashCard extends Component {
         return (
             <Card {...props} onClick={this.onClick.bind(this)} >
                 {difficultyBar}
+                {
+                    props.isAnswered && props.onExpandCard !== false && !props.isSmall && (
+                        <a className='card__expand-button' onClick={this.onExpand.bind(this)}>+</a>
+                    )
+                }
                 <div key='char'
                     className={className(BLOCK_NAME, 'label', labelModifiers)}
                 >{label}</div>
@@ -169,7 +180,12 @@ const mapStateToProps = (state, props) => {
 };
 
 const mapDispatchToProps = (dispatch, props) => {
+    const onExpandCard = (ev, character) => {
+        dispatch(showOverlay(character));
+    };
+
     return {
+        onExpandCard: props.onExpandCard !== undefined ? props.onExpandCard : onExpandCard,
         onSelect: (character, index) => {
             dispatch(revealFlashcard(character, index));
         },

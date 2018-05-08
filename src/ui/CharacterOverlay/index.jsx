@@ -22,6 +22,7 @@ class Decompositions extends Component {
                             return <FlashCard {...cardProps} isSelected isFrozen
                                 isSmall={isSmall} debug={false} english={english}
                                 className='app__overlay__decompositions__card'
+                                onExpandCard={false}
                                 key={`card-highlighted-${cardProps.character}`} />;
                         })
                     )
@@ -82,6 +83,7 @@ class CharacterOverlay extends Component {
         return (
             <div className='app__overlay'>
                 <FlashCard {...props} isSmall={false} isSelected isFrozen debug={false}
+                    onExpandCard={false}
                     className='app__overlay__card' />
                 <a href={`https://en.wiktionary.org/wiki/${props.character}`}
                     className='app__overlay__link'>wiktionary</a>

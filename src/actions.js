@@ -32,6 +32,14 @@ export function init(userData) {
     };
 }
 
+export function showOverlay( character ) {
+    return { type: actionTypes.SHOW_OVERLAY, character };
+}
+
+export function hideOverlay() {
+    return { type: actionTypes.HIDE_OVERLAY };
+}
+
 export function answerAllCardsInRound( isCorrect, cards ) {
     return { type: actionTypes.CHEAT_ANSWER_ALL, isCorrect, cards };
 }

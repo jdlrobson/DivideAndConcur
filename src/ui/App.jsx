@@ -2,7 +2,6 @@
 import { Component, h } from 'preact';
 import Game from './Game';
 import { connect } from 'preact-redux';
-import FlashCard, { Card } from './Card';
 import GameMatchPairs from './GameMatchPairs';
 import ExhaustedDeck from './ExhaustedDeck';
 import GameSelection from './GameSelection';
@@ -14,7 +13,9 @@ import CharacterOverlay from './CharacterOverlay';
 import Button from './Button';
 import { getAnsweredCards, maxSize } from './../helpers/cards';
 import { getKnownWordCount, getUnKnownWordCount } from './../helpers/difficulty-ratings';
-import { dismountCurrentGame, dismountDeck, refresh } from './../actions';
+import { dismountCurrentGame, dismountDeck, refresh,
+    hideOverlay
+} from './../actions';
 import { MATCH_PAIRS, REVISE,
     ENGLISH_TO_CHINESE, PINYIN_TO_CHINESE,
     MATCH_SOUND, MATCH_DEFINITION,
@@ -25,23 +26,8 @@ import { MATCH_PAIRS, REVISE,
 } from './../constants';
 
 class App extends Component {
-    clearOverlay() {
-        this.setState({ overlay: undefined });
-    }
-    onHighlightedCardClick(ev, props) {
-        ev.stopPropagation();
-        this.setState({
-            overlay: (
-                <CharacterOverlay {...props}>
-                    <Button className='app__overlay__button'
-                        onClick={this.clearOverlay.bind(this)}>Got it!</Button>
-                </CharacterOverlay>
-            )
-        });
-    }
     render(props) {
         let workflow;
-        const onHighlightedCardClick = this.onHighlightedCardClick.bind(this);
         const game = props.game;
         let gameDescription;
         switch (props.deck) {
@@ -89,7 +75,12 @@ class App extends Component {
 
         return (
             <div className='app'>
-                {this.state && this.state.overlay}
+                {props.overlay && (
+                    <CharacterOverlay {...props.overlay}>
+                        <Button className='app__overlay__button'
+                            onClick={this.props.onHideOverlay}>Got it!</Button>
+                    </CharacterOverlay>
+                )}
                 {
                     props.maxSize &&
                     <ProgressBar known={props.knownWordCount} total={props.maxSize}
@@ -102,19 +93,6 @@ class App extends Component {
                             disabled={props.isPaused || !props.deck}>Back</Button>
                     </div>
                     }
-                    <div className='app__component--floated'>
-                        {
-                            props.isBooted && props.highlighted.map((props) => {
-                                return <FlashCard {...props} isHighlighted debug={false}
-                                    onClick={onHighlightedCardClick}
-                                    key={`card-highlighted-${props.character}`} isSmall />;
-                            })
-                        }
-                        {
-                            props.isBooted && props.highlighted.length === 0 &&
-                                <Card isSmall={true} />
-                        }
-                    </div>
                     <div className='app__rounds'>{props.numRounds}</div>
                 </div>
                 {workflow}
@@ -136,6 +114,9 @@ const mapDispatchToProps = (dispatch, props) => {
     return {
         onRefresh:() => {
             dispatch(refresh());
+        },
+        onHideOverlay: () => {
+            dispatch(hideOverlay());
         },
         onBackClick:(props) => {
             if (props.game) {
@@ -165,6 +146,7 @@ const mapStateToProps = (state, props) => {
     // While we're building out the game it's possible I've removed words from the game
     // that are included in unknown word count.
     const unknownWordCount = Math.min(maxSize - knownWordCount, getUnKnownWordCount(answers));
+
     return Object.assign({}, props, {
         isBooted,
         isDeckEmpty: cards === undefined ? true : cards.length === 0,

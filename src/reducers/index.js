@@ -14,6 +14,7 @@ import words from './words';
 import endRound from './endRound';
 import numRounds from './numRounds';
 import countdown from './countdown';
+import overlay from './overlay';
 
 export default {
     cards,
@@ -23,6 +24,7 @@ export default {
     highlighted,
     isRendered,
     paused,
+    overlay,
     seenWords,
     numRounds,
     cards,

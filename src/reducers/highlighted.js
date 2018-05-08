@@ -1,15 +1,5 @@
 import actionTypes from './../actionTypes';
-import { makeCardsFromCharacters, dictUtils, freezeCards } from './../helpers/cards';
-
-function getHighlightedCards(state, char) {
-    return freezeCards(
-        makeCardsFromCharacters(state,
-            [ char ],
-            true,
-            true
-        )
-    );
-}
+import { getHighlightedCards } from './../helpers/cards';
 
 export default (state=[], action) => {
     switch (action.type) {
