@@ -1,5 +1,4 @@
-@app-width: 500px;
-@app-overlay-gutter: 10px;
+@import './../variables';
 
 .app__overlay__link {
   text-align: center;
@@ -19,7 +18,7 @@
   border: solid 2px #333;
   max-width: @app-width - @app-overlay-gutter - @app-overlay-gutter;
   background: white;
-  z-index: 2;
+  z-index: @z-index-overlay;
   left: @app-overlay-gutter;
   right: @app-overlay-gutter;
   top: @app-overlay-gutter;

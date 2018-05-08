@@ -1,4 +1,4 @@
-@import './Card/variables.less';
+@import './variables.less';
 
 .game-match-pairs__cards {
   display: grid;
@@ -15,7 +15,7 @@
   left: 50%;
   margin-left: -36px;
   top: 40%;
-  z-index: 5;
+  z-index: @z-index-overlay - 1;
 }
 
 .game-match-pairs__cards {

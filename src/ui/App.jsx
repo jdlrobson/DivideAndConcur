@@ -93,7 +93,6 @@ class App extends Component {
                             disabled={props.isPaused || !props.deck}>Back</Button>
                     </div>
                     }
-                    <div className='app__rounds'>{props.numRounds}</div>
                 </div>
                 {workflow}
                 <div className='app__content'>
@@ -137,7 +136,6 @@ const mapStateToProps = (state, props) => {
         deck,
         seenWords,
         overlay,
-        numRounds,
         cards,
         answers
     } = state;
@@ -157,7 +155,6 @@ const mapStateToProps = (state, props) => {
             getAnsweredCards({ cards }).length === 0,
         isPaused,
         game,
-        numRounds,
         deck,
         overlay,
         unknownWordCount,
