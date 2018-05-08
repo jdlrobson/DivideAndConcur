@@ -16,7 +16,7 @@
   text-align: center;
   position: relative;
   font-size: 0.8em;
-  justify-self: center;
+  justify-self: start;
 }
 
 .card__expand-button {
@@ -186,8 +186,6 @@
   }
 }
 
-@card-max-width: (@app-width / 3) - @card-gutter - (@card-border-width * 2);
-@card-small-max-width: (@card-max-width / 2) - (@card-gutter/2);
 @media all and ( min-width: @app-width ) {
   .card {
     width: @card-max-width;

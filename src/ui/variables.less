@@ -2,6 +2,12 @@
 @someday-blue: #3aaaa8;
 @daily-dose-of-brown: #594A42;
 @z-index-overlay: 3;
-@app-width: 500px;
+@app-width: 720px;
 @app-overlay-gutter: 10px;
+
+// Maximum 102px for iPhone 5
+@cardSize: 102px;
 @card-gutter: 2px;
+@card-border-width: 3px;
+@card-max-width: (@app-width / 3) - @card-gutter - (@card-border-width * 2);
+@card-small-max-width: (@card-max-width / 2) - (@card-gutter/2);
