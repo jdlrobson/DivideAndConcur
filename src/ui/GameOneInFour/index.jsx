@@ -52,7 +52,6 @@ class GameOneInFour extends Component {
         const isFinished = this.isFinished(props);
 
         return (<div className='game-one-four'>
-            <p>Match the cards</p>
             <div className='game-one-four__cards'>
                 <Card {...card} isLarge isSelected={isFinished}
                     isFrozen debug={false}

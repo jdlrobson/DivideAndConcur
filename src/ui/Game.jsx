@@ -2,7 +2,6 @@
 import { Component, h } from 'preact';
 import { connect } from 'preact-redux';
 import FlashcardRound from './FlashcardRound';
-import GameDescription from './GameDescription';
 import './game.less';
 
 import { startRound } from './../actions';
@@ -19,7 +18,6 @@ class Game extends Component {
 
         return (
             <div className='game' onClick={props.onCanvasClick}>
-                <GameDescription>{props.description}</GameDescription>
                 {cards || loader }
             </div>
         );

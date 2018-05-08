@@ -2,7 +2,6 @@
 import { Component, h } from 'preact';
 import { connect } from 'preact-redux';
 import Card from './Card';
-import GameDescription from './GameDescription';
 import { DECK_NEW } from './../constants';
 import { flipCardsAfter, answerFlashcard } from './../actions';
 import './matchpairs.less';
@@ -48,16 +47,6 @@ class GameMatchPairs extends Component {
     render(props) {
         const isFrozen = !this.canSelect();
         const isSelected = !isFrozen &&  !props.isFlipped;
-        const flipMsgs = props.flipMessages || [
-            'Flipping soon!',
-            'Match the pairs!'
-        ];
-        let msg;
-        if (this.state.numFlips > 1) {
-            msg = props.isFlipped ? flipMsgs[1] : '不幸!';
-        } else {
-            msg = props.isFlipped ? flipMsgs[1] : flipMsgs[0];
-        }
         const className = props.isFlipped ? 'game-match-pairs__card' :
             'game-match-pairs__card--pending';
         let cards;
@@ -115,7 +104,6 @@ class GameMatchPairs extends Component {
         return (
             <div className='game-match-pairs'>
                 <div className={`game-match-pairs__countdown${modifier}`}>{props.countdown}</div>
-                <GameDescription>{msg}</GameDescription>
                 <div className={`game-match-pairs__cards ${classModifiers}`}>{
                     cards
                 }</div>
@@ -131,21 +119,16 @@ GameMatchPairs.defaultProps = {
 
 const mapStateToProps = (state, props) => {
     const { cards, isFlipped, deck, countdown } = state;
-    let flipMessages;
     let delayStart = 5000;
     switch (deck) {
         case DECK_NEW:
             delayStart = 10000;
-            flipMessages = [
-                'Here\'s some new cards to get acquainted with.',
-                'Match the pairs until you become familiar with them!'
-            ];
             break;
         default:
             break;
     }
 
-    return Object.assign({}, props, { cards, isFlipped, flipMessages, delayStart, countdown });
+    return Object.assign({}, props, { cards, isFlipped, delayStart, countdown });
 };
 
 const mapDispatchToProps = (dispatch, props) => {
