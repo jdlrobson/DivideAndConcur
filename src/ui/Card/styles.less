@@ -1,7 +1,10 @@
 @import './variables.less';
 
-@backSideColor: #ccc;
+@backSideColor: #c2b69a;
 @frontSideColor: @someday-orange;
+@background-card-known: #59776d;
+@color-text-card-known: #8f8a82;
+@color-text-english-card-known: #5b6056;
 
 .card {
   box-sizing: border-box;
@@ -35,9 +38,12 @@
 }
 
 .card--known {
-  opacity: 0.4;
   .card__front {
-    background: @someday-blue;
+    background: @background-card-known;
+    color: @color-text-card-known;
+  }
+  .card__english {
+    color: @color-text-english-card-known;
   }
 }
 
@@ -66,6 +72,7 @@
 }
 
 .card__front {
+  padding-top: 20px;
   z-index: 2;
   background: @frontSideColor;
   /* for firefox 31 */
@@ -99,6 +106,10 @@
   width: @cardSizeSmall;
   height: @cardSizeSmall;
   font-size: 0.7em;
+
+  .card__front {
+    padding-top: 5px;
+  }
 }
 
 .card--wide {
