@@ -39,6 +39,8 @@ export default class ProgressBar extends Component {
                 <div className='progress-bar__bar'>
                     {blocks}
                 </div>
+                <div className='app__content progress-bar__label'>
+                    Complete the word bank &gt;&gt;&gt;</div>
             </div>
         );
     }
