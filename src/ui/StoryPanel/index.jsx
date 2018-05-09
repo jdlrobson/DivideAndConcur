@@ -1,7 +1,7 @@
 /** @jsx h */
 import { Component, h } from 'preact';
 import { FlashCard } from './../Card';
-import Button from './../Button';
+import MatchPairs from './../MatchPairs';
 
 import './styles.less';
 
@@ -19,11 +19,11 @@ const medicineDecomp = [
     <FlashCard character='艹' english='grass radical' isSmall={true} className='panel__card' />
 ];
 
-const PanelButton = ( { href, children, isFixed } ) => {
+const PanelButton = ({ href, children, isFixed }) => {
     const className = isFixed ? 'panel__next panel__next--fixed' : 'panel__next';
     return (
         <a className={className} href={href}>{children}</a>
-    )
+    );
 };
 
 export default class StoryPanel extends Component {
@@ -87,11 +87,11 @@ export default class StoryPanel extends Component {
                     <PanelButton isFixed={true} href='#panel-6'>Next</PanelButton>
                 </Panel>
                 <Panel id='panel-6'>
-                    <p>Play my game every day on your commute to work to
-                        become confident in Mandarin.</p>
-                    <p>Are you ready!?!</p>
-                    <p>准备好了吗!?!</p>
-                    <Button id='init-game'>Let's play!</Button>
+                    <div id='init-game'>
+                        <MatchPairs mode={4}>
+                            <FlashCard /><FlashCard /><FlashCard /><FlashCard />
+                        </MatchPairs>
+                    </div>
                     <PanelButton isFixed={false} href='#panel-1'>About this game</PanelButton>
                 </Panel>
             </div>

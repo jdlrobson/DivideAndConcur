@@ -11,6 +11,7 @@ export const TAKE_A_BREAK = 'take-break';
 export const DECK_NEW = 'new';
 export const DECK_KNOWN = 'known';
 export const DECK_UNKNOWN = 'unknown';
+export const DECK_START = 'start';
 
 export const ALLOW_DECK_SELECTION = false;
 

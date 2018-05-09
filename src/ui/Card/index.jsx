@@ -144,7 +144,7 @@ export class FlashCard extends Component {
         if (props.hideCharacter) {
             labelModifiers.push('hidden-character');
         }
-        if (label.length > 4) {
+        if (label && label.length > 4) {
             labelModifiers.push('long');
         }
         // if ( !props.english && !props.character)

@@ -49,7 +49,7 @@ export function speakHighlightedWord(store) {
     };
 }
 
-export function checkForBoot(store) {
+export function checkForBoot(store, callback) {
     return () => {
         const state = store.getState();
         if ( state.isBooted && !state.isRendered ) {
@@ -66,6 +66,7 @@ export function checkForBoot(store) {
                 provider,
                 document.getElementById('container')
             );
+            callback();
         }
     };
 }

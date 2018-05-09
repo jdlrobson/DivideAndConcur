@@ -2,6 +2,7 @@ import actionTypes from './../actionTypes';
 import { MATCH_SOUND, MATCH_PAIRS, REVISE,
     ENGLISH_TO_CHINESE, PINYIN_TO_CHINESE,
     MATCH_DEFINITION,
+    DECK_START,
     DECK_UNKNOWN, DECK_NEW, DECK_KNOWN
 } from './../constants';
 import { mapCard, shuffle, isCardInGame, freezeCards as freezeCardsHelper } from './../helpers/cards';
@@ -97,6 +98,9 @@ function chooseDeck( _cards, action ) {
     let cards = [];
     const state = { words: action.words, answers: action.answers };
     switch (action.deck) {
+        case DECK_START:
+            cards = [ '切入', '切记' ].map(char => mapCard(state, char));
+            break;
         case DECK_UNKNOWN:
             cards = getHardCards(state, 9);
             break;

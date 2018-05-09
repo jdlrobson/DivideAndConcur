@@ -13,6 +13,20 @@
   margin: auto;
 }
 
+.game-match-pairs__hint {
+  grid-column: 1 e('/') 3;
+  text-align: center;
+  color: @boquete-brown;
+  text-transform: uppercase;
+  font-size: 1.1em;
+  font-family: sans-serif;
+}
+
+.game-match-pairs__cards--grid-small {
+  grid-template-columns: 1fr 1fr;
+  width: (@cardSize * 2) + @card-gutter;
+}
+
 .game-match-pairs__countdown {
   position: absolute;
   top: 20px;

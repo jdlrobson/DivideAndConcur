@@ -1,6 +1,7 @@
 import actionTypes from './../actionTypes';
+import { DECK_START } from './../constants';
 
-export default (state=false, action) => {
+export default (state=DECK_START, action) => {
     switch (action.type) {
         case actionTypes.SET_DECK:
             return action.deck;

@@ -26,12 +26,6 @@
 			<div id="container" class="chrome__content"  style="display: none;">
 				<div id="chrome__content__panel-two" style="display: none;">
 					<!-- PROGRESSBAR-START --><!-- PROGRESSBAR-END -->
-					<p>洗牌!</p>
-					<img class='chrome__boot-screen__img' style="border: solid 1px #aaa;"
-						width="288" height="162"
-						src="panda.gif" alt='panda rolling' />
-					<a class='chrome__boot-screen__source-link'
-						href='https://cheezburger.com/5368650240'>gif source	</a>
 				</div>
 			</div>
 			<footer>

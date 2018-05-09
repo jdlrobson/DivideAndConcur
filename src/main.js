@@ -58,7 +58,9 @@ const store = createStore(reducer,
     // setup subscribers
     store.subscribe(checkIfEndOfRound(store));
     store.subscribe(checkForSave(store));
-    store.subscribe(checkForBoot(store));
+    store.subscribe(checkForBoot(store, () => {
+        hide( $('#chrome__content__panel-one')[0] );
+    }));
     store.subscribe(speakHighlightedWord(store));
 
     /**
@@ -88,15 +90,12 @@ const store = createStore(reducer,
         });
     })
     const boot = () => {
-        hide( $('#chrome__content__panel-one')[0] );
         show( $('#chrome__content__panel-two')[0] );
         show( $('#chrome__content__panel-two')[0].parentNode );
         localStorage.setItem(SEEN_KEY, '1');
         focusWindow();
-        setTimeout(() => {
-            store.dispatch(init(userData));
-            focusWindow();
-        }, STARTUP_WAIT_TIME);
+        store.dispatch(init(userData));
+        focusWindow();
     };
     if ( !window.location.hash ) {
         window.location.hash = seen ? '#panel-6' : '#panel-1';
