@@ -87,6 +87,14 @@ export default class StoryPanel extends Component {
                     <PanelButton isFixed={true} href='#panel-6'>Next</PanelButton>
                 </Panel>
                 <Panel id='panel-6'>
+                    <p>It was fun breaking the characters apart. It was a fun way
+                     to enjoy exploring and learning the language.</p>
+                    <p>Soon I was associating sounds with the characters and slowly
+                    I was constructing ill-pronounced sentences.</p>
+                    <p>Soon through this game, I would know Chinese.</p>
+                    <PanelButton isFixed={true} href='#panel-7'>Next</PanelButton>
+                </Panel>
+                <Panel id='panel-7'>
                     <div id='init-game'>
                         <MatchPairs mode={4}>
                             <FlashCard /><FlashCard /><FlashCard /><FlashCard />
