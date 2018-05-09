@@ -1,4 +1,5 @@
 @import './src/ui/variables.less';
+@import './src/ui/StoryPanel/styles.less';
 
 body {
   margin: 0;
@@ -23,11 +24,17 @@ body {
 
 .chrome__header__home a {
   display: block;
+  text-align: center;
 }
 
 .panel,
 .app__content {
   padding: 3px;
+}
+
+.chrome__content {
+  max-width: 500px;
+  margin: auto;
 }
 
 .panel,
@@ -36,13 +43,11 @@ body {
   font-family: courier;
 }
 
-.panel__next {
-  margin-top: 20px;
-}
-
 .chrome__header__home__logo {
   vertical-align: middle;
-  width: 100%;
+  width: auto;
+  margin: 12px 0 10px;
+  height: 50px;
 }
 
 .chrome__boot-screen {
@@ -69,48 +74,6 @@ footer {
   color: #333;
   border-top: solid 1px #aaa;
   padding-top: 10px;
-}
-
-.panel-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.panel {
-  position: relative;
-  width: 100%;
-  line-height: 1.2;
-}
-
-.panel__button {
-  margin-bottom: 40px;
-  width: 200px;
-  height: auto !important;
-  padding: 12px !important;
-}
-
-.panel__break {
-  clear: both;
-  border-style: dotted;
-  border-color: #ccc;
-}
-
-.panel__card {
-  float: left;
-}
-
-.panel:not(:target) {
-  display: none;
-}
-
-.panel:target {
-  display: block;
-}
-
-.panel__next {
-  display: block;
-  clear: both;
 }
 
 @media all and ( min-width: 500px ) {

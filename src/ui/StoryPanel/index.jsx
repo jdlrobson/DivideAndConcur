@@ -3,6 +3,8 @@ import { Component, h } from 'preact';
 import { FlashCard } from './../Card';
 import Button from './../Button';
 
+import './styles.less';
+
 const Panel = ({ id, children }) => {
     return (
         <div id={id} className='panel'>
@@ -17,6 +19,13 @@ const medicineDecomp = [
     <FlashCard character='艹' english='grass radical' isSmall={true} className='panel__card' />
 ];
 
+const PanelButton = ( { href, children, isFixed } ) => {
+    const className = isFixed ? 'panel__next panel__next--fixed' : 'panel__next';
+    return (
+        <a className={className} href={href}>{children}</a>
+    )
+};
+
 export default class StoryPanel extends Component {
     render(props) {
         return (
@@ -30,7 +39,7 @@ export default class StoryPanel extends Component {
                         to be able to read a newspaper.</p>
                     <p>I couldn't imagine speaking it!</p>
                     <p>I didn't know where to begin.</p>
-                    <a className='panel__next' href='#panel-2'>Next</a>
+                    <PanelButton isFixed={true} href='#panel-2'>Next</PanelButton>
                 </Panel>
                 <Panel id='panel-2'>
                     <p>I started looking at this character:</p>
@@ -42,7 +51,7 @@ export default class StoryPanel extends Component {
                     <p>I've disassembled typewriters; computers; stanzas in beautiful poems;
                         to try and understand how they work.</p>
                     <p>I wondered if it worked with Chinese characters.</p>
-                    <a className='panel__next'href='#panel-3'>Next</a>
+                    <PanelButton isFixed={true} href='#panel-3'>Next</PanelButton>
                 </Panel>
                 <Panel id='panel-3'>
                     <p>I cut the word apart until I can cut it no more.</p>
@@ -52,7 +61,7 @@ export default class StoryPanel extends Component {
                         to remember; to learn.</p>
                     {medicineDecomp}
                     <hr className='panel__break' />
-                    <a className='panel__next' href='#panel-4'>Next</a>
+                    <PanelButton isFixed={true} href='#panel-4'>Next</PanelButton>
                 </Panel>
                 <Panel id='panel-4'>
                     <p>I learned my first word.</p>
@@ -63,7 +72,7 @@ export default class StoryPanel extends Component {
                     <FlashCard character='约' english='appointment' pinyin='yuē' />
                     <hr className='panel__break' />
                     <p>Medicine was now an appointment with grass.</p>
-                    <a className='panel__next' href='#panel-5'>Next</a>
+                    <PanelButton isFixed={true} href='#panel-5'>Next</PanelButton>
                 </Panel>
                 <Panel id='panel-5'>
                     <p>I knew <strong>five</strong> characters now!</p>
@@ -75,7 +84,7 @@ export default class StoryPanel extends Component {
                     <hr className='panel__break' />
                     <p>I wondered if I could learn the smaller characters to
                   remember all the big ones.</p>
-                    <a className='panel__next'  href='#panel-6'>Next</a>
+                    <PanelButton isFixed={true} href='#panel-6'>Next</PanelButton>
                 </Panel>
                 <Panel id='panel-6'>
                     <p>Play my game every day on your commute to work to
@@ -83,7 +92,7 @@ export default class StoryPanel extends Component {
                     <p>Are you ready!?!</p>
                     <p>准备好了吗!?!</p>
                     <Button id='init-game'>Let's play!</Button>
-                    <a className='panel__next' href='#panel-1'>Read why I made this game</a>
+                    <PanelButton isFixed={false} href='#panel-1'>About this game</PanelButton>
                 </Panel>
             </div>
         );
