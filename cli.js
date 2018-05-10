@@ -299,7 +299,8 @@ function menu() {
 		'12: Auto-assign difficulty',
 		'13: Clean',
 		'14: Add blurb',
-		'15: View cards with difficulty range'
+		'15: View cards with difficulty range',
+		'16: Add pinyin'
 	];
 	getUserInput( '**********************\n' + options.join('\n') + '\n**********************' )
 		.then( ( val ) => {
@@ -421,7 +422,15 @@ function menu() {
 							return menu();
 						} );
 					} );
-					break
+					break;
+				case 16:
+					return getUserInput('Word?').then((w) => {
+						return getUserInput('Pinyin?').then((p) => {
+							dict.savePinyin(w, p);
+							return dict.save();
+						}).then(()=>menu());
+					});
+					break;
 				default:
 					feedback('Huh?');
 					menu();

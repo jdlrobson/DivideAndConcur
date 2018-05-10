@@ -19,7 +19,7 @@ DictionaryUtils.prototype = {
       .filter((word) => ( ( !this.words[word] || this.words[word] === '?' ) || !this.words[word] ));
   },
   getPinyin: function ( word ) {
-    return Array.from(word).map((w) => this.pinyin[w] || '').join( ' ' );
+    return this.pinyin[word] || Array.from(word).map((w) => this.pinyin[w] || '').join( ' ' );
   },
   getWord: function ( word ) {
     return this.words[word];
