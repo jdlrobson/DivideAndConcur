@@ -1,5 +1,26 @@
 @import './../variables.less';
 
+.pane-position-bar {
+  display: inline-block;
+}
+
+.panel p {
+  margin: auto;
+  padding: 8px 30px;
+}
+.pane-position-bar__circle {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background: #d2c9b5;
+  margin-right: 10px;
+}
+
+.pane-position-bar__circle--active {
+  background: white;
+}
+
 .panel-wrapper {
   display: flex;
   align-items: center;
@@ -56,6 +77,14 @@
   right: 0;
 }
 
+.panel__highlighted-text {
+  background: fadeout(@someday-blue,0.5);
+  padding: 3px 5px;
+  margin: -3px -5px;
+  line-height: 1.7;
+  border-radius: 3px;
+  color: white;
+}
 
 .panel__next--fixed {
   position: fixed;

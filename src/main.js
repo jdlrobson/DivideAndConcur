@@ -98,7 +98,7 @@ const store = createStore(reducer,
         focusWindow();
     };
     if ( !window.location.hash ) {
-        window.location.hash = seen ? '#panel-7' : '#panel-1';
+        window.location.hash = seen ? '#panel-6' : '#panel-0';
         focusWindow();
     }
     document.querySelector('#init-game').addEventListener('click', () => {

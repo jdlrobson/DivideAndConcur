@@ -90,9 +90,7 @@ class MatchPairs extends Component {
                 );
             });
         } else if (mode === 4) {
-            cards = props.children.concat([
-                <p className='game-match-pairs__hint'>Click a box to start</p>
-            ]);
+            cards = props.children;
         }
 
         let classModifiers = props.countdown > 0 ? 'game-match-pairs__cards--countdown' : '';
@@ -103,7 +101,9 @@ class MatchPairs extends Component {
             modifier = ' game-match-pairs__countdown--hidden';
         }
 
-        if (cards.length < 7) {
+        if (cards.length === 1) {
+            classModifiers += ' game-match-pairs__cards--single';
+        } else if (cards.length !== 3 && cards.length < 5) {
             classModifiers += ' game-match-pairs__cards--grid-small';
         }
 
@@ -112,6 +112,8 @@ class MatchPairs extends Component {
                 <div className={`game-match-pairs__countdown${modifier}`}>{props.countdown}</div>
                 <div className={`game-match-pairs__cards ${classModifiers}`}>{
                     cards
+                }{
+                    props.showHint && <p className='game-match-pairs__hint'>Click a box to start</p>
                 }</div>
                 <div className='game-match-pairs__end-marker' />
             </div>

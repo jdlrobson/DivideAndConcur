@@ -36,7 +36,9 @@ export class Card extends Component {
             // property counts the number of UTF-16 code units in a string
             // not the number of characters
             // so use Array.from
-            if (props.character && !props.label && Array.from(props.character).length > 1) {
+            if (props.isWide === undefined &&
+                props.character && !props.label && Array.from(props.character).length > 1
+            ) {
                 modifiers.push('wide');
             }
         }

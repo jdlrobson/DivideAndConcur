@@ -4,7 +4,7 @@
 @frontSideColor: @someday-orange;
 @background-card-known: #59776d;
 @color-text-card-known: #8f8a82;
-@color-text-english-card-known: #5b6056;
+@color-text-english-card-known: #fff;
 
 .card {
   box-sizing: border-box;
@@ -116,7 +116,8 @@
 }
 
 .card__english {
-  font-family: serif;
+  font-family: Courier;
+  text-transform: uppercase;
 }
 
 .card--small {
@@ -206,11 +207,6 @@
 }
 
 @media all and ( min-width: @app-width ) {
-  .card {
-    width: @card-max-width;
-    height: @card-max-width;
-    font-size: 1em;
-  }
   .card__front {
     padding-top: 20px;
   }

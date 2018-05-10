@@ -99,7 +99,7 @@ function chooseDeck( _cards, action ) {
     const state = { words: action.words, answers: action.answers };
     switch (action.deck) {
         case DECK_START:
-            cards = [ '切入', '切记' ].map(char => mapCard(state, char));
+            cards = [ '切分', '切记' ].map(char => mapCard(state, char));
             break;
         case DECK_UNKNOWN:
             cards = getHardCards(state, 9);

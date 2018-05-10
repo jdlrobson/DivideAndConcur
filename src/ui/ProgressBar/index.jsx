@@ -13,6 +13,7 @@ export default class ProgressBar extends Component {
         }, 0);
     }
     render(props) {
+        const animate = props.animate || this.state.animate;
         const percent = Math.floor(
             (props.known / props.total) * 100
         );
@@ -26,7 +27,7 @@ export default class ProgressBar extends Component {
         let delay = delayInc * (numBlocks - 1);
         while (i > 0) {
             const style = { transitionDelay: `${delay}s` };
-            const className = i > percent || !this.state.animate ?
+            const className = i > percent || !animate ?
                 'progress-bar__bar__locked' : 'progress-bar__bar__unlocked';
             blocks.unshift(
                 <div className={className} style={style} />
@@ -39,8 +40,8 @@ export default class ProgressBar extends Component {
                 <div className='progress-bar__bar'>
                     {blocks}
                 </div>
-                <div className='app__content progress-bar__label'>
-                    Complete the word bank &gt;&gt;&gt;</div>
+                {!props.noLabel && <div className='app__content progress-bar__label'>
+                    Complete the word bank &gt;&gt;&gt;</div>}
             </div>
         );
     }
