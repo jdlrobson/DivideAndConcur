@@ -1,9 +1,10 @@
 @import './variables.less';
 
-@backSideColor: @boquete-brown;
-@frontSideColor: @someday-orange;
-@background-card-known: #59776d;
-@color-text-card-known: #8f8a82;
+@backSideColor: @boquete-light;
+@frontSideColor: @pina-yellow;
+@background-card-known: @someday-blue;
+@color-pinyin-card-known: @boquete-light;
+@color-text-card-known: #fff;
 @color-text-english-card-known: #fff;
 
 .card {
@@ -25,10 +26,10 @@
   right: -8px;
   position: absolute;
   top: -8px;
-  font-size: 40px;
+  font-size: 25px;
   display: block;
   width: 40px;
-  color: @someday-orange;
+  color: @boquete-light;
 }
 
 .card--large {
@@ -58,6 +59,9 @@
     background: @background-card-known;
     color: @color-text-card-known;
   }
+  .card__pinyin {
+    color: @color-pinyin-card-known;
+  }
   .card__english {
     color: @color-text-english-card-known;
   }
@@ -65,8 +69,8 @@
 
 
 .card--empty {
-  border: solid 1px @someday-orange;
-  background: lighten(@someday-orange, 20%);
+  border: solid 1px @pina-yellow;
+  background: lighten(@pina-yellow, 20%);
 }
 
 .card--unknown {
@@ -111,8 +115,8 @@
 
 .card__pinyin {
   font-family: sans-serif;
-  font-weight: bold;
-  color: #847b66;
+  color: @boquete-dark;
+  margin: -1px 0 2px;
 }
 
 .card__english {
@@ -187,7 +191,7 @@
 }
 
 .card__label {
-  font-size: 2.5em;
+  font-size: 2.2em;
   font-weight: bold;
   font-family: "Hiragino Sans GB", "Droid Sans fallback";
 }
