@@ -6,6 +6,7 @@ import { revealFlashcard, answerFlashcard, showOverlay } from './../../actions';
 import { getDifficultyRating } from './../../helpers/difficulty-ratings';
 import { className } from './../className';
 
+import ExpandButton from './../ExpandButton';
 const BLOCK_NAME = 'card';
 
 export class Card extends Component {
@@ -155,7 +156,9 @@ export class FlashCard extends Component {
                 {difficultyBar}
                 {
                     props.isAnswered && props.onExpandCard !== false && !props.isSmall && (
-                        <a className='card__expand-button' onClick={this.onExpand.bind(this)}>+</a>
+                        <ExpandButton
+                          className="card__expand-button"
+                          onClick={this.onExpand.bind(this)} />
                     )
                 }
                 <div key='char'
