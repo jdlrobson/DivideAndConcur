@@ -17,10 +17,6 @@ export function translationArray( definition ) {
     let translations = [];
     if ( definition ) {
         translations = definition.trim().replace(/;$/, '').split(';');
-        if ( translations.length > 1 ) {
-            translations = translations.map((translation, i) =>
-                `[${i+1}/${translations.length}] ${translation.trim()}`);
-        }
     }
     return translations;
 }
@@ -35,6 +31,7 @@ export function mapCard(state, character, withDecompositions, withBlurb) {
 
     const text = withBlurb ? blurbs[character] : undefined;
     const translations = translationArray(dictUtils.getWord(character));
+    const english = random(translations);
 
     return {
         character,
@@ -42,7 +39,7 @@ export function mapCard(state, character, withDecompositions, withBlurb) {
         level: `${dictUtils.getWordLength(character)}.${dictUtils.getDifficultyRating(character)}`,
         pinyin: dictUtils.getPinyin(character),
         translations,
-        english: random(translations),
+        english,
         decompositions
     };
 }

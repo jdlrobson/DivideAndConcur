@@ -111,15 +111,26 @@
   height: 18px;
   text-overflow: ellipsis;
   white-space: nowrap;
+  position: relative;
 }
 
 .card__pinyin {
   font-family: sans-serif;
   color: @boquete-dark;
-  margin: -1px 0 2px;
+  margin: -1px 0 0;
 }
 
 .card__english {
+  padding-top: 8px;
+  &[data-translation-number]:before {
+    content: '[' attr(data-translation-number) "/" attr(data-translation-total) ']';
+    position: absolute;
+    top: 0px;
+    left: 50%;
+    margin-left: -11px;
+    color: @boquete-dark;
+    font-size: 0.7em;
+  }
   font-family: Courier;
   text-transform: uppercase;
 }

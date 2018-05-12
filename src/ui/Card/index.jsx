@@ -118,13 +118,22 @@ export class FlashCard extends Component {
         }
         style={props.pinyin !== false ?
             {} : hidden}>{props.pinyin}</div>;
-        const inEnglish = <div key='lang' className={
-            className(BLOCK_NAME, 'english',
-                !done && props.hideEnglish ? [ 'hide' ] : []
-            )
+
+        const englishModifiers = !done && props.hideEnglish ? [ 'hide' ] : [];
+        const dataAttrs = {};
+        if (props.translations && props.translations.length > 1) {
+            dataAttrs['data-translation-number'] = props.translations.indexOf(props.english) + 1;
+            dataAttrs['data-translation-total'] = props.translations.length;
         }
-        style={props.english !== false ?
-            {} : hidden}>{props.english}</div>;
+        const inEnglish = <div key='lang'
+            className={
+                className(BLOCK_NAME, 'english',
+                    englishModifiers
+                )
+            }
+            {...dataAttrs}
+            style={props.english !== false ?
+                {} : hidden}>{props.english}</div>;
         const translations = [
             inPinyin,
             inEnglish
