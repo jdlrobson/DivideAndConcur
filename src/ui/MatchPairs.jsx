@@ -97,6 +97,7 @@ class MatchPairs extends Component {
         let modifier = '';
         if (props.countdown === 1) {
             modifier = ' game-match-pairs__countdown--hiding';
+            classModifiers = '';
         } else if (props.countdown === 0) {
             modifier = ' game-match-pairs__countdown--hidden';
         }
