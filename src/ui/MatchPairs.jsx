@@ -1,10 +1,29 @@
 /** @jsx h */
 import { Component, h } from 'preact';
 import Card from './Card';
+import ExpandButton from './ExpandButton';
 
 import './matchpairs.less';
 
+
 class MatchPairs extends Component {
+    getHint(props) {
+        const selected = this.getSelectedCards(props);
+        const cards = props.cards;
+        const answered = cards.filter(card => card.isAnswered);
+        if (cards.filter(card => card.isFlipped).length === cards.length) {
+            return 'Click one of the cards to start!';
+        } else if (answered.length === cards.length) {
+            return 'You are ready to play now! Have fun!';
+        } else if (answered.length > 0) {
+            return <p>Click <ExpandButton className='game-match-pairs__expand' /> to
+          learn about the character</p>;
+        } else if (selected.length > 0) {
+            return 'Match the pairs!';
+        } else {
+            return 'Remember these characters';
+        }
+    }
     constructor() {
         super();
         this.state = { numFlips: 0 };
@@ -114,7 +133,8 @@ class MatchPairs extends Component {
                 <div className={`game-match-pairs__cards ${classModifiers}`}>{
                     cards
                 }{
-                    props.showHint && <p className='game-match-pairs__hint'>Click a box to start</p>
+                    props.showHint &&
+                    <p className='game-match-pairs__hint'>{this.getHint(props)}</p>
                 }</div>
                 <div className='game-match-pairs__end-marker' />
             </div>
@@ -123,6 +143,7 @@ class MatchPairs extends Component {
 }
 
 MatchPairs.defaultProps = {
+    hint: 'Click a box to start',
     cards: []
 };
 

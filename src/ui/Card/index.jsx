@@ -157,8 +157,8 @@ export class FlashCard extends Component {
                 {
                     props.isAnswered && props.onExpandCard !== false && !props.isSmall && (
                         <ExpandButton
-                          className="card__expand-button"
-                          onClick={this.onExpand.bind(this)} />
+                            className='card__expand-button'
+                            onClick={this.onExpand.bind(this)} />
                     )
                 }
                 <div key='char'

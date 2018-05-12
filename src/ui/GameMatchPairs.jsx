@@ -1,12 +1,16 @@
 import { connect } from 'preact-redux';
-import { DECK_NEW } from './../constants';
+import { DECK_NEW, DECK_START } from './../constants';
 import { flipCardsAfter, answerFlashcard } from './../actions';
 import MatchPairs from './MatchPairs';
 
 const mapStateToProps = (state, props) => {
     const { cards, isFlipped, deck, countdown } = state;
     let delayStart = 5000;
+    let showHint = false;
     switch (deck) {
+        case DECK_START:
+            showHint = true;
+            break;
         case DECK_NEW:
             delayStart = 10000;
             break;
@@ -14,7 +18,11 @@ const mapStateToProps = (state, props) => {
             break;
     }
 
-    return Object.assign({}, props, { cards, isFlipped, delayStart, countdown });
+    return Object.assign({}, props, { cards,
+        isFlipped,
+        delayStart,
+        countdown,
+        showHint });
 };
 
 const mapDispatchToProps = (dispatch, props) => {

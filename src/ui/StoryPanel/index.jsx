@@ -141,6 +141,7 @@ export default class StoryPanel extends Component {
                     <div id='init-game'>
                         <MatchPairs mode={4} showHint={true}>
                             <FlashCard /><FlashCard /><FlashCard /><FlashCard />
+                            <FlashCard /><FlashCard />
                         </MatchPairs>
                     </div>
                 </Panel>
