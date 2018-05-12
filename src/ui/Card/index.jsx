@@ -4,18 +4,9 @@ import { connect } from 'preact-redux';
 import './styles.less';
 import { revealFlashcard, answerFlashcard, showOverlay } from './../../actions';
 import { getDifficultyRating } from './../../helpers/difficulty-ratings';
+import { className } from './../className';
 
 const BLOCK_NAME = 'card';
-
-function className(block, element, modifiers = []) {
-    let blockElement = block;
-    if (element) {
-        blockElement += `__${element}`;
-    }
-    return `${blockElement} ${modifiers.map((modifier) => {
-        return `${blockElement}--${modifier}`;
-    }).join(' ')}`;
-}
 
 export class Card extends Component {
     render(props) {
