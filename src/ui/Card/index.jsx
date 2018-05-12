@@ -181,7 +181,7 @@ export class FlashCard extends Component {
 
 FlashCard.defaultProps = {
     // Show the difficulty and word size
-    debug: true,
+    debug: false,
     // Whether to show the tick/wrong buttons when card has been selected
     selectedControls: true
 };

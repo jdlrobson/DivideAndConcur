@@ -20,7 +20,7 @@ class Decompositions extends Component {
                             const isSmall = level > 2;
                             const english = isSmall ? false : cardProps.english;
                             return <FlashCard {...cardProps} isSelected isFrozen
-                                isSmall={isSmall} debug={false} english={english}
+                                isSmall={isSmall} english={english}
                                 className='app__overlay__decompositions__card'
                                 onExpandCard={false}
                                 key={`card-highlighted-${cardProps.character}`} />;
@@ -82,7 +82,7 @@ class CharacterOverlay extends Component {
         const decomp = props.decompositions || [];
         return (
             <div className='app__overlay'>
-                <FlashCard {...props} isSmall={false} isSelected isFrozen debug={false}
+                <FlashCard {...props} isSmall={false} isSelected isFrozen debug={true}
                     onExpandCard={false}
                     className='app__overlay__card' />
                 <a href={`https://en.wiktionary.org/wiki/${props.character}`}

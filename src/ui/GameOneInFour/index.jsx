@@ -52,7 +52,7 @@ class GameOneInFour extends Component {
         return (<div className='game-one-four'>
             <div className='game-one-four__cards'>
                 <Card {...card} isLarge isSelected={isFinished}
-                    isFrozen debug={false} hidePinyin={!isFinished} hideEnglish={!isFinished}
+                    isFrozen hidePinyin={!isFinished} hideEnglish={!isFinished}
                 /><div className='game-one-four__choices'>{
                     props.cards.slice(1)
                         .map(cardProps =>
