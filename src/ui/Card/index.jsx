@@ -153,7 +153,7 @@ export class FlashCard extends Component {
         // if ( !props.english && !props.character)
         return (
             <Card {...props} onClick={this.onClick.bind(this)} >
-                {difficultyBar}
+                {props.debug && difficultyBar}
                 {
                     props.isAnswered && props.onExpandCard !== false && !props.isSmall && (
                         <ExpandButton
