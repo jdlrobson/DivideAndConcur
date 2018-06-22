@@ -3,6 +3,10 @@ import assert from 'assert';
 
 const difficulties = { '口': 3, '云': 5, '人': 1, '一': 0.5, '辶': 8, '车': 10 };
 const decompositions = { '回': ['口', '口'],
+    '锦': [ '钅', '帛' ],
+    '哇': [ '口', '圭' ],
+    '圭': [ '土', '土' ],
+    '帛': [ '白', '巾' ],
     '𠮷': ['土', '口'],
     '会': ['人', '云'],
     '天': ['大','一'],
@@ -15,6 +19,20 @@ const decompositions = { '回': ['口', '口'],
     '连': [ '辶', '车' ]
 };
 const words = {};
+const wordsForWordLength = {
+    '大': 'big',
+    '艹': 'grass',
+    '辶': 'walk',
+    '车': 'car',
+    '土': 'soil',
+    '天': 'sky',
+    '哇': 'wow',
+    '人': 'person',
+    '口': 'mouth',
+    '一': 'one',
+    '白': 'white',
+    '巾': 'towel'
+};
 const utils = new DictionaryUtils(words, decompositions, difficulties);
 
 describe('DictionaryUtils', () => {
@@ -32,6 +50,7 @@ describe('DictionaryUtils', () => {
         assert.ok(utils.getDifficultyRating('连') === 18);
     });
     it('getWordLength', () => {
+        const utils = new DictionaryUtils(wordsForWordLength, decompositions, difficulties);
         assert.ok(utils.getWordLength('爸') === 0, 'No decomposition');
         assert.ok(utils.getWordLength('爸爸') === 1,
             'Neither character has decomp but still length 1');
@@ -41,15 +60,25 @@ describe('DictionaryUtils', () => {
         assert.ok(utils.getWordLength('云') === 1, 'size 1 (云) - empty strings ignored');
         assert.ok(utils.getWordLength('回') === 2, 'size 2');
         assert.ok(utils.getWordLength('会') === 2, 'size 2 人(1) + 云(1)');
-        assert.ok(utils.getWordLength('莲') === 3, 'size 3');
+        assert.strictEqual(utils.getWordLength('莲'), 3, '莲 is size 3');
         assert.ok(utils.getWordLength('𥫗') === 0, 'Protect against decomposing to itself');
         assert.ok(utils.getWordLength('戊') === 0, 'No decompositions');
-        assert.ok(utils.getWordLength('戌') === 2, 'Has 2 decompositions');
-        assert.ok(utils.getWordLength('咸') === 3,
-            'Has 3 decompositions (戌 decompositions plus 口)');
-        assert.ok(utils.getWordLength('减') === 4,
-            'Has 4 decompositions (咸 decompositions plus 口)');
-        assert.ok(utils.getWordLength('天') === 2, 'Has 2 decompositions (大 and 一)');
-        assert.ok(utils.getWordLength('天人') === 3, 'Has 3 decompositions (大 and 一 and 人)');
+        assert.strictEqual(utils.getWordLength('戌'), 3,
+            '戌 has 2 decompositions but 戊 is not a known word so additional penalty');
+        assert.strictEqual(utils.getWordLength('咸'), 4,
+            'Has 3 decompositions (戌 decompositions plus 口). 戌 not known.');
+        assert.strictEqual(utils.getWordLength('减'), 6,
+            'Has 4 decompositions (咸 decompositions plus 口) but 咸 and 戌 not known.');
+        assert.strictEqual(utils.getWordLength('天'), 2, '天 has 2 known decompositions (大 and 一)');
+        assert.strictEqual(utils.getWordLength('天人'), 3, 'Has 3 decompositions (大 and 一 and 人)');
+        assert.strictEqual(utils.getWordLength('哇'), 3,
+            '哇 decomposes to 2 characters ' +
+            'and one of those (圭) to 2' +
+            'no word length penalty as 口 is a known word');
+        assert.strictEqual(utils.getWordLength('锦'), 4,
+            'Although 锦 decomposes to 2 characters ' +
+            'and one of those (帛) to 白 and 巾, which normally means 3' +
+            ' an extra point is added because the ' +
+            'dictionary doesn\'t know the word 帛');
     });
 });

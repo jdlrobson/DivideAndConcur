@@ -81,10 +81,8 @@ DictionaryUtils.prototype = {
     chars.forEach((char) => {
       if ( !getWord( char ) ) {
         penalty += 1;
-        console.log('dont know ', char)
       }
     });
-    console.log(word,penalty);
     const len = chars.
         map(
           (word) => decompose(word, true).
@@ -95,7 +93,6 @@ DictionaryUtils.prototype = {
           decompositions.forEach((char) => {
             if ( !getWord( char ) ) {
               penalty += 1;
-              console.log('dont know ', char)
             }
           });
           return decompositions.length + acc + penalty;
