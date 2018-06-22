@@ -97,7 +97,7 @@ class CharacterOverlay extends Component {
                         )
                     }
                     {
-                        props.translations.length > 1 && (
+                        (
                             <Tab name='Translations'>
                                 <div className='translations'>
                                     This word has multiple meanings:
