@@ -14,7 +14,7 @@ class TakeBreak extends Component {
                 <p>You've looked at {props.seenWords.length} words!</p>
                 <p>The brain degrades over time,
                     so please consider taking a break and playing again later!</p>
-                <Button onClick={props.onButtonClick}>Bu yao!</Button>
+                <Button onClick={props.onButtonClick}>不要!</Button>
                 <p>Hopefully the following words are beginning to look familiar...</p>
                 <p>{props.seenWords.map(char =>
                     <span className='takebreak__char'>{char}</span>)}</p>
