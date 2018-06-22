@@ -75,19 +75,35 @@ DictionaryUtils.prototype = {
   },
   getWordLength: function ( word ) {
     const decompose = this.decompose.bind(this);
+    const getWord = this.getWord.bind(this);
     const chars = Array.from(word);
+    let penalty = 0;
+    chars.forEach((char) => {
+      if ( !getWord( char ) ) {
+        penalty += 1;
+        console.log('dont know ', char)
+      }
+    });
+    console.log(word,penalty);
     const len = chars.
         map(
           (word) => decompose(word, true).
             filter((char) => char !== word )
         ).
         reduce((acc, decompositions) => {
-          return decompositions.length + acc;
+          let penalty = 0;
+          decompositions.forEach((char) => {
+            if ( !getWord( char ) ) {
+              penalty += 1;
+              console.log('dont know ', char)
+            }
+          });
+          return decompositions.length + acc + penalty;
         }, 0 );
     if ( chars.length > 1 && len === 0 ) {
       return 1;
     } else {
-      return chars.length === 2 ? len + 1 : len;
+      return chars.length === 2 ? len + 1 + penalty : len;
     }
   },
   /**
