@@ -417,7 +417,7 @@ function menu() {
 							).sort(
 								(a,b)=>dict.getWordLength(a)<dict.getWordLength(b) ? -1 : 1
 							).forEach((word) => {
-								console.log(word, dict.getWord(word), 'word length=', dict.getWordLength(word));
+								console.log(word, dict.getWord(word), dict.getPinyin(word), 'word length=', dict.getWordLength(word));
 							});
 							return menu();
 						} );
