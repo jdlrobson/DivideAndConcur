@@ -86,7 +86,6 @@ function save() {
 function removeWord( chinese ) {
 	const exists = Boolean(words[chinese]);
 	delete words[chinese];
-	save();
 	return exists;
 }
 

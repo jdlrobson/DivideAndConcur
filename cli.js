@@ -300,7 +300,9 @@ function menu() {
 		'13: Clean',
 		'14: Add blurb',
 		'15: View cards with difficulty range',
-		'16: Add pinyin'
+		'16: Add pinyin',
+		'17: Clear decompositions',
+		'18: Batch delete characters'
 	];
 	getUserInput( '**********************\n' + options.join('\n') + '\n**********************' )
 		.then( ( val ) => {
@@ -382,7 +384,7 @@ function menu() {
 						} else {
 							console.log('Word does not exist');
 						}
-						return menu()
+						return dict.save().then(() => menu());
 					} );
 					break;
 				case 12:
@@ -431,6 +433,17 @@ function menu() {
 						}).then(()=>menu());
 					});
 					break;
+				case 17:
+					return getUserInput('Clear decompositions for what?').then((w) => {
+						dict.addDecomposition( w, [] );
+						return dict.save();
+					}).then(()=>menu());
+				break;
+				case 18:
+					return getUserInput('Batch delete what words?').then((w) => {
+						Array.from(w).forEach((word) => dict.removeWord(word));
+						return dict.save();
+					}).then(()=>menu());
 				default:
 					feedback('Huh?');
 					menu();
