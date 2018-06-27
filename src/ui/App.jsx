@@ -84,6 +84,7 @@ class App extends Component {
                 {
                     props.maxSize &&
                     <ProgressBar known={props.knownWordCount} total={props.maxSize}
+                        initialKnown={props.initialState.known}
                         unknown={props.unknownWordCount} />
                 }
                 <div className='app__header'>
@@ -132,6 +133,7 @@ const mapStateToProps = (state, props) => {
         isPaused,
         isBooted,
         highlighted,
+        initialState,
         game,
         deck,
         seenWords,
@@ -157,6 +159,7 @@ const mapStateToProps = (state, props) => {
         game,
         deck,
         overlay,
+        initialState,
         unknownWordCount,
         knownWordCount,
         maxSize  });

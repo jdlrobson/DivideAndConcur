@@ -15,11 +15,13 @@ import endRound from './endRound';
 import numRounds from './numRounds';
 import countdown from './countdown';
 import overlay from './overlay';
+import initialState from './initialState';
 
 export default {
     cards,
     countdown,
     answers,
+    initialState,
     deck,
     highlighted,
     isRendered,
