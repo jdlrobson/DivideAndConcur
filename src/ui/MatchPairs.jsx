@@ -112,7 +112,9 @@ class MatchPairs extends Component {
             cards = props.children;
         }
 
-        let classModifiers = props.countdown > 0 ? 'game-match-pairs__cards--countdown' : '';
+        const countdownModifier = props.countdown < 6 ? '--soon' : '';
+        let classModifiers = props.countdown > 0 && props.countdown ?
+            `game-match-pairs__cards--countdown${countdownModifier}` : '';
         let modifier = '';
         if (props.countdown === 1) {
             modifier = ' game-match-pairs__countdown--hiding';

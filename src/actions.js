@@ -80,7 +80,7 @@ export function refresh() {
     return (dispatch, getState) => {
         const game = getState().game;
         dispatch( { type: actionTypes.RESET_CURRENT_DECK, game } );
-        flipCardsAfter(5000)(dispatch, getState);
+        flipCardsAfter(10000)(dispatch, getState);
     };
 }
 

@@ -34,7 +34,7 @@ const mapDispatchToProps = (dispatch, props) => {
             dispatch(answerFlashcard(true, char, false));
         },
         onStart: (delay) => {
-            dispatch(flipCardsAfter(delay || 5000));
+            dispatch(flipCardsAfter(delay || 10000));
         }
     };
 };
