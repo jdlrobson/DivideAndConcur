@@ -30,6 +30,7 @@ function say(word) {
     const voice = voices.filter((voice) => voice.lang.indexOf('zh') === 0)[0];
     const utterThis = new SpeechSynthesisUtterance(word);
     utterThis.voice = voice;
+    utterThis.rate = 0.75;
     synth.speak(utterThis);
 }
 
