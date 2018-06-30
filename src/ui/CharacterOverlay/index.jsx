@@ -90,6 +90,21 @@ class CharacterOverlay extends Component {
                 {props.children}
                 <TabGroup>
                     {
+                        props.usedBy.length && (
+                            <Tab name='Used by'>
+                                <div className='app__overlay__decompositions'>
+                                    {
+                                        props.usedBy.map(props => <FlashCard {...props}
+                                            isSmall={true}
+                                            className='app__overlay__decompositions__card'
+                                            onExpandCard={false}
+                                            key={`card-highlighted-usedby-${props.character}`} />)
+                                    }
+                                </div>
+                            </Tab>
+                        )
+                    }
+                    {
                         decomp.length > 0 && (
                             <Tab name='Divide/Concur'>
                                 <Decompositions decompositions={decomp} />

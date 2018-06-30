@@ -21,7 +21,7 @@ export function translationArray( definition ) {
     return translations;
 }
 
-export function mapCard(state, character, withDecompositions, withBlurb) {
+export function mapCard(state, character, withDecompositions, withBlurb, withUsedBy) {
     let decompositions = withDecompositions ?
       makeCardsFromCharacters(
         state,
@@ -32,6 +32,8 @@ export function mapCard(state, character, withDecompositions, withBlurb) {
     const text = withBlurb ? blurbs[character] : undefined;
     const translations = translationArray(dictUtils.getWord(character));
     const english = random(translations);
+    const usedBy = withUsedBy ?  dictUtils.usedBy(character)
+      .map(char => mapCard(state, char, false, false)) : [];
 
     return {
         character,
@@ -40,6 +42,7 @@ export function mapCard(state, character, withDecompositions, withBlurb) {
         pinyin: dictUtils.getPinyin(character),
         translations,
         english,
+        usedBy,
         decompositions
     };
 }
@@ -48,6 +51,7 @@ export function getHighlightedCards(state, char) {
     return freezeCards(
         makeCardsFromCharacters(state,
             [ char ],
+            true,
             true,
             true
         )
@@ -98,8 +102,8 @@ export function freezeCards(cards) {
     return cards.map(card => Object.assign({}, card, { isFrozen: true }));
 }
 
-export function makeCardsFromCharacters(state, chars, withDecompositions, withBlurbs) {
-    return chars.map(char => mapCard(state, char, withDecompositions, withBlurbs));
+export function makeCardsFromCharacters(state, chars, withDecompositions, withBlurbs, withUsedBy) {
+    return chars.map(char => mapCard(state, char, withDecompositions, withBlurbs, withUsedBy));
 }
 
 export function dealKnownCards(state) {

@@ -106,11 +106,7 @@ function saveWord( chinese, english ) {
  * are contained inside 2 character words e.g. 山 in 火山
  */
 function usedBy(char) {
-	return Object.keys( decompositions ).filter(
-		key => decompositions[key].indexOf(char) > -1
-	).concat(
-		Object.keys(words).filter((key)=> key.indexOf(char) > -1 && key !== char)
-	);
+	return utils.usedBy(char);
 }
 
 function getPinyin(word) {

@@ -134,6 +134,15 @@ DictionaryUtils.prototype = {
         return getWordLength(w) === wordLength && matchesDifficultyLevel(w);
       } );
   },
+  usedBy: function ( char ) {
+    const d = this.decompositions;
+    const w = this.words;
+    return Object.keys( d ).filter(
+      key => d[key].indexOf(char) > -1
+    ).concat(
+      Object.keys(w).filter((key)=> key.indexOf(char) > -1 && key !== char)
+    ).filter((c) => c !== char );
+  },
   decompose: function( word, isRecursive ) {
     if ( Array.from(word).length > 1 && !isRecursive ) {
       return word.split('');
