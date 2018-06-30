@@ -86,6 +86,7 @@ class CharacterOverlay extends Component {
                     onExpandCard={false}
                     className='app__overlay__card' />
                 <a href={`https://en.wiktionary.org/wiki/${props.character}`}
+                    target='_blank'
                     className='app__overlay__link'>wiktionary</a>
                 {props.children}
                 <TabGroup>
