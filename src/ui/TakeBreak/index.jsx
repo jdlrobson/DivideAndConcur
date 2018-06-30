@@ -2,9 +2,10 @@
 import { Component, h } from 'preact';
 import { connect } from 'preact-redux';
 import Button from './../Button';
+import Card from './../Card';
 import './styles.less';
 
-import { getKnownWordCount } from './../../helpers/difficulty-ratings';
+import { getKnownWords } from './../../helpers/difficulty-ratings';
 import { resetNumRounds, dismountCurrentGame } from './../../actions';
 
 class TakeBreak extends Component {
@@ -23,6 +24,11 @@ class TakeBreak extends Component {
                 <p>Hopefully the following words are beginning to look familiar...</p>
                 <p>{props.seenWords.map(char =>
                     <span className='takebreak__char'>{char}</span>)}</p>
+                <h2>Your word bank</h2>
+                {
+                    props.knownWords.map(character => <Card character={character}
+                        isKnown={true} isAnswered={true} isTiny={true} />)
+                }
             </div>
         );
     }
@@ -35,10 +41,11 @@ const mapStateToProps = (state, props) => {
         seenWords
     } = state;
 
-    const knownWordCount = getKnownWordCount(answers);
-    const learned = knownWordCount - initialState.known;
+    const knownWords = getKnownWords(answers);
+    const learned = knownWords.length - initialState.known;
     return Object.assign({}, props, {
         seenWords,
+        knownWords,
         learned
     });
 };

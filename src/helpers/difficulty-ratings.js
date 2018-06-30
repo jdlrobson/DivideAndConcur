@@ -12,8 +12,12 @@ export function knowsWord(difficultyRatings, char) {
     return difficultyRatings[char] && difficultyRatings[char] < 0;
 }
 
-export function getKnownWordCount(difficultyRatings, char) {
-    return Object.keys(difficultyRatings).filter(word => knowsWord(difficultyRatings, word)).length;
+export function getKnownWords(difficultyRatings) {
+    return Object.keys(difficultyRatings).filter(word => knowsWord(difficultyRatings, word));
+}
+
+export function getKnownWordCount(difficultyRatings) {
+    return getKnownWords(difficultyRatings).length;
 }
 
 export function getUnKnownWordCount(difficultyRatings, char) {

@@ -34,6 +34,9 @@ export class Card extends Component {
                 modifiers.push('wide');
             }
         }
+        if (props.isTiny) {
+            modifiers.push('tiny');
+        }
         if (props.isWide) {
             modifiers.push('wide');
         }
