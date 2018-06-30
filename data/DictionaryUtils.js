@@ -134,6 +134,11 @@ DictionaryUtils.prototype = {
         return getWordLength(w) === wordLength && matchesDifficultyLevel(w);
       } );
   },
+  /**
+   * @param {string} char
+   * @return {array} of words with length greater than 1 character
+   *   that contain this character
+   */
   usedBy: function ( char ) {
     const d = this.decompositions;
     const w = this.words;
@@ -141,7 +146,7 @@ DictionaryUtils.prototype = {
       key => d[key].indexOf(char) > -1
     ).concat(
       Object.keys(w).filter((key)=> key.indexOf(char) > -1 && key !== char)
-    ).filter((c) => c !== char );
+    ).filter((c) => c !== char && Array.from(c).length > 1 );
   },
   decompose: function( word, isRecursive ) {
     if ( Array.from(word).length > 1 && !isRecursive ) {
