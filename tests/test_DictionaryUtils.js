@@ -3,6 +3,9 @@ import assert from 'assert';
 
 const difficulties = { '口': 3, '云': 5, '人': 1, '一': 0.5, '辶': 8, '车': 10 };
 const decompositions = { '回': ['口', '口'],
+    '舅': [ '臼', '男'],
+    '男': [ '田', '力' ],
+    '母': [ '毋' ],
     '锦': [ '钅', '帛' ],
     '哇': [ '口', '圭' ],
     '圭': [ '土', '土' ],
@@ -52,8 +55,10 @@ describe('DictionaryUtils', () => {
     it('getWordLength', () => {
         const utils = new DictionaryUtils(wordsForWordLength, decompositions, difficulties);
         assert.ok(utils.getWordLength('爸') === 0, 'No decomposition');
-        assert.ok(utils.getWordLength('爸爸') === 1,
+        assert.strictEqual(utils.getWordLength('爸爸'), 1,
             'Neither character has decomp but still length 1');
+        assert.ok(utils.getWordLength('舅舅') < utils.getWordLength('舅母'),
+            'Word length of 2 characters which are same is less than 2 that are not.');
         assert.ok(utils.getWordLength('艹') === 0, 'If not registered, is zero');
         assert.ok(utils.getWordLength('人') === 0, '人 size 0');
         assert.ok(utils.getWordLength('一') === 0, 'size 0');

@@ -74,16 +74,18 @@ DictionaryUtils.prototype = {
     return forWordAlone ? thisWord : Math.max( thisWord, combinedDifficulties );
   },
   getWordLength: function ( word ) {
+    const uniques = (char, i, self) => self.indexOf(char) === i;
     const decompose = this.decompose.bind(this);
     const getWord = this.getWord.bind(this);
     const chars = Array.from(word);
+    const uniqueChars = chars.filter(uniques);
     let penalty = 0;
-    chars.forEach((char) => {
+    uniqueChars.forEach((char) => {
       if ( !getWord( char ) ) {
         penalty += 1;
       }
     });
-    const len = chars.
+    const len = uniqueChars.
         map(
           (word) => decompose(word, true).
             filter((char) => char !== word )
