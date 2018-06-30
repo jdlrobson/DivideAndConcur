@@ -201,6 +201,8 @@ function revealedFlashcard(state, action) {
     if ( action.paused ) {
         return state;
     } else if (isMatchOneGame(action.game)) {
+        // Regardless of whether right or wrong, the first card was answered
+        state[0].isAnswered = true;
         return revealCardInAction(
             markCardsAsAnswered({ cards: state }, action.character, action.isKnown),
             action
