@@ -145,9 +145,11 @@ export function revealFlashcard(character, index) {
         const paused = state.paused;
         const game = state.game;
         const isKnown = state.cards[0].character === character;
+        const correctAnswer = state.cards[0].character;
         dispatch( {
             type: actionTypes.REVEAL_FLASHCARD,
             character,
+            correctAnswer,
             isEnd, isKnown, paused, game,
             index
         } );

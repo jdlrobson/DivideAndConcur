@@ -67,6 +67,10 @@ export function revealedFlashcard(state, action) {
             if (action.isKnown) {
                 return markWordAsEasy({ answers: state }, action.character);
             } else {
+                // If wrong mark both as difficult to push them back on the learning stack
+                if ( action.correctAnswer ) {
+                    state = markWordAsDifficult({ answers: state }, action.correctAnswer);
+                }
                 return markWordAsDifficult({ answers: state }, action.character);
             }
         } else {
