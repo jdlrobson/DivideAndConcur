@@ -10,8 +10,8 @@
     "start": "npm run build-html && export DEV=1 && parcel index.html",
     "dev": "npm run build-html &&parcel serve index.html",
     "lint:ui": "eslint src/ui/**/*.jsx",
-    "lint": "eslint \"src/**/*.js[x]\" \"tests/**\"",
-    "fixlint": "eslint \"src/**/*.js[x]\" \"tests/**\" --fix",
+    "lint": "eslint src/ tests/",
+    "fixlint": "eslint src/ tests/ --fix",
     "node:test": "mocha --compilers js:babel-core/register,jsx:babel-core/register,less:tests/null-compiler.js tests/**",
     "test": "npm run lint && npm run node:test"
   },

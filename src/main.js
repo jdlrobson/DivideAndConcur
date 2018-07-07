@@ -3,10 +3,9 @@ import 'preact/devtools';
 import { applyMiddleware, compose, createStore } from 'redux';
 import { checkForSave, checkForBoot,
     speakHighlightedWord,
-    checkForTimedAction, checkIfEndOfRound } from './subscribers';
+    checkIfEndOfRound } from './subscribers';
 
 import { init, answerAllCardsInRound, highlightCharacter } from './actions';
-import { STARTUP_WAIT_TIME } from './constants';
 import reducer from './reducer';
 import thunkMiddleware from 'redux-thunk';
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -25,10 +24,10 @@ const store = createStore(reducer,
     let keys = [];
 
     function checkCheatCode(ev) {
-        if ( ev.type === 'paste' ) {
+        if (ev.type === 'paste') {
             keys = keys.concat(ev.clipboardData.getData('text/plain'));
         } else {
-           keys.push(ev.key); 
+            keys.push(ev.key);
         }
         const code = keys.join('');
         const cards = store.getState().cards;
@@ -38,11 +37,11 @@ const store = createStore(reducer,
         } else if (code.indexOf('JRH') > -1) {
             keys = [];
             store.dispatch(answerAllCardsInRound(true, cards));
-        } else if ( code.indexOf( 'LC' ) > -1 ) {
-            const char = code.slice(code.indexOf( 'LC' )+2);
-            if ( char ) {
+        } else if (code.indexOf('LC') > -1) {
+            const char = code.slice(code.indexOf('LC') + 2);
+            if (char) {
                 store.dispatch(highlightCharacter(char));
-                if ( char.length === 2 ) {
+                if (char.length === 2) {
                     keys = [];
                 }
             }
@@ -51,7 +50,7 @@ const store = createStore(reducer,
             keys = keys.slice(-10);
         }
 
-    };
+    }
     document.body.onpaste = checkCheatCode;
     window.onkeypress = checkCheatCode;
 
@@ -59,7 +58,7 @@ const store = createStore(reducer,
     store.subscribe(checkIfEndOfRound(store));
     store.subscribe(checkForSave(store));
     store.subscribe(checkForBoot(store, () => {
-        hide( $('#chrome__content__panel-one')[0] );
+        hide($('#chrome__content__panel-one')[0]);
     }));
     store.subscribe(speakHighlightedWord(store));
 
@@ -73,31 +72,31 @@ const store = createStore(reducer,
     const seen = localStorage.getItem(SEEN_KEY);
     const userData = memory ? JSON.parse(memory) : { answers: {} };
 
-    function hide( domElement ) {
+    function hide(domElement) {
         domElement.style.display = 'none';
     }
-    function show( domElement ) {
+    function show(domElement) {
         domElement.style.display = '';
     }
     function focusWindow() {
-        setTimeout(()=>window.scrollTo(0,0), 0);
+        setTimeout(() => window.scrollTo(0,0), 0);
     }
-    const $ = (selector) => document.querySelectorAll(selector);
+    const $ = selector => document.querySelectorAll(selector);
     Array.from($('.panel__next')).forEach((node) => {
         node.addEventListener('click', (ev) => {
             ev.stopPropagation();
             focusWindow();
         });
-    })
+    });
     const boot = () => {
-        show( $('#chrome__content__panel-two')[0] );
-        show( $('#chrome__content__panel-two')[0].parentNode );
+        show($('#chrome__content__panel-two')[0]);
+        show($('#chrome__content__panel-two')[0].parentNode);
         localStorage.setItem(SEEN_KEY, '1');
         focusWindow();
         store.dispatch(init(userData));
         focusWindow();
     };
-    if ( !window.location.hash ) {
+    if (!window.location.hash) {
         window.location.hash = seen ? '#panel-6' : '#panel-0';
         focusWindow();
     }

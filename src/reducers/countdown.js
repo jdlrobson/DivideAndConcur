@@ -1,6 +1,6 @@
 import actionTypes from './../actionTypes';
 
-export default (state=0, action) => {
+export default (state = 0, action) => {
     switch (action.type) {
         case actionTypes.FLIP_CARDS_START:
             return action.countdown > 1 ? action.countdown : 0;

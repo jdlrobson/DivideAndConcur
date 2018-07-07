@@ -29,7 +29,6 @@ export default {
     overlay,
     seenWords,
     numRounds,
-    cards,
     game,
     isFlipping,
     isFlipped,

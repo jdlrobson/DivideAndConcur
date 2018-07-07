@@ -1,6 +1,6 @@
 import actionTypes from './../actionTypes';
 
-export default (state=0, action) => {
+export default (state = 0, action) => {
     switch (action.type) {
         case actionTypes.RESET_ROUNDS:
             return 0;

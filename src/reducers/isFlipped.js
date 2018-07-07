@@ -3,7 +3,7 @@ import {
     PINYIN_TO_CHINESE, ENGLISH_TO_CHINESE, MATCH_PAIRS
 } from './../constants';
 
-export default (state=false, action) => {
+export default (state = false, action) => {
     switch (action.type) {
         case actionTypes.START_ROUND:
             switch (action.game) {
@@ -11,7 +11,6 @@ export default (state=false, action) => {
                 case ENGLISH_TO_CHINESE:
                 case MATCH_PAIRS:
                     return false;
-                    break;
                 default:
                     break;
             }

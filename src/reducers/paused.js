@@ -1,6 +1,6 @@
 import actionTypes from './../actionTypes';
 
-export default (state=false, action) => {
+export default (state = false, action) => {
     switch (action.type) {
         case actionTypes.HIDE_OVERLAY:
         case actionTypes.START_ROUND:

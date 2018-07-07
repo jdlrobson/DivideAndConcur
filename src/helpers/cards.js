@@ -4,7 +4,7 @@ import DictionaryUtils from './../../data/DictionaryUtils';
 import { getDifficultyRating, knowsWord,
     getDifficultyRatings } from './difficulty-ratings';
 import { MAX_DIFFICULTY } from './../constants';
-import { random } from './../utils'
+import { random } from './../utils';
 
 export const DATA_MODIFIED_LAST = dictJson.modified;
 export const dictUtils = new DictionaryUtils(dictJson.words,
@@ -13,21 +13,21 @@ export const maxSize = dictJson.total;
 
 export const ALL_WORDS = dictUtils.all();
 
-export function translationArray( definition ) {
+export function translationArray(definition) {
     let translations = [];
-    if ( definition ) {
+    if (definition) {
         translations = definition.trim().replace(/;$/, '').split(';');
     }
     return translations;
 }
 
 export function mapCard(state, character, withDecompositions, withBlurb, withUsedBy) {
-    let decompositions = withDecompositions ?
-      makeCardsFromCharacters(
-        state,
-        dictUtils.decompose( character ).filter((char) => char !== character ),
-        withDecompositions, withBlurb
-      ) : [];
+    const decompositions = withDecompositions ?
+        makeCardsFromCharacters(
+            state,
+            dictUtils.decompose(character).filter(char => char !== character),
+            withDecompositions, withBlurb
+        ) : [];
 
     const text = withBlurb ? blurbs[character] : undefined;
     const translations = translationArray(dictUtils.getWord(character));
@@ -66,8 +66,8 @@ export function getSelectedUnansweredCards(state) {
     return state.cards.filter(card => card.isSelected && !card.isAnswered);
 }
 
-export function isCardInGame( card ) {
-  return card.rating < MAX_DIFFICULTY * Math.max(1, card.wordLength);
+export function isCardInGame(card) {
+    return card.rating < MAX_DIFFICULTY * Math.max(1, card.wordLength);
 }
 
 export function getAllCardsWithUserDifficulty(answers) {
@@ -87,7 +87,7 @@ export function getAllCardsWithUserDifficulty(answers) {
             // pinyin: dictUtils.getPinyin(character),
             english: dictUtils.getWord(character)
         };
-    }).filter( isCardInGame ).sort((card, card2) => {
+    }).filter(isCardInGame).sort((card, card2) => {
         if (card.wordLength < card2.wordLength) {
             return -1;
         } else if (card.wordLength === card2.wordLength) {

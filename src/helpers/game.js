@@ -1,6 +1,5 @@
-import { MATCH_DEFINITION, MATCH_SOUND,
-    ENGLISH_TO_CHINESE, PINYIN_TO_CHINESE, MATCH_PAIRS
- } from './../constants';
+import { MATCH_DEFINITION, MATCH_SOUND, MATCH_PAIRS
+} from './../constants';
 
 export function isMatchOneGame(game) {
     switch (game) {
@@ -15,7 +14,7 @@ export function isMatchOneGame(game) {
 
 export function isMatchPairsGame(game) {
     switch (game) {
-    case MATCH_PAIRS:
+        case MATCH_PAIRS:
         case MATCH_SOUND:
             return true;
         default:

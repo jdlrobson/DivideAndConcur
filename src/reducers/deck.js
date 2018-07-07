@@ -2,7 +2,7 @@ import actionTypes from './../actionTypes';
 import { DECK_START, DECK_NEW } from './../constants';
 import { getKnownWordCount } from './../helpers/difficulty-ratings';
 
-export default (state=DECK_START, action) => {
+export default (state = DECK_START, action) => {
     switch (action.type) {
         case actionTypes.INIT_END:
             if (getKnownWordCount(action.answers) > 20) {

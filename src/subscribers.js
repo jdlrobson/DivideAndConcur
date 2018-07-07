@@ -1,5 +1,6 @@
-import { endRound, saveComplete, dismountDeck, renderComplete } from './actions';
-import { DECK_NEW, VERSION } from './constants';
+/* global SpeechSynthesisUtterance */
+import { endRound, saveComplete, renderComplete } from './actions';
+import { VERSION } from './constants';
 import { DATA_MODIFIED_LAST } from './helpers/cards';
 import App from './ui/App';
 import { h, render } from 'preact';
@@ -27,7 +28,7 @@ export function checkForSave(store) {
 function say(word) {
     const synth = window.speechSynthesis;
     const voices = synth.getVoices();
-    const voice = voices.filter((voice) => voice.lang.indexOf('zh') === 0)[0];
+    const voice = voices.filter(voice => voice.lang.indexOf('zh') === 0)[0];
     const utterThis = new SpeechSynthesisUtterance(word);
     utterThis.voice = voice;
     utterThis.rate = 0.75;
@@ -37,15 +38,15 @@ function say(word) {
 let lastSpoken;
 export function speakHighlightedWord(store) {
     return () => {
-        if ( window.speechSynthesis && typeof SpeechSynthesisUtterance !== undefined ) {
+        if (window.speechSynthesis && typeof SpeechSynthesisUtterance !== undefined) {
             const state = store.getState();
-            if ( state.highlighted ) {
+            if (state.highlighted) {
                 const curCard = state.highlighted[0];
-                if ( curCard && curCard.character !== lastSpoken ) {
+                if (curCard && curCard.character !== lastSpoken) {
                     lastSpoken = curCard.character;
                     say(lastSpoken);
                 }
-            };
+            }
         }
     };
 }
@@ -53,7 +54,7 @@ export function speakHighlightedWord(store) {
 export function checkForBoot(store, callback) {
     return () => {
         const state = store.getState();
-        if ( state.isBooted && !state.isRendered ) {
+        if (state.isBooted && !state.isRendered) {
             store.dispatch(renderComplete());
             const provider = (
                 <Provider store={store}>

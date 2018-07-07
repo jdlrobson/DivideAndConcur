@@ -1,5 +1,5 @@
 {
-  "extends": [ "eslint-config-node-services", "eslint-config-standard-jsx" ],
+  "extends": [ "node-services", "standard-jsx" ],
   "globals": {
     "document": true,
     "window": true,

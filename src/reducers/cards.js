@@ -1,12 +1,13 @@
 import actionTypes from './../actionTypes';
-import { MATCH_SOUND, MATCH_PAIRS, REVISE,
+import { MATCH_SOUND, MATCH_PAIRS,
     ENGLISH_TO_CHINESE, PINYIN_TO_CHINESE,
     MATCH_DEFINITION,
     DECK_START,
     DECK_UNKNOWN, DECK_NEW, DECK_KNOWN
 } from './../constants';
-import { mapCard, shuffle, isCardInGame, freezeCards as freezeCardsHelper } from './../helpers/cards';
-import { isTooEasy, knowsWord, getDifficultyRatings } from './../helpers/difficulty-ratings';
+import { mapCard, shuffle, isCardInGame,
+    freezeCards as freezeCardsHelper } from './../helpers/cards';
+import { knowsWord, getDifficultyRatings } from './../helpers/difficulty-ratings';
 import { isMatchOneGame } from './../helpers/game';
 
 function updateCardInCards(cards, character, index, props) {
@@ -47,7 +48,7 @@ export function addIndexToCards(state) {
 
 export function getUnknownCards(state, total) {
     const ratings = getDifficultyRatings(state);
-    const cards = state.words.filter((word) => ratings[word.character] === undefined &&
+    const cards = state.words.filter(word => ratings[word.character] === undefined &&
         isCardInGame(word)
     );
 
@@ -76,25 +77,25 @@ export function getHardCards(state, total) {
     const ratings = getDifficultyRatings(state);
     let available = state.words.filter((word) => {
         const char = word.character;
-        return ratings[char] !== undefined && !knowsWord(ratings, char)
-    } );
-    if ( available.length < total ) {
-       available = available.concat(
-           getUnknownCards(state, total - available.length )
-       );
+        return ratings[char] !== undefined && !knowsWord(ratings, char);
+    });
+    if (available.length < total) {
+        available = available.concat(
+            getUnknownCards(state, total - available.length)
+        );
     }
-    if ( available.length < total ) {
-       available = available.concat(
-           getKnownCards(state, total - available.length )
-       );
+    if (available.length < total) {
+        available = available.concat(
+            getKnownCards(state, total - available.length)
+        );
     }
     return shuffle(
-            available
-        ).slice(0, total)
+        available
+    ).slice(0, total)
         .map(word => mapCard(state, word.character));
 }
 
-function chooseDeck( _cards, action ) {
+function chooseDeck(_cards, action) {
     let cards = [];
     const state = { words: action.words, answers: action.answers };
     switch (action.deck) {
@@ -116,16 +117,16 @@ function chooseDeck( _cards, action ) {
     return cards;
 }
 
-export function pickCardsForGame( _cards, action ) {
-    let cards = chooseDeck( _cards, action );
+export function pickCardsForGame(_cards, action) {
+    let cards = chooseDeck(_cards, action);
     // Pick card to play the game with
     const card = cards[0];
+    if (action.game === MATCH_SOUND) {
+        // Move out any duplicate sounds to avoid duplicate answers
+        cards = cards.filter((c, i) => c.character === card.character ||
+        c.pinyin !== card.pinyin);
+    }
     switch (action.game) {
-        case MATCH_SOUND:
-            const x = 1;
-            // Move out any duplicate sounds to avoid duplicate answers
-            cards = cards.filter((c, i) => c.character === card.character ||
-                c.pinyin !== card.pinyin);
         case MATCH_DEFINITION:
         case MATCH_SOUND:
             // 4 cards will be used in the game.
@@ -147,7 +148,7 @@ export function pickCardsForGame( _cards, action ) {
             break;
     }
     return cards;
-};
+}
 
 export function cutCardDeck(state, total) {
     return state.cards.slice(0,total);
@@ -158,14 +159,14 @@ export function shuffleCards(state) {
 }
 
 export function resetCards(cards) {
-    return cards.map(card => {
+    return cards.map((card) => {
         return Object.assign({}, card, { isFlipped: false, isAnswered: false, isSelected: true });
     });
 }
 
 export function flipCards(state) {
-    return state.map(card => {
-        if ( card.isAnswered ) {
+    return state.map((card) => {
+        if (card.isAnswered) {
             return card;
         } else {
             return Object.assign({}, card, { isFlipped: true, isSelected: false });
@@ -176,7 +177,7 @@ export function flipCards(state) {
 // Reducer for when a card is answered
 function actionAnswerCard(state, action) {
     const char = action.character;
-    let isKnown = true;
+    const isKnown = true;
 
     return answerCard(state, char, action.index, isKnown);
 }
@@ -188,7 +189,7 @@ function newRound(cards, action) {
     const deck = action.deck;
     return addIndexToCards(
         {
-            cards: pickCardsForGame( cards, { game, answers, words, deck } )
+            cards: pickCardsForGame(cards, { game, answers, words, deck })
         }
     );
 }
@@ -198,7 +199,7 @@ function revealCardInAction(cards, action) {
 }
 
 function revealedFlashcard(state, action) {
-    if ( action.paused ) {
+    if (action.paused) {
         return state;
     } else if (isMatchOneGame(action.game)) {
         // Regardless of whether right or wrong, the first card was answered
@@ -218,15 +219,17 @@ function resetCurrentDeck(cards, action) {
         case ENGLISH_TO_CHINESE:
         case MATCH_PAIRS:
             return shuffleCards({ cards: resetCards(cards) });
-            break;
         default:
-            console.log('resetCurrentDeck is a noop if not the game');
             break;
     }
     return cards;
 }
 
-export default (state=[], action) => {
+export default (state = [], action) => {
+    let cards;
+    const words = action.words;
+    const answers = action.answers;
+
     switch (action.type) {
         case actionTypes.RESET_CURRENT_DECK:
             return resetCurrentDeck(state, action);
@@ -238,27 +241,24 @@ export default (state=[], action) => {
         case actionTypes.GUESS_FLASHCARD_RIGHT:
             return actionAnswerCard(state, action);
         case actionTypes.CHEAT_ANSWER_ALL:
-            let cards;
-            state.forEach((card) =>
+            state.forEach((card) => {
                 cards = actionAnswerCard(state, {
                     type: action.isCorrect ?
                         actionTypes.GUESS_FLASHCARD_RIGHT :
                         actionTypes.GUESS_FLASHCARD_WRONG,
                     character: card.character
-                })
-            );
+                });
+            });
             return selectAndAnswerAll(cards, false);
         case actionTypes.DESELECT_ALL_UNANSWERED_CARDS:
             return deselectUnansweredCards(state);
         case actionTypes.FLIP_CARDS_END:
             return flipCards(state);
         case actionTypes.END_ROUND:
-            return freezeCardsHelper( state );
+            return freezeCardsHelper(state);
         case actionTypes.INIT_END:
             // Load known cards into cache
-            const words = action.words;
-            const answers = action.answers;
-            getKnownCards( Object.assign( {}, state, { words, answers } ) );
+            getKnownCards(Object.assign({}, state, { words, answers }));
             break;
         default:
             break;

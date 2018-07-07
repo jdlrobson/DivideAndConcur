@@ -1,7 +1,7 @@
 import actionTypes from './../actionTypes';
 import { getHighlightedCards } from './../helpers/cards';
 
-export default (state=[], action) => {
+export default (state = [], action) => {
     switch (action.type) {
         case actionTypes.HIGHLIGHT_CHARACTER:
             return getHighlightedCards(state, action.character);
