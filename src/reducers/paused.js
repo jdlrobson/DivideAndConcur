@@ -8,8 +8,8 @@ export default (state = false, action) => {
         case actionTypes.DESELECT_ALL_UNANSWERED_CARDS:
         case actionTypes.DISMOUNT_DECK:
         case actionTypes.DISMOUNT_GAME:
-            return false;
         case actionTypes.END_ROUND:
+            return false;
         case actionTypes.SHOW_OVERLAY:
         case actionTypes.FLIP_CARDS_START:
             return true;
