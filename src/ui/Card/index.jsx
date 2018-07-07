@@ -13,6 +13,8 @@ export class Card extends Component {
     render(props) {
         const additionalClassName = props.className || '';
         const modifiers = [];
+        const isTiny = props.isTiny;
+
         if (props.isAnswered) {
             modifiers.push(props.isKnown ? 'known' : 'unknown');
         }
@@ -34,7 +36,7 @@ export class Card extends Component {
                 modifiers.push('wide');
             }
         }
-        if (props.isTiny) {
+        if (isTiny) {
             modifiers.push('tiny');
         }
         if (props.isWide) {
@@ -52,7 +54,7 @@ export class Card extends Component {
                 onClick={props.onClick}>
                 {props.children.length > 0 &&
             <div className={className(BLOCK_NAME, 'front')}>{props.children}</div>}
-                <div className={className(BLOCK_NAME, 'back')} />
+                { !isTiny && <div className={className(BLOCK_NAME, 'back')} /> }
             </div>
         );
     }
@@ -91,6 +93,7 @@ export class FlashCard extends Component {
         const isKnown = dLevel < -4;
         const isSelected = props.isSelected;
         const isFrozen = props.isFrozen;
+        const isTiny = props.isTiny;
         const done = props.isAnswered;
         let components = [];
 
@@ -156,9 +159,9 @@ export class FlashCard extends Component {
         // if ( !props.english && !props.character)
         return (
             <Card {...props} onClick={this.onClick.bind(this)} >
-                {props.debug && difficultyBar}
+                {!isTiny && props.debug && difficultyBar}
                 {
-                    props.isAnswered && props.onExpandCard !== false && !props.isSmall && (
+                    !isTiny && props.isAnswered && props.onExpandCard !== false && !props.isSmall && (
                         <ExpandButton
                             className='card__expand-button'
                             onClick={this.onExpand.bind(this)} />
@@ -167,7 +170,7 @@ export class FlashCard extends Component {
                 <div key='char'
                     className={className(BLOCK_NAME, 'label', labelModifiers)}
                 >{label}</div>
-                {components}
+                {!isTiny && components}
                 <span className='card__debug'>
                     { props.debug ? props.level : null }
                 </span>
