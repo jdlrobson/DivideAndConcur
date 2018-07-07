@@ -70,9 +70,18 @@ export function dismountDeck() {
 
 export function startRound() {
     return (dispatch, getState) => {
-        const state = getState();
-        const { game, deck, answers, words } = state;
-        dispatch( { type: actionTypes.START_ROUND, deck, game, answers, words } );
+        function waitAndStart() {
+            const state = getState();
+            const { game, deck, answers, words, paused } = state;
+
+            if ( !paused ) {
+                dispatch( { type: actionTypes.START_ROUND, deck, game, answers, words } );
+            } else {
+                // try again in 1s.
+                setTimeout(waitAndStart, 1000);
+            }
+        }
+        waitAndStart();
     };
 }
 
