@@ -5,7 +5,7 @@ import Button from './../Button';
 import Card from './../Card';
 import './styles.less';
 
-import { getKnownWords } from './../../helpers/difficulty-ratings';
+import { getKnownWords, getUniqueChars } from './../../helpers/difficulty-ratings';
 import { resetNumRounds, dismountCurrentGame } from './../../actions';
 
 class TakeBreak extends Component {
@@ -24,7 +24,7 @@ class TakeBreak extends Component {
                 <p>Hopefully the following words are beginning to look familiar...</p>
                 <p>{props.seenWords.map(char =>
                     <span className='takebreak__char'>{char}</span>)}</p>
-                <h2>Your word bank</h2>
+                <h2>Your word bank ({props.knownWords.length} characters)</h2>
                 {
                     props.knownWords.map(character => <Card character={character}
                         isKnown={true} isAnswered={true} isTiny={true} />)
@@ -41,7 +41,7 @@ const mapStateToProps = (state, props) => {
         seenWords
     } = state;
 
-    const knownWords = getKnownWords(answers);
+    const knownWords = getUniqueChars(getKnownWords(answers));
     const learned = knownWords.length - initialState.known;
     return Object.assign({}, props, {
         seenWords,

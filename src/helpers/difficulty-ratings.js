@@ -20,6 +20,18 @@ export function getKnownWordCount(difficultyRatings) {
     return getKnownWords(difficultyRatings).length;
 }
 
+export function getUniqueChars(words) {
+    const uniqueChars = [];
+    words.forEach((word) => {
+        Array.from(word).forEach((char) => {
+            if (uniqueChars.indexOf(char) === -1) {
+                uniqueChars.push(char);
+            }
+        });
+    });
+    return uniqueChars;
+}
+
 export function getUnKnownWordCount(difficultyRatings, char) {
     return Object.keys(difficultyRatings).filter(word =>
         difficultyRatings[word] !== undefined && !knowsWord(difficultyRatings, word)).length;
