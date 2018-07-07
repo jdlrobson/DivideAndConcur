@@ -1,7 +1,7 @@
 import actionTypes from './actionTypes';
 import { getAllCardsWithUserDifficulty, getAnsweredCards } from './helpers/cards';
 import { getKnownWordCount, getUnKnownWordCount } from './helpers/difficulty-ratings';
-import { ALLOW_DECK_SELECTION, DECK_NEW, DECK_UNKNOWN, DECK_KNOWN } from './constants';
+import { ALLOW_DECK_SELECTION, DECK_NEW, DECK_UNKNOWN, DECK_KNOWN, FLIP_DELAY } from './constants';
 import { random } from './utils';
 import { isMatchOneGame } from './helpers/game';
 
@@ -19,7 +19,7 @@ export function switchGame(game) {
 
 export function init(userData) {
     const cleanWordOrder = process.env.CLEAN_WORD_ORDER !== undefined;
-    return (dispatch, getState) => {
+    return (dispatch) => {
         dispatch({ type: actionTypes.INIT, userData });
         window.requestIdleCallback(() => {
             const answers = userData.answers;
@@ -89,7 +89,7 @@ export function refresh() {
     return (dispatch, getState) => {
         const game = getState().game;
         dispatch({ type: actionTypes.RESET_CURRENT_DECK, game });
-        flipCardsAfter(10000)(dispatch, getState);
+        flipCardsAfter(FLIP_DELAY)(dispatch, getState);
     };
 }
 
