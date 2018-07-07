@@ -142,7 +142,14 @@ DictionaryUtils.prototype = {
   usedBy: function ( char ) {
     const d = this.decompositions;
     const w = this.words;
-    return Object.keys( d ).filter(
+    const l = this.getWordLength( char );
+    function usedByRadical( radical ) {
+      return Object.keys(d).filter((key) => {
+        return d[key].indexOf( radical ) > -1 && w[key];
+      });
+    }
+
+    return l === 0 ? usedByRadical( char ) : Object.keys( d ).filter(
       key => d[key].indexOf(char) > -1
     ).concat(
       Object.keys(w).filter((key)=> key.indexOf(char) > -1 && key !== char)

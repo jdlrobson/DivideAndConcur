@@ -4,6 +4,8 @@ import assert from 'assert';
 const difficulties = { '口': 3, '云': 5, '人': 1, '一': 0.5, '辶': 8, '车': 10 };
 const decompositions = { '回': ['口', '口'],
     '舅': [ '臼', '男'],
+    '袜': [ '衤', '末' ],
+    '衬': [ '衤', '寸'],
     '男': [ '田', '力' ],
     '母': [ '毋' ],
     '锦': [ '钅', '帛' ],
@@ -23,6 +25,7 @@ const decompositions = { '回': ['口', '口'],
 };
 const words = {};
 const wordsForWordLength = {
+    '袜': 'socks',
     '大': 'big',
     '艹': 'grass',
     '辶': 'walk',
@@ -39,6 +42,10 @@ const wordsForWordLength = {
 const utils = new DictionaryUtils(words, decompositions, difficulties);
 
 describe('DictionaryUtils', () => {
+    it('usedBy', () => {
+        const utils = new DictionaryUtils(wordsForWordLength, decompositions, difficulties);
+        assert.equal(utils.usedBy('衤').length, 1, '衤 is used by 1 thing that is also a word');
+    });
     it('translate', () => {
         const utils = new DictionaryUtils(words, decompositions, difficulties);
         assert.equal(utils.translate('𠮷'), '? (? · ?)');
