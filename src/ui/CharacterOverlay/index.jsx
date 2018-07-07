@@ -5,31 +5,28 @@ import FlashCard from './../Card';
 import './styles.less';
 
 class Decompositions extends Component {
-    render(props) {
-        const decomp = props.decompositions;
-        const level = props.level || 2;
+    getDecompCards(decomp) {
         let childDecompositions = [];
         decomp.forEach((d) => {
             childDecompositions = childDecompositions.concat(d.decompositions);
         });
+        return childDecompositions.length > 0 ? decomp.concat([ '*' ])
+            .concat(this.getDecompCards(childDecompositions)) : decomp;
+    }
+    render(props) {
+        const decomp = props.decompositions;
+
         return (
             <div className='app__overlay__decompositions'>
                 {
-                    decomp.length > 0 && (
-                        decomp.map((cardProps) => {
-                            const isSmall = level > 2;
-                            const english = isSmall ? false : cardProps.english;
-                            return <FlashCard {...cardProps} isSelected isFrozen
-                                isSmall={isSmall} english={english}
+                    this.getDecompCards(decomp).map((cardProps) => {
+                        return cardProps === '*' ? <span className='cut'>÷</span> :
+                            <FlashCard {...cardProps} isSelected isFrozen
+                                english={cardProps.english}
                                 className='app__overlay__decompositions__card'
                                 onExpandCard={false}
                                 key={`card-highlighted-${cardProps.character}`} />;
-                        })
-                    )
-                }
-                {
-                    childDecompositions.length > 0 &&
-                    <Decompositions decompositions={childDecompositions} level={level + 1} />
+                    })
                 }
             </div>
         );
