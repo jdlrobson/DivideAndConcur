@@ -106,7 +106,7 @@ export default class StoryPanel extends Component {
                 </Panel>
                 <Panel id={3}>
                     <p>Not only did <span className='panel__highlighted-text'>MEDICINE become
-                        an APPOINTMENT with GRASS</span>, I know was familiar with five
+                        an APPOINTMENT with GRASS</span>, I was now familiar with five
                         Chinese characters!</p>
                     <MatchPairs mode={4}>
                         {medicineDecomp}
