@@ -18,6 +18,10 @@ class TakeBreak extends Component {
                     props.learned > 0 &&
                         <p>You've strengthened {props.learned} words!</p>
                 }
+                {
+                    props.learnedChars > 0 &&
+                        <p>You've strengthened {props.learnedChars} unique characters.</p>
+                }
                 <p>The brain degrades over time,
                     so please consider taking a break and playing again later!</p>
                 <Button onClick={props.onButtonClick}>不要!</Button>
@@ -41,11 +45,14 @@ const mapStateToProps = (state, props) => {
         seenWords
     } = state;
 
-    const knownWords = getUniqueChars(getKnownWords(answers));
+    const knownWords = getKnownWords(answers);
+    const uniqueChars = getUniqueChars(knownWords);
     const learned = knownWords.length - initialState.known;
+    const learnedChars = uniqueChars.length - initialState.known;
     return Object.assign({}, props, {
         seenWords,
         knownWords,
+        learnedChars,
         learned
     });
 };
