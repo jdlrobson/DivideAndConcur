@@ -32,7 +32,8 @@ export function mapCard(state, character, withDecompositions, withBlurb, withUse
     const text = withBlurb ? blurbs[character] : undefined;
     const translations = translationArray(dictUtils.getWord(character));
     const english = random(translations);
-    const usedBy = withUsedBy ?  dictUtils.usedBy(character)
+    // Limit to 6 words
+    const usedBy = withUsedBy ?  dictUtils.usedBy(character).slice(0, 6)
       .map(char => mapCard(state, char, false, false)) : [];
 
     return {

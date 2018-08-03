@@ -149,11 +149,12 @@ DictionaryUtils.prototype = {
       });
     }
 
-    return l === 0 ? usedByRadical( char ) : Object.keys( d ).filter(
+    const compoundWords = Object.keys( d ).filter(
       key => d[key].indexOf(char) > -1
     ).concat(
       Object.keys(w).filter((key)=> key.indexOf(char) > -1 && key !== char)
     ).filter((c) => c !== char && Array.from(c).length > 1 );
+    return l === 0 ? usedByRadical( char ).concat( compoundWords ) : compoundWords; 
   },
   decompose: function( word, isRecursive ) {
     if ( Array.from(word).length > 1 && !isRecursive ) {
