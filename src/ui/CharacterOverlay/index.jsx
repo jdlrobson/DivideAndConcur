@@ -4,6 +4,39 @@ import { connect } from 'preact-redux';
 import FlashCard from './../Card';
 import './styles.less';
 
+class Carousel extends Component {
+    constructor(props) {
+        super();
+        this.state = { active: 0, items: props.children.length };
+    }
+    setActive(i) {
+        const total = this.state.items;
+        if ( i >= total ) {
+            i = 0;
+        }
+        if ( i < 0 ) {
+            i = total - 1;
+        }
+        this.setState( { active: i } )
+    }
+    onNext() {
+        this.setActive(this.state.active + 1);
+    }
+    onPrev() {
+        this.setActive(this.state.active - 1);
+    }
+    render() {
+        const children = this.props.children;
+        return (
+            <div className="carousel">
+                {children.length > 1 && <div onClick={this.onPrev.bind(this)}>⬅️</div>}
+                {children[this.state.active || 0]}
+                {children.length > 1 && <div onClick={this.onNext.bind(this)}>➡️</div>}
+            </div>
+        )
+    }
+}
+
 class Decompositions extends Component {
     getDecompCards(decomp) {
         let childDecompositions = [];
@@ -91,13 +124,14 @@ class CharacterOverlay extends Component {
                         props.usedBy.length && (
                             <Tab name='Used by'>
                                 <div className='app__overlay__decompositions'>
-                                    {
-                                        props.usedBy.map(props => <FlashCard {...props}
-                                            isSmall={true}
-                                            className='app__overlay__decompositions__card'
-                                            onExpandCard={false}
-                                            key={`card-highlighted-usedby-${props.character}`} />)
-                                    }
+                                   <Carousel>
+                                    {props.usedBy.map(props => <FlashCard {...props}
+                                                isSmall={true}
+                                                className='app__overlay__decompositions__card'
+                                                onExpandCard={false}
+                                                key={`card-highlighted-usedby-${props.character}`} />
+                                    )}
+                                    </Carousel>
                                 </div>
                             </Tab>
                         )
