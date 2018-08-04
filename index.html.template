@@ -8,6 +8,7 @@
 		<link rel="manifest" href="./manifest.webmanifest" />
 	</head>
 	<body>
+		<script type="text/javascript">document.body.className = 'client-js';</script>
 		<!-- todo: generate static HTML from jsx component -->
 		<div class='chrome'>
 			<div class='chrome__header'>

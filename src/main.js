@@ -68,8 +68,6 @@ const store = createStore(reducer,
    *******************************************
    */
     const memory = localStorage.getItem('memory');
-    const SEEN_KEY = 'y-seen';
-    const seen = localStorage.getItem(SEEN_KEY);
     const userData = memory ? JSON.parse(memory) : { answers: {} };
 
     function hide(domElement) {
@@ -91,13 +89,12 @@ const store = createStore(reducer,
     const boot = () => {
         show($('#chrome__content__panel-two')[0]);
         show($('#chrome__content__panel-two')[0].parentNode);
-        localStorage.setItem(SEEN_KEY, '1');
         focusWindow();
         store.dispatch(init(userData));
         focusWindow();
     };
     if (!window.location.hash) {
-        window.location.hash = seen ? '#panel-6' : '#panel-0';
+        window.location.hash = '#panel-6';
         focusWindow();
     }
     document.querySelector('#init-game').addEventListener('click', () => {

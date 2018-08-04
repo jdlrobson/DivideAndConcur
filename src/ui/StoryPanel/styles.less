@@ -21,7 +21,7 @@
   background: white;
 }
 
-.panel-wrapper {
+.client-js .panel-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -31,6 +31,8 @@
   position: relative;
   width: 100%;
   line-height: 1.2;
+  // For no-js clients
+  border-bottom: solid 1px #ccc;
 }
 
 .panel__button {
@@ -50,7 +52,7 @@
   float: left;
 }
 
-.panel:not(:target) {
+.client-js .panel:not(:target) {
   display: none;
 }
 

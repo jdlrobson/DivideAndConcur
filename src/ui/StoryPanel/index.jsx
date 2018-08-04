@@ -138,6 +138,7 @@ export default class StoryPanel extends Component {
                 </Panel>
                 <Panel id={6}>
                     <ProgressBar known={0} total={100} noLabel={true} />
+                    <p>Let's learn some words! Let's learn Mandarin!</p>
                     <div id='init-game'>
                         <MatchPairs mode={4} showHint={true}>
                             <FlashCard /><FlashCard /><FlashCard /><FlashCard />
