@@ -190,6 +190,12 @@ function clean() {
 		if ( decomp.indexOf( '?' ) > -1 ) {
 			console.log(`Warning: ${key} has ? decomposition.`, decomp);
 		}
+		const indexFlesh = decomp.indexOf( '⺼' );
+		if ( indexFlesh > -1 ) {
+			// moon and flesh are very similar, so we merged them into one.
+			decomp[indexFlesh] = '月';
+			console.log(`Updated ⺼ to 月 for ${key}`);
+		}
 		decomp.forEach((char) => {
 			Array.from(char).forEach((chinese)=> {
 				const p = dict.getPinyin(chinese);
