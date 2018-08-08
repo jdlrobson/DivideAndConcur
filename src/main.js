@@ -4,8 +4,11 @@ import { applyMiddleware, compose, createStore } from 'redux';
 import { checkForSave, checkForBoot,
     speakHighlightedWord,
     checkIfEndOfRound } from './subscribers';
-
-import { init, answerAllCardsInRound, highlightCharacter } from './actions';
+import {
+    TAKE_A_BREAK
+} from './constants';
+import { init, answerAllCardsInRound, highlightCharacter, switchGame,
+    startRound } from './actions';
 import reducer from './reducer';
 import thunkMiddleware from 'redux-thunk';
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -31,7 +34,10 @@ const store = createStore(reducer,
         }
         const code = keys.join('');
         const cards = store.getState().cards;
-        if (code.indexOf('JRG') > -1) {
+        if (code.indexOf('LL') > -1) {
+            store.dispatch(switchGame(TAKE_A_BREAK));
+            store.dispatch(startRound());
+        } else if (code.indexOf('JRG') > -1) {
             keys = [];
             store.dispatch(answerAllCardsInRound(false, cards));
         } else if (code.indexOf('JRH') > -1) {
