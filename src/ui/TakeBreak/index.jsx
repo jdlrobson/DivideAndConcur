@@ -5,7 +5,7 @@ import Button from './../Button';
 import Card from './../Card';
 import './styles.less';
 
-import { getKnownWords, getUniqueChars } from './../../helpers/difficulty-ratings';
+import { getDifficultWords, getKnownWords, getUniqueChars } from './../../helpers/difficulty-ratings';
 import { resetNumRounds, dismountCurrentGame } from './../../actions';
 
 class TakeBreak extends Component {
@@ -28,11 +28,12 @@ class TakeBreak extends Component {
                 <p>Hopefully the following words are beginning to look familiar...</p>
                 <p>{props.seenWords.map(char =>
                     <span className='takebreak__char'>{char}</span>)}</p>
-                <h2>Your word bank ({props.knownWords.length} characters)</h2>
-                {
-                    props.knownWords.map(character => <Card character={character}
-                        isKnown={true} isAnswered={true} isTiny={true} />)
-                }
+                <h2>Your word bank contains {props.knownWords.length} characters</h2>
+                <p>Learn these words for next time to win more cards!</p>
+                <div className="takebreak__learn">{
+                    props.hardWords.map(character => <Card character={character}
+                        isKnown={false} isAnswered={true} />)
+                }</div>
             </div>
         );
     }
@@ -46,12 +47,14 @@ const mapStateToProps = (state, props) => {
     } = state;
 
     const knownWords = getKnownWords(answers);
+    const hardWords = getDifficultWords(answers);
     const uniqueChars = getUniqueChars(knownWords);
     const learned = knownWords.length - initialState.known;
     const learnedChars = uniqueChars.length - initialState.known;
     return Object.assign({}, props, {
         seenWords,
         knownWords,
+        hardWords,
         learnedChars,
         learned
     });

@@ -1,3 +1,5 @@
+@import './../variables.less';
+
 .takebreak__char {
   font-size: 1.5em;
   display: inline-block;
@@ -6,5 +8,19 @@
   top: -3px;
   &:nth-child(even) {
     top: 3px;
+  }
+}
+
+.takebreak__learn {
+  display: grid;
+  width: 300px;
+  grid-column-gap: @card-gutter;
+  grid-row-gap: @card-gutter;
+  .card {
+    justify-self: start;
+
+    &:nth-child(3n) {
+      grid-column: 3;
+    }
   }
 }
