@@ -1,8 +1,9 @@
 import { DECK_NEW, MATCH_PAIRS, MATCH_SOUND } from './../../src/constants';
 import { getHardCards, getKnownCards, getUnknownCards,
-    pickCardsForGame
+    pickCardsForGame, revealedFlashcard
 } from './../../src/reducers/cards';
 import assert from 'assert';
+import example from './example.json';
 
 const words = [
     { character: '!', pinyin: '!', rating: 24, wordLength: 2 },
@@ -13,6 +14,27 @@ const words = [
     { character: 'D', pinyin: 'D', rating: 24, wordLength: 2 },
     { character: 'E', pinyin: 'E', rating: 24, wordLength: 2 },
 ];
+describe('Reducer: cards (revealedFlashcard)', () => {
+    const newState = revealedFlashcard(example.cards, {
+        type: 'REVEAL-FLASHCARD',
+        character: '小白',
+        correctAnswer: '小心',
+        isRealWord: false,
+        isEnd: false,
+        isKnown: false,
+        paused: false,
+        game: 'match-sound',
+        index: 1
+    });
+    assert.equal(
+        newState[1].isKnown,
+        false,
+        // I don't like the existence/need of this test. Should be fixed inside  GameOneInFour
+        'There is no card for 小白.' +
+        'The card is 白 but has a fake title so 白 needs to be marked as wrong.'
+    );
+});
+
 describe('Reducer: cards', () => {
     it('pickCardsForGame (avoids duplicates)', () => {
         const rating = 0;

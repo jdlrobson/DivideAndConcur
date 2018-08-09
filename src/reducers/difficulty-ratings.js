@@ -14,6 +14,7 @@ export function markWordAsDifficult(state, char) {
     const difficultyRatings = getDifficultyRatings(state);
     const newRating = difficultyRatings[char] !== undefined ? difficultyRatings[char] + 1 : 1;
     difficultyRatings[char] = Math.min(5, newRating);
+
     return Object.assign({}, difficultyRatings);
 }
 
@@ -63,13 +64,32 @@ export function revealedFlashcard(state, action) {
     if (!action.paused && isMatchOneGame(action.game)) {
         if (!action.isEnd) {
             if (action.isKnown) {
-                return markWordAsEasy({ answers: state }, action.character);
+                return markWordAsEasy({
+                    answers: Object.assign({}, state)
+                }, action.character);
             } else {
                 // If wrong mark both as difficult to push them back on the learning stack
+                // mark what was the correct answer as wrong
                 if (action.correctAnswer) {
-                    state = markWordAsDifficult({ answers: state }, action.correctAnswer);
+                    state = markWordAsDifficult({
+                        answers: Object.assign({}, state)
+                    }, action.correctAnswer);
                 }
-                return markWordAsDifficult({ answers: state }, action.character);
+                if (action.isRealWord) {
+                    return markWordAsDifficult({
+                        answers: Object.assign({}, state)
+                    }, action.character);
+                } else {
+                    const answerChars = Array.from(action.correctAnswer || '');
+                    const uniqueChars = Array.from(action.character)
+                        .filter(char => answerChars.indexOf(char) === -1);
+                    return uniqueChars.length === 1 ?
+                        // Mark the shared characters as difficult
+                        markWordAsDifficult({
+                            answers: Object.assign({}, state)
+                        }, uniqueChars.join(''))
+                        : state;
+                }
             }
         } else {
             return state;

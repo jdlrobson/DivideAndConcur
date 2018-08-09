@@ -3,6 +3,28 @@ import { clean,
 } from './../../src/reducers/difficulty-ratings';
 import { MATCH_DEFINITION } from './../../src/constants';
 import assert from 'assert';
+import example from './example.json';
+
+describe('Reducer: difficulty-ratings', () => {
+    const action = {
+        type: 'REVEAL-FLASHCARD',
+        character: '小白',
+        correctAnswer: '小心',
+        isEnd: false,
+        isRealWord: false,
+        isKnown: false,
+        paused: false,
+        game: 'match-sound',
+        index: 1
+    };
+    const newAnswers = revealedFlashcard(example.answers, action);
+    assert.ok(newAnswers['小白'] === example.answers['小白'],
+        'non-existent word not marked as not known as it is not a valid word');
+    assert.ok(newAnswers['小心'] > example.answers['小心'],
+        'incorrect word marked as more difficult');
+    assert.ok(newAnswers['白'] > example.answers['白'],
+        'word 白 marked as difficult (intersect between 小白 and 小心');
+});
 
 describe('Reducer: difficulty-ratings', () => {
     it('clean', () => {
