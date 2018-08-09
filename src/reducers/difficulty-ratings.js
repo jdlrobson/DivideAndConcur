@@ -24,17 +24,15 @@ export function clean(state, action) {
     const maxDifficulty = nextWord.rating;
     const nextIndex = words.findIndex(word => word.character === nextWord.character);
 
-    if (!action.cleanWordOrder) {
-        return Object.assign({}, state);
-    }
     Object.keys(state).forEach((char) => {
         const wordPos = words.findIndex(word => word.character === char);
+        // Delete words that have been dropped from the dictionary but were previously answered
         if (wordPos === -1) {
             delete state[char];
-        } else if (wordPos > nextIndex) {
+        } else if (action.cleanWordOrder && wordPos > nextIndex) {
             // If the word being looked at comes after the next card than it needs to be dropped
             delete state[char];
-        } else {
+        } else if (action.cleanWordOrder) {
             // Cleanup words which are more difficulty then the next known word
             // (ratings sometimes change)
             const w = words[wordPos];
