@@ -16,6 +16,12 @@ export function getDifficultWords(difficultyRatings) {
     return Object.keys(difficultyRatings).filter(word => !knowsWord(difficultyRatings, word));
 }
 
+export function getDifficultWordsHardestFirst(difficultyRatings) {
+    return getDifficultWords(difficultyRatings).sort((w1, w2) => {
+        return difficultyRatings[w1] < difficultyRatings[w2] ? 1 : -1;
+    });
+}
+
 export function getKnownWords(difficultyRatings) {
     return Object.keys(difficultyRatings).filter(word => knowsWord(difficultyRatings, word));
 }

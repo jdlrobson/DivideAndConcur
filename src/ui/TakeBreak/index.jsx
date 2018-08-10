@@ -5,7 +5,8 @@ import Button from './../Button';
 import Card from './../Card';
 import './styles.less';
 
-import { getDifficultWords, getKnownWords, getUniqueChars } from './../../helpers/difficulty-ratings';
+import { getDifficultWordsHardestFirst, getKnownWords,
+    getUniqueChars } from './../../helpers/difficulty-ratings';
 import { resetNumRounds, dismountCurrentGame } from './../../actions';
 
 class TakeBreak extends Component {
@@ -47,7 +48,7 @@ const mapStateToProps = (state, props) => {
     } = state;
 
     const knownWords = getKnownWords(answers);
-    const hardWords = getDifficultWords(answers);
+    const hardWords = getDifficultWordsHardestFirst(answers);
     const uniqueChars = getUniqueChars(knownWords);
     const learned = knownWords.length - initialState.known;
     const learnedChars = uniqueChars.length - initialState.known;
