@@ -3,7 +3,7 @@ import { Component, h } from 'preact';
 import { connect } from 'preact-redux';
 import { setDeck } from './../../actions';
 import { DECK_NEW, DECK_KNOWN, DECK_UNKNOWN,
-    ALLOW_DECK_SELECTION
+    ALLOW_DECK_SELECTION, MAXIMUM_UNKNOWN_WORDS
 } from './../../constants';
 import { random } from './../../utils';
 import Button from './../Button';
@@ -69,7 +69,7 @@ const mapStateToProps = (state, props) => {
     const maxSize = words.length;
     const unknown = getUnKnownWordCount(answers);
     const known = getKnownWordCount(answers);
-    const isNewWordsAvailable = unknown <= known;
+    const isNewWordsAvailable = unknown < MAXIMUM_UNKNOWN_WORDS;
     const isDifficultWordsAvailable = unknown > 0 && unknown < maxSize;
     const isFamiliarWordsAvailable = known > 0;
 
