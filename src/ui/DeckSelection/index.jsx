@@ -3,7 +3,8 @@ import { Component, h } from 'preact';
 import { connect } from 'preact-redux';
 import { setDeck } from './../../actions';
 import { DECK_NEW, DECK_KNOWN, DECK_UNKNOWN,
-    ALLOW_DECK_SELECTION, MAXIMUM_UNKNOWN_WORDS
+    ALLOW_DECK_SELECTION, MAXIMUM_UNKNOWN_WORDS,
+    DEBUG_DECK
 } from './../../constants';
 import { random } from './../../utils';
 import Button from './../Button';
@@ -29,7 +30,11 @@ class DeckSelection extends Component {
                 options.push(DECK_KNOWN);
             }
             // auto-choose deck
-            props.setDeck(random(options));
+            if (DEBUG_DECK) {
+                props.setDeck(DEBUG_DECK);
+            } else {
+                props.setDeck(random(options));
+            }
         }
     }
     render(props) {
@@ -70,6 +75,7 @@ const mapStateToProps = (state, props) => {
     const unknown = getUnKnownWordCount(answers);
     const known = getKnownWordCount(answers);
     const isNewWordsAvailable = unknown < MAXIMUM_UNKNOWN_WORDS;
+    console.log('new words?', unknown, known, MAXIMUM_UNKNOWN_WORDS );
     const isDifficultWordsAvailable = unknown > 0 && unknown < maxSize;
     const isFamiliarWordsAvailable = known > 0;
 

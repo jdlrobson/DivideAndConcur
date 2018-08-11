@@ -19,3 +19,11 @@ export const VERSION = '0.6.0';
 export const MAXIMUM_UNKNOWN_WORDS = 20;
 export const BREAK_AFTER_ROUNDS = 50;
 export const FLIP_DELAY = 10000;
+
+// Some debugging tools.
+// Define which cards to boot with
+// e.g. [ '暗暗', '灬', '奄', '宀', '山 ]
+export const DEBUG_WORDS = false;
+// define which deck/game to boot up with
+export const DEBUG_DECK = false;
+export const DEBUG_GAME = false;

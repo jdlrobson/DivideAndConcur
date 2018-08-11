@@ -7,7 +7,7 @@ import { MATCH_PAIRS, REVISE,
     MATCH_DEFINITION,
     TAKE_A_BREAK, BREAK_AFTER_ROUNDS,
     DECK_NEW, DECK_KNOWN, DECK_UNKNOWN,
-    DECK_START,
+    DECK_START, DEBUG_GAME,
     ALLOW_DECK_SELECTION
 } from './../../constants';
 import { random } from './../../utils';
@@ -24,7 +24,9 @@ class GameSelection extends Component {
                 MATCH_DEFINITION, MATCH_DEFINITION, MATCH_DEFINITION,
                 MATCH_SOUND, MATCH_SOUND, MATCH_SOUND
             ];
-            if (props.deck === DECK_START) {
+            if (DEBUG_GAME) {
+                props.setGame(DEBUG_GAME);
+            } else if (props.deck === DECK_START) {
                 props.setGame(MATCH_PAIRS);
             } else if (props.numRounds >= BREAK_AFTER_ROUNDS) {
                 props.setGame(TAKE_A_BREAK);

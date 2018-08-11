@@ -2,7 +2,7 @@ import actionTypes from './../actionTypes';
 import { MATCH_SOUND, MATCH_PAIRS,
     ENGLISH_TO_CHINESE, PINYIN_TO_CHINESE,
     MATCH_DEFINITION,
-    DECK_START,
+    DECK_START, DEBUG_WORDS,
     DECK_UNKNOWN, DECK_NEW, DECK_KNOWN
 } from './../constants';
 import { mapCard, shuffle, isCardInGame,
@@ -48,9 +48,10 @@ export function addIndexToCards(state) {
 
 export function getUnknownCards(state, total) {
     const ratings = getDifficultyRatings(state);
-    const cards = state.words.filter(word => ratings[word.character] === undefined &&
-        isCardInGame(word)
-    );
+    const cards = state.words.filter((word) => {
+        return ratings[word.character] === undefined &&
+            isCardInGame(word);
+    });
 
     return cards.slice(0, total)
         .map(word => mapCard(state, word.character));
@@ -98,6 +99,9 @@ export function getHardCards(state, total) {
 function chooseDeck(_cards, action) {
     let cards = [];
     const state = { words: action.words, answers: action.answers };
+    if (DEBUG_WORDS && DEBUG_WORDS.length) {
+        state.words = state.words.filter(word => DEBUG_WORDS.indexOf(word.character) > -1);
+    }
     switch (action.deck) {
         case DECK_START:
             cards = [ '切', '刀', '七' ].map(char => mapCard(state, char));
