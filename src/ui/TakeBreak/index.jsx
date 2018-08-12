@@ -23,7 +23,7 @@ class TakeBreak extends Component {
                     props.learnedChars > 0 &&
                         <p>You've strengthened {props.learnedChars} unique characters.</p>
                 }
-                <p>The brain degrades over time,
+                <p>Your brain is probably tired right now,
                     so please consider taking a break and playing again later!</p>
                 <Button onClick={props.onButtonClick}>不要!</Button>
                 <p>Hopefully the following words are beginning to look familiar...</p>
