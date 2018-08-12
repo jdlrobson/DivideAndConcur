@@ -78,8 +78,9 @@ export function getHardCards(state, total) {
     const ratings = getDifficultyRatings(state);
     let available = state.words.filter((word) => {
         const char = word.character;
-        return ratings[char] !== undefined && !knowsWord(ratings, char);
+        return ratings[char] !== undefined && ratings[char] >= 0;
     });
+
     if (available.length < total) {
         available = available.concat(
             getUnknownCards(state, total - available.length)
@@ -90,8 +91,12 @@ export function getHardCards(state, total) {
             getKnownCards(state, total - available.length)
         );
     }
+
     return shuffle(
-        available
+        // Sort so that the easiest are first.
+        available.sort((word1, word2) => {
+            return ratings[word1.character] < ratings[word2.character] ? -1 : 1;
+        })
     ).slice(0, total)
         .map(word => mapCard(state, word.character));
 }
