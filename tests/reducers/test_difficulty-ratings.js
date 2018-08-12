@@ -11,7 +11,6 @@ describe('Reducer: difficulty-ratings', () => {
         character: '小白',
         correctAnswer: '小心',
         isEnd: false,
-        isRealWord: false,
         isKnown: false,
         paused: false,
         game: 'match-sound',

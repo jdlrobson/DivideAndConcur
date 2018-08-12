@@ -155,12 +155,10 @@ export function revealFlashcard(character, index) {
         const paused = state.paused;
         const game = state.game;
         const isKnown = state.cards[0].character === character;
-        const isRealWord = state.words.findIndex(word => word.character === character) > -1;
         const correctAnswer = state.cards[0].character;
         dispatch({
             type: actionTypes.REVEAL_FLASHCARD,
             character,
-            isRealWord,
             correctAnswer,
             isEnd,
             isKnown,

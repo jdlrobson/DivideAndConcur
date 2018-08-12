@@ -14,6 +14,7 @@ export class Card extends Component {
         const additionalClassName = props.className || '';
         const modifiers = [];
         const isTiny = props.isTiny;
+        const displayChar = props.displayCharacter || props.character;
 
         if (props.isAnswered) {
             modifiers.push(props.isKnown ? 'known' : 'unknown');
@@ -31,7 +32,7 @@ export class Card extends Component {
             // not the number of characters
             // so use Array.from
             if (props.isWide === undefined &&
-                props.character && !props.label && Array.from(props.character).length > 1
+                displayChar && !props.label && Array.from(displayChar).length > 1
             ) {
                 modifiers.push('wide');
             }
@@ -145,7 +146,8 @@ export class FlashCard extends Component {
 
         components = translations.concat(buttons);
 
-        const label = props.label !== undefined ? props.label : props.character;
+        const displayChar = props.displayCharacter || props.character;
+        const label = props.label !== undefined ? props.label : displayChar;
         const labelModifiers = [];
         if (props.label) {
             labelModifiers.push('custom');
@@ -156,7 +158,6 @@ export class FlashCard extends Component {
         if (label && label.length > 4) {
             labelModifiers.push('long');
         }
-        // if ( !props.english && !props.character)
         return (
             <Card {...props} onClick={this.onClick.bind(this)} >
                 {!isTiny && props.debug && difficultyBar}

@@ -208,20 +208,10 @@ export function revealedFlashcard(state, action) {
     } else if (isMatchOneGame(action.game)) {
         // Regardless of whether right or wrong, the first card was answered
         state[0].isAnswered = true;
-        if (action.isRealWord) {
-            return revealCardInAction(
-                markCardsAsAnswered({ cards: state }, action.character, action.isKnown),
-                action
-            );
-        } else {
-            // Find the word its derived from
-            const uniqueChars = Array.from(action.character)
-                .filter(char => Array.from(action.correctAnswer).indexOf(char) === -1);
-            return revealCardInAction(
-                markCardsAsAnswered({ cards: state }, uniqueChars[0], action.isKnown),
-                action
-            );
-        }
+        return revealCardInAction(
+            markCardsAsAnswered({ cards: state }, action.character, action.isKnown),
+            action
+        );
     }  else {
         return revealCardInAction(state, action);
     }

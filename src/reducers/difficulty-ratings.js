@@ -75,21 +75,15 @@ export function revealedFlashcard(state, action) {
                         answers: Object.assign({}, state)
                     }, action.correctAnswer);
                 }
-                if (action.isRealWord) {
-                    return markWordAsDifficult({
+                const answerChars = Array.from(action.correctAnswer || '');
+                const uniqueChars = Array.from(action.character)
+                    .filter(char => answerChars.indexOf(char) === -1);
+                return uniqueChars.length === 1 ?
+                    // Mark the shared characters as difficult
+                    markWordAsDifficult({
                         answers: Object.assign({}, state)
-                    }, action.character);
-                } else {
-                    const answerChars = Array.from(action.correctAnswer || '');
-                    const uniqueChars = Array.from(action.character)
-                        .filter(char => answerChars.indexOf(char) === -1);
-                    return uniqueChars.length === 1 ?
-                        // Mark the shared characters as difficult
-                        markWordAsDifficult({
-                            answers: Object.assign({}, state)
-                        }, uniqueChars.join(''))
-                        : state;
-                }
+                    }, uniqueChars.join(''))
+                    : state;
             }
         } else {
             return state;

@@ -14,12 +14,12 @@ const words = [
     { character: 'D', pinyin: 'D', rating: 24, wordLength: 2 },
     { character: 'E', pinyin: 'E', rating: 24, wordLength: 2 },
 ];
+
 describe('Reducer: cards (revealedFlashcard)', () => {
     const newState = revealedFlashcard(example.cards, {
         type: 'REVEAL-FLASHCARD',
-        character: '小白',
+        character: '白',
         correctAnswer: '小心',
-        isRealWord: false,
         isEnd: false,
         isKnown: false,
         paused: false,
@@ -30,8 +30,7 @@ describe('Reducer: cards (revealedFlashcard)', () => {
         newState[1].isKnown,
         false,
         // I don't like the existence/need of this test. Should be fixed inside  GameOneInFour
-        'There is no card for 小白.' +
-        'The card is 白 but has a fake title so 白 needs to be marked as wrong.'
+        'The card is 白 and needs to be marked as wrong.'
     );
 });
 
