@@ -70,6 +70,17 @@ export function getKnownCards(state, total) {
     );
 }
 
+export function getDifficultWordSorter(ratings) {
+    return (word1, word2) => {
+        if (word1.wordLength === word2.wordLength) {
+            // if cards are same word length, prioritise the easier cards
+            return ratings[word1.character] < ratings[word2.character] ? -1 : 1;
+        } else {
+            return word1.wordLength < word2.wordLength ? -1 : 1;
+        }
+    };
+}
+
 /**
  * If the number of hard cards is less than the total, then cards
  * will be added from unknown cards and then available cards.
@@ -93,11 +104,9 @@ export function getHardCards(state, total) {
     }
 
     return shuffle(
-        // Sort so that the easiest are first.
-        available.sort((word1, word2) => {
-            return ratings[word1.character] < ratings[word2.character] ? -1 : 1;
-        })
-    ).slice(0, total)
+        // Shuffle `total`cards.
+        available.sort(getDifficultWordSorter(ratings)).slice(0, total)
+    )
         .map(word => mapCard(state, word.character));
 }
 
