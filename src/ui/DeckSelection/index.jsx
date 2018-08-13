@@ -75,9 +75,8 @@ const mapStateToProps = (state, props) => {
     const unknown = getUnKnownWordCount(answers);
     const known = getKnownWordCount(answers);
     const isNewWordsAvailable = unknown < MAXIMUM_UNKNOWN_WORDS;
-    console.log('new words?', unknown, known, MAXIMUM_UNKNOWN_WORDS );
     const isDifficultWordsAvailable = unknown > 0 && unknown < maxSize;
-    const isFamiliarWordsAvailable = known > 0;
+    const isFamiliarWordsAvailable = known > 0 && unknown < MAXIMUM_UNKNOWN_WORDS;
 
     return Object.assign({}, props, {
         isNewWordsAvailable,
