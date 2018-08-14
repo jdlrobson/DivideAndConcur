@@ -104,9 +104,11 @@ export function getHardCards(state, total) {
     }
 
     return shuffle(
-        // Shuffle `total`cards.
-        available.sort(getDifficultWordSorter(ratings)).slice(0, total)
-    )
+        // Shuffle `total` * 2 cards to add some variety when lots of unknown words
+        // if total is undefined no slicing will happen
+        available.sort(getDifficultWordSorter(ratings)).slice(0, total ? total * 2 : total)
+        // and then limit to `total` cards
+    ).slice(0, total)
         .map(word => mapCard(state, word.character));
 }
 
