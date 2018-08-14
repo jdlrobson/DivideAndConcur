@@ -14,7 +14,7 @@ class TakeBreak extends Component {
         return (
             <div className='game'>
                 <p>You've been playing some time today!</p>
-                <p>You've looked at {props.seenWords.length} words!</p>
+                <p>You've looked at {props.seenWords.length} different words!</p>
                 {
                     props.learned > 0 &&
                         <p>You've strengthened {props.learned} words!</p>
