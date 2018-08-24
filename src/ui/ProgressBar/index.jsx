@@ -14,11 +14,15 @@ export default class ProgressBar extends Component {
     }
     render(props) {
         const animate = props.animate || this.state.animate;
+        const TOTAL_LEVELS = 100;
+        const wordsPerLevel = ( props.total / TOTAL_LEVELS );
+        const levelPos = props.known / wordsPerLevel;
+        const level = Math.ceil( levelPos );
         const percent = Math.floor(
-            (props.known / props.total) * 100
+            (levelPos - level + 1) * 100
         );
-        const msg = `${props.known} of ${props.total} words known (${percent}%).`;
-
+        const totalPercent = (props.known / props.total) * 100;
+        const msg = `${props.known} of ${props.total} words known (${totalPercent}%).`;
         const blocks = [];
         let i = 100;
         const numBlocks = 16;
@@ -35,13 +39,14 @@ export default class ProgressBar extends Component {
             i -= inc;
             delay -= delayInc;
         }
+        const wordbankMsg = level ? `Word bank level ${level}` : 'Complete the word bank';
         return (
             <div className='progress-bar' title={msg}>
                 <div className='progress-bar__bar'>
                     {blocks}
                 </div>
                 {!props.noLabel && <div className='app__content progress-bar__label'>
-                    Complete the word bank &gt;&gt;&gt;</div>}
+                    {wordbankMsg}  &gt;&gt;&gt;</div>}
                 {props.initialKnown < props.known &&
                     <div className='progress-bar__delta'>+{props.known - props.initialKnown}</div>
                 }
