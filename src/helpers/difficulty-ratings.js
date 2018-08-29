@@ -12,8 +12,13 @@ export function knowsWord(difficultyRatings, char) {
     return difficultyRatings[char] && difficultyRatings[char] < 0;
 }
 
+export function isNewWord(difficultyRatings, char) {
+    return !difficultyRatings[char] || difficultyRatings[char] === 0;
+}
+
 export function getDifficultWords(difficultyRatings) {
-    return Object.keys(difficultyRatings).filter(word => !knowsWord(difficultyRatings, word));
+    return Object.keys(difficultyRatings)
+        .filter(word => !knowsWord(difficultyRatings, word) && !isNewWord(difficultyRatings, word));
 }
 
 export function getDifficultWordsHardestFirst(difficultyRatings) {
