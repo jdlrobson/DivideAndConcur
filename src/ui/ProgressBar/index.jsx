@@ -2,6 +2,7 @@
 import { Component, h } from 'preact';
 import './styles.less';
 
+const NUM_BLOCK_BARS = 20;
 export default class ProgressBar extends Component {
     constructor() {
         super();
@@ -18,17 +19,16 @@ export default class ProgressBar extends Component {
         const wordsPerLevel = ( props.total / TOTAL_LEVELS );
         const levelPos = props.known / wordsPerLevel;
         const level = Math.ceil( levelPos );
-        const percent = Math.floor(
+        const percent = Math.ceil(
             (levelPos - level + 1) * 100
         );
         const totalPercent = (props.known / props.total) * 100;
         const msg = `${props.known} of ${props.total} words known (${totalPercent}%).`;
         const blocks = [];
         let i = 100;
-        const numBlocks = 16;
-        const inc = 100 / numBlocks;
-        const delayInc = 0.5;
-        let delay = delayInc * (numBlocks - 1);
+        const inc = 100 / NUM_BLOCK_BARS;
+        const delayInc = 0.2;
+        let delay = delayInc * (NUM_BLOCK_BARS - 1);
         while (i > 0) {
             const style = { transitionDelay: `${delay}s` };
             const className = i > percent || !animate ?
