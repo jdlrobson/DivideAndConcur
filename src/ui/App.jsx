@@ -9,6 +9,7 @@ import DeckSelection from './DeckSelection';
 import GameOneInFour from './GameOneInFour';
 import ProgressBar from './ProgressBar';
 import TakeBreak from './TakeBreak';
+import Overlay from './Overlay';
 import CharacterOverlay from './CharacterOverlay';
 import Button from './Button';
 import { getAnsweredCards, maxSize } from './../helpers/cards';
@@ -73,10 +74,22 @@ class App extends Component {
             />;
         }
 
+        const overlay = props.overlay;
         return (
             <div className='app'>
-                {props.overlay && (
-                    <CharacterOverlay {...props.overlay}>
+                {
+                    // Return a bunch of empty overlays to give illusion of multiple overlays stacked on top
+                    overlay.slice(1).map((_, i) =>
+                        <Overlay style={
+                            {
+                                opacity: 0.8,
+                                marginTop: (-3 * overlay.length) + (3 * i)
+                            }
+                        }/>
+                    )
+                }
+                {overlay.length > 0 && (
+                    <CharacterOverlay {...overlay[0]}>
                         <Button className='app__overlay__button'
                             onClick={this.props.onHideOverlay}>Got it!</Button>
                     </CharacterOverlay>

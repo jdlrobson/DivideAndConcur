@@ -1,19 +1,23 @@
 import actionTypes from './../actionTypes';
 import { getHighlightedCards } from './../helpers/cards';
 
-function getCardIfExists(character) {
+function pushCardToStackIfExists(stack, character) {
     const card = getHighlightedCards({}, character)[0];
     return card && card.pinyin ?
-        Object.assign({
-            onExpandCard: false,
-        }, card) : {};
+        [
+            Object.assign({
+                onExpandCard: false,
+            }, card)
+        ].concat(stack) : stack;
 }
-export default (state = false, action) => {
+export default (state = [], action) => {
     switch (action.type) {
         case actionTypes.HIDE_OVERLAY:
-            return false;
+            // Remove the top overlay from the stack
+            return state.slice(1);
         case actionTypes.SHOW_OVERLAY:
-            return getCardIfExists(action.character);
+            // Push the new card to the top of the stack (item 0)
+            return pushCardToStackIfExists(state, action.character);
         default:
             break;
     }
