@@ -1,0 +1,24 @@
+@import './../variables';
+
+.app__overlay {
+    border: solid 2px #333;
+    position: fixed;
+    bottom: 10px;
+    top: 10px;
+    background: white;
+    left: @app-overlay-gutter;
+    right: @app-overlay-gutter;
+    z-index: @z-index-overlay;
+    padding-top: 10px;
+    height: auto;
+    margin: auto;
+    max-width: @app-width - @app-overlay-gutter - @app-overlay-gutter;
+    top: @app-overlay-gutter;
+    overflow: hidden;
+    text-align: center;
+}
+
+.app__overlay h2 {
+    padding: 0;
+    margin: 8px 0;
+}

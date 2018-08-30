@@ -2,109 +2,13 @@
 import { Component, h } from 'preact';
 import { connect } from 'preact-redux';
 import FlashCard from './../Card';
+import Overlay from './../Overlay';
+import Carousel from './Carousel';
+import Tab from './Tab';
+import TabGroup from './TabGroup';
+import Decompositions from './Decompositions';
+
 import './styles.less';
-
-class Carousel extends Component {
-    constructor(props) {
-        super();
-        this.state = { active: 0, items: props.children.length };
-    }
-    setActive(i) {
-        const total = this.state.items;
-        if ( i >= total ) {
-            i = 0;
-        }
-        if ( i < 0 ) {
-            i = total - 1;
-        }
-        this.setState( { active: i } )
-    }
-    onNext() {
-        this.setActive(this.state.active + 1);
-    }
-    onPrev() {
-        this.setActive(this.state.active - 1);
-    }
-    render() {
-        const children = this.props.children;
-        return (
-            <div className="carousel">
-                {children.length > 1 && <div onClick={this.onPrev.bind(this)}>⬅️</div>}
-                {children[this.state.active || 0]}
-                {children.length > 1 && <div onClick={this.onNext.bind(this)}>➡️</div>}
-            </div>
-        )
-    }
-}
-
-class Decompositions extends Component {
-    getDecompCards(decomp) {
-        let childDecompositions = [];
-        decomp.forEach((d) => {
-            childDecompositions = childDecompositions.concat(d.decompositions);
-        });
-        return childDecompositions.length > 0 ? decomp.concat([ '*' ])
-            .concat(this.getDecompCards(childDecompositions)) : decomp;
-    }
-    render(props) {
-        const decomp = props.decompositions;
-
-        return (
-            <div className='app__overlay__decompositions'>
-                {
-                    this.getDecompCards(decomp).map((cardProps) => {
-                        return cardProps === '*' ? <span className='cut'>÷</span> :
-                            <FlashCard {...cardProps} isSelected isFrozen
-                                english={cardProps.english}
-                                className='app__overlay__decompositions__card'
-                                onExpandCard={false}
-                                key={`card-highlighted-${cardProps.character}`} />;
-                    })
-                }
-            </div>
-        );
-    }
-}
-
-class Tab extends Component {
-    render(props) {
-        return (
-            <div className='tab'>
-                {props.children}
-            </div>
-        );
-    }
-}
-
-class TabGroup extends Component {
-    constructor() {
-        super();
-        this.state = { activeTab: 0 };
-    }
-    switchTab(i) {
-        const setState = this.setState.bind(this);
-        return (ev) => {
-            setState({ activeTab: i });
-        };
-    }
-    render(props) {
-        const switchTab = this.switchTab.bind(this);
-        const active = this.state.activeTab;
-        const nonEmptyChildren = props.children.filter(child => Boolean(child));
-        return (
-            <div className='tab-group'>
-                <div>{
-                    nonEmptyChildren.map((child, i) => {
-                        return <span className={i === active ?
-                            "tabgroup__tab tabgroup__tab--active" : "tabgroup__tab"}
-                        onClick={switchTab(i)}>{child.attributes.name}</span>;
-                    })
-                }</div>
-                {nonEmptyChildren[active]}
-            </div>
-        );
-    }
-}
 
 class CharacterOverlay extends Component {
     render(props) {
@@ -112,7 +16,7 @@ class CharacterOverlay extends Component {
         const blurb = props.text || '';
         const decomp = props.decompositions || [];
         return (
-            <div className='app__overlay'>
+            <Overlay>
                 {!character && <p>I don't know word you search for.</p>}
                 {character && <FlashCard {...props} isSmall={false} isSelected isFrozen debug={true}
                     onExpandCard={false}
@@ -167,7 +71,7 @@ class CharacterOverlay extends Component {
                         </Tab>
                     )}
                 </TabGroup>}
-            </div>
+            </Overlay>
         );
     }
 }
