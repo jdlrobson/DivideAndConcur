@@ -8,6 +8,7 @@ import {
     TAKE_A_BREAK
 } from './constants';
 import { init, answerAllCardsInRound, highlightCharacter, switchGame,
+    showOverlay,
     startRound } from './actions';
 import reducer from './reducer';
 import thunkMiddleware from 'redux-thunk';
@@ -92,16 +93,23 @@ const store = createStore(reducer,
             focusWindow();
         });
     });
-    const boot = () => {
+    const boot = (action) => {
+        action = action || init(userData);
         show($('#chrome__content__panel-two')[0]);
         show($('#chrome__content__panel-two')[0].parentNode);
         focusWindow();
-        store.dispatch(init(userData));
+        store.dispatch(action);
         focusWindow();
     };
-    if (!window.location.hash) {
+    const hash = window.location.hash;
+    if (!hash) {
         window.location.hash = '#panel-6';
         focusWindow();
+    } else if (!document.querySelector(decodeURIComponent(hash))) {
+        // If the hash fragment is pointing to something that's not an element.
+        boot();
+        const char = decodeURIComponent(hash.replace('#', ''));
+        store.dispatch(showOverlay(char));
     }
     document.querySelector('#init-game').addEventListener('click', () => {
         boot();

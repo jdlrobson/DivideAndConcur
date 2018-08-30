@@ -108,18 +108,20 @@ class TabGroup extends Component {
 
 class CharacterOverlay extends Component {
     render(props) {
+        const character = props.character;
         const blurb = props.text || '';
         const decomp = props.decompositions || [];
         return (
             <div className='app__overlay'>
-                <FlashCard {...props} isSmall={false} isSelected isFrozen debug={true}
+                {!character && <p>I don't know word you search for.</p>}
+                {character && <FlashCard {...props} isSmall={false} isSelected isFrozen debug={true}
                     onExpandCard={false}
-                    className='app__overlay__card' />
-                <a href={`https://en.wiktionary.org/wiki/${props.character}`}
+                    className='app__overlay__card' />}
+                {character && <a href={`https://en.wiktionary.org/wiki/${props.character}`}
                     target='_blank'
-                    className='app__overlay__link'>wiktionary</a>
+                    className='app__overlay__link'>wiktionary</a>}
                 {props.children}
-                <TabGroup>
+                {character && <TabGroup>
                     {
                         props.usedBy.length && (
                             <Tab name='Used by'>
@@ -164,7 +166,7 @@ class CharacterOverlay extends Component {
                             }</div>
                         </Tab>
                     )}
-                </TabGroup>
+                </TabGroup>}
             </div>
         );
     }
