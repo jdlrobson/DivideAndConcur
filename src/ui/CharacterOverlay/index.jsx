@@ -15,6 +15,14 @@ class CharacterOverlay extends Component {
         const character = props.character;
         const blurb = props.text || '';
         const decomp = props.decompositions || [];
+        let translationMsg;
+        if (props.translations.length > 1) {
+            translationMsg = 'This word has multiple meanings';
+        } else if (props.translations.length === 0) {
+            translationMsg = 'No translations available';
+        } else {
+            translationMsg = 'This word means:';
+        }
         return (
             <Overlay>
                 {!character && <p>I don't know word you search for.</p>}
@@ -53,7 +61,7 @@ class CharacterOverlay extends Component {
                         (
                             <Tab name='Translations'>
                                 <div className='translations'>
-                                    This word has multiple meanings:
+                                    <span>{translationMsg}</span>
                                     <ul>{
                                         props.translations.map(
                                             translation => (<li>{translation}</li>)
