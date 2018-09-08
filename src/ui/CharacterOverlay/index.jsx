@@ -59,7 +59,7 @@ class CharacterOverlay extends Component {
                     }
                     {
                         (
-                            <Tab name='Translations'>
+                            props.translations.length && <Tab name='Translations'>
                                 <div className='translations'>
                                     <span>{translationMsg}</span>
                                     <ul>{
