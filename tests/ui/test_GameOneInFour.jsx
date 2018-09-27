@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { getCardProps } from './../../src/ui/GameOneInFour';
+import { getCardProps, obscurePinyinInCard } from './../../src/ui/GameOneInFour';
 
 describe('GameOneInFour', () => {
     it('all pinyin same length', () => {
@@ -33,5 +33,24 @@ describe('GameOneInFour', () => {
             );
         });
     });
-
+    it( 'obscures cards', () => {
+        [
+            [
+                { pinyin: 'é máo', character: '鹅毛' },
+                { character: '现', pinyin: 'xiàn' },
+                'é xiàn'
+            ],
+            [
+                { pinyin: 'é máo', character: '鹅毛' },
+                { character: '现在', pinyin: 'xiàn zài' },
+                'xiàn zài'
+            ]
+        ].forEach((test) => {
+            const obsCard = obscurePinyinInCard(
+                test[0],
+                test[1]
+            );
+            assert.equal(obsCard.pinyin, test[2]);
+        });
+    })
 });
