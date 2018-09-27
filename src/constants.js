@@ -16,7 +16,7 @@ export const ALLOW_DECK_SELECTION = false;
 
 export const VERSION = '0.6.0';
 
-export const MAXIMUM_UNKNOWN_WORDS = 20;
+export const MAXIMUM_UNKNOWN_WORDS = 50;
 export const BREAK_AFTER_ROUNDS = 50;
 export const FLIP_DELAY = 10000;
 
