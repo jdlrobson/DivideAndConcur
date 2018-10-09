@@ -118,9 +118,6 @@
 .card__pinyin,
 .card__english {
   font-size: 0.8em;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
   position: relative;
 }
 
@@ -132,6 +129,11 @@
 
 .card__english {
   padding-top: 8px;
+  height: 36px;
+  overflow: hidden;
+  font-family: Courier;
+  text-transform: uppercase;
+
   &[data-translation-number]:before {
     content: '[' attr(data-translation-number) "/" attr(data-translation-total) ']';
     position: absolute;
@@ -141,8 +143,6 @@
     color: @boquete-dark;
     font-size: 0.7em;
   }
-  font-family: Courier;
-  text-transform: uppercase;
 }
 
 .card--small {
