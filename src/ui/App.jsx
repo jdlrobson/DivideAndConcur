@@ -89,7 +89,7 @@ class App extends Component {
                     )
                 }
                 {overlay.length > 0 && (
-                    <CharacterOverlay {...overlay[0]}>
+                    <CharacterOverlay {...overlay[0]} key={`overlay-${overlay.length}`}>
                         <Button className='app__overlay__button'
                             onClick={this.props.onHideOverlay}>Got it!</Button>
                     </CharacterOverlay>
