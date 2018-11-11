@@ -13,6 +13,16 @@ function all() {
 	return utils.all();
 }
 
+function atoZify(str) {
+    return str.replace(/[āǎáǎà]/g, 'a').replace(/[īìǐìí]/g, 'i')
+        .replace(/[úùūùǔ]/g, 'u')
+        .replace(/[ǒōóò]/g, 'o').replace(/[ēèéě]/g, 'e');
+}
+function lookupPinyin(pinyinPhrase) {
+    return Object.keys(pinyin).filter(
+        key => atoZify(pinyin[key]).match(pinyinPhrase)
+    ).map(char => [ char, pinyin[char], words[char] ]);
+}
 function decompose(word) {
   return utils.decompose( word );
 }
@@ -146,6 +156,7 @@ module.exports = {
 	usedBy,
 	removeWord,
 	savePinyin,
+	lookupPinyin,
 	getDecompositions: getDecompositions,
 	decompose: decompose,
 	rateWord: rateWord,

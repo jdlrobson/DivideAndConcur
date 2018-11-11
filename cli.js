@@ -289,8 +289,14 @@ function clean() {
 	});
 }
 
+function lookup(p) {
+	return dict.lookupPinyin(p).forEach(( words ) => {
+		console.log( words[0], words[1], words[2] || '' );
+	});
+}
 function menu() {
 	const options = [
+		'0: Lookup pinyin',
 		'1: Game',
 		'2: Lookup word',
 		'3: auto decompose difficulty level',
@@ -314,6 +320,12 @@ function menu() {
 		.then( ( val ) => {
 			val = parseInt( val, 10 );
 			switch ( val ) {
+				case 0:
+					getUserInput('Enter chinese character').then((msg) => {
+						console.log(lookup(msg));
+						return menu();
+					});
+					break;
 				case 4:
 					getUserInput('Enter chinese character').then((msg) => {
 						console.log(getEnglish(msg));
