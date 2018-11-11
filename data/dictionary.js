@@ -146,8 +146,12 @@ function getWordLength(w) {
 function savePinyin(word, pin) {
 	pinyin[word] = pin;
 }
+function deletePinyin(word, pin) {
+	delete pinyin[word];
+}
 
 module.exports = {
+	deletePinyin,
 	missing,
 	getWordLength,
 	getPinyin,

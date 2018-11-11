@@ -397,6 +397,8 @@ function menu() {
 				case 11:
 					getUserInput('Enter chinese character to remove').then((word) => {
 						const deleted = dict.removeWord(word);
+						// remove pinyin
+						dict.deletePinyin(word);
 						if ( deleted ) {
 							console.log('Removed word (retained difficulty and decompositions)', word);
 						} else {
