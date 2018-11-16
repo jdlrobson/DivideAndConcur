@@ -7,13 +7,41 @@ import { endRound } from './../../actions';
 import './styles.less';
 
 /**
+ * @typedef {object} CardWithIndex
+ * @extends {Card}
+ * @property {array} index
+ */
+
+/**
+ * @param {Card[]} cards
+ * @return {CardWithIndex}
+ */
+function findEasiestCharacter(cards) {
+    let easiest, index;
+    for( let i = 0; i < cards.length; i++) {
+        if (!easiest) {
+            easiest = cards[i];
+            index = i;
+        } else if (easiest && easiest.wordLength > cards[i].wordLength) {
+            easiest = cards[i];
+            index = i
+        }
+    }
+    return Object.assign({ index }, easiest);
+}
+
+/**
  * Obscures card's pinyin to look more like target card
  * @param {Card} targetCard
  * @param {Card} card
  */
 export function obscurePinyinInCard(targetCard, card) {
-    const targetChar = Array.from(targetCard.character)[0];
+    let targetIndex = 0;
     const targetPinyin = targetCard.pinyin.split(' ');
+    if (targetCard.decompositions) {
+        targetIndex = findEasiestCharacter(targetCard.decompositions).index;
+    }
+    const targetChar = Array.from(targetCard.character)[targetIndex];
     let displayCharacter;
     let label = card.pinyin;
     let english;
@@ -29,11 +57,17 @@ export function obscurePinyinInCard(targetCard, card) {
             // e.g. 水 becomes 水水
             label = `${label} ${label}`;
             displayCharacter = character + character;
-        } else {
+        } else if (targetIndex === 0) {
             // in this case we have something like 火山 where the characters are different
             // e.g. 水 becomes 水山
             label = `${targetPinyin[0]} ${label}`;
             displayCharacter = targetChar + character;
+        } else {
+            // characters are different, but the 2nd character is the easist
+            // e.g. in 胡子 (hú zi)
+            // 现 is obscured to 现子
+            label = `${label} ${targetPinyin[targetIndex]}`;
+            displayCharacter = character + targetChar;
         }
         // Since this is no longer a real word, reset english
         english = '';

@@ -52,5 +52,33 @@ describe('GameOneInFour', () => {
             );
             assert.equal(obsCard.pinyin, test[2]);
         });
-    })
+    });
+    it( 'obscures cards based on `easiest` character (#9)', () => {
+        [
+            [
+                {
+                    pinyin: 'shì nèi',
+                    character: "室内",
+                    decompositions: [
+                        {
+                            character: '室',
+                            wordLength: 4
+                        },
+                        {
+                            character: '内',
+                            wordLength: 0
+                        }
+                    ]
+                },
+                { character: '现', pinyin: 'xiàn', decompositions: [] },
+                'xiàn nèi'
+            ]
+        ].forEach((test) => {
+            const obsCard = obscurePinyinInCard(
+                test[0],
+                test[1]
+            );
+            assert.equal(obsCard.pinyin, test[2]);
+        });
+    });
 });

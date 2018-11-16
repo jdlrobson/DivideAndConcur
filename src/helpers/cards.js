@@ -20,6 +20,21 @@ export function translationArray(definition) {
     return translations;
 }
 
+function cardWithWordLength(character) {
+    return {
+        character,
+        wordLength: dictUtils.getWordLength(character)
+    };
+}
+
+export function cardsWithDecompositions(cards) {
+    return cards.map((card) => {
+        return Object.assign({}, card, {
+            decompositions: dictUtils.decompose(card.character)
+                .map(character => cardWithWordLength(character))
+        });
+    });
+}
 export function mapCard(state, character, withDecompositions, withBlurb, withUsedBy) {
     const decompositions = withDecompositions ?
         makeCardsFromCharacters(

@@ -5,7 +5,7 @@ import { MATCH_SOUND, MATCH_PAIRS,
     DECK_START, DEBUG_WORDS,
     DECK_UNKNOWN, DECK_NEW, DECK_KNOWN
 } from './../constants';
-import { mapCard, shuffle, isCardInGame,
+import { mapCard, shuffle, isCardInGame, cardsWithDecompositions,
     freezeCards as freezeCardsHelper } from './../helpers/cards';
 import { knowsWord, getDifficultyRatings } from './../helpers/difficulty-ratings';
 import { isMatchOneGame } from './../helpers/game';
@@ -198,7 +198,7 @@ export function pickCardsFromDeck(cards, action) {
             cards = shuffleCards({ cards });
             break;
     }
-    return cards;
+    return cardsWithDecompositions(cards);
 }
 
 export function pickCardsForGame(_cards, action) {

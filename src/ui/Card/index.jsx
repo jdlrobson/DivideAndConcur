@@ -9,6 +9,12 @@ import { className } from './../className';
 import ExpandButton from './../ExpandButton';
 const BLOCK_NAME = 'card';
 
+/**
+ * @typedef {object} Card
+ * @property {string} pinyin
+ * @property {string} character
+ * @property {array} [decompositions]
+ */
 export class Card extends Component {
     render(props) {
         const additionalClassName = props.className || '';
