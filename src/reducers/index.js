@@ -16,11 +16,13 @@ import numRounds from './numRounds';
 import countdown from './countdown';
 import overlay from './overlay';
 import initialState from './initialState';
+import lastActionType from './lastActionType';
 
 export default {
     cards,
     countdown,
     answers,
+    lastActionType,
     initialState,
     deck,
     highlighted,

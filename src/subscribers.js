@@ -1,5 +1,6 @@
 /* global SpeechSynthesisUtterance */
 import { endRound, saveComplete, renderComplete } from './actions';
+import actionTypes from './actionTypes';
 import { VERSION } from './constants';
 import { DATA_MODIFIED_LAST } from './helpers/cards';
 import App from './ui/App';
@@ -35,16 +36,14 @@ function say(word) {
     synth.speak(utterThis);
 }
 
-let lastSpoken;
 export function speakHighlightedWord(store) {
     return () => {
         if (window.speechSynthesis && typeof SpeechSynthesisUtterance !== undefined) {
             const state = store.getState();
             if (state.highlighted) {
                 const curCard = state.highlighted[0];
-                if (curCard && curCard.character !== lastSpoken) {
-                    lastSpoken = curCard.character;
-                    say(lastSpoken);
+                if (curCard && state.lastActionType === actionTypes.REVEAL_FLASHCARD) {
+                    say(curCard.character);
                 }
             }
         }
