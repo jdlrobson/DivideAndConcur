@@ -1,8 +1,7 @@
 import dictJson from './../../data/dictionary.json';
 import blurbs from './../../data/blurbs.json';
 import DictionaryUtils from './../../data/DictionaryUtils';
-import { getDifficultyRating, knowsWord,
-    getDifficultyRatings } from './difficulty-ratings';
+import { getDifficultyRating } from './difficulty-ratings';
 import { MAX_DIFFICULTY } from './../constants';
 import { random } from './../utils';
 
@@ -105,12 +104,6 @@ export function freezeCards(cards) {
 
 export function makeCardsFromCharacters(state, chars, withDecompositions, withBlurbs, withUsedBy) {
     return chars.map(char => mapCard(state, char, withDecompositions, withBlurbs, withUsedBy));
-}
-
-export function dealKnownCards(state) {
-    const known = ALL_WORDS.filter(char => knowsWord(getDifficultyRatings(state), char));
-    const cards = makeCardsFromCharacters(state, known);
-    return Object.assign({}, state, { cards });
 }
 
 export function shuffle(arr) {
