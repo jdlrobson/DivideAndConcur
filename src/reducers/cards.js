@@ -137,20 +137,51 @@ function chooseDeck(_cards, action) {
     return cards;
 }
 
-export function pickCardsForGame(_cards, action) {
-    let cards = chooseDeck(_cards, action);
-    // Pick card to play the game with
+export function intersection(a, b) {
+    return Array.from(
+        new Set(a.filter(s => b.indexOf(s) > -1))
+    );
+}
+
+function noDupePinyin(cards) {
+    const newCards = [];
+    cards.forEach((thisCard, i) => {
+        // if the card hasn't been used so far, add it.
+        if (newCards.findIndex(card => card.pinyin === thisCard.pinyin) === -1) {
+            newCards.push(thisCard);
+        }
+    });
+    return newCards.slice(0, 4);
+}
+
+function noDupeTranslations(cards) {
+    let translationsSoFar = [];
+    const newCards = [];
+    cards.forEach((thisCard, i) => {
+        // if the card hasn't been used so far, add it.
+        if (intersection(translationsSoFar, thisCard.translations).length === 0) {
+            // merge it into the current set of translations
+            translationsSoFar = translationsSoFar.concat(thisCard.translations);
+            newCards.push(thisCard);
+        }
+    });
+    return newCards.slice(0, 4);
+}
+
+export function pickCardsFromDeck(cards, action) {
     const card = cards[0];
-    if (action.game === MATCH_SOUND) {
-        // Move out any duplicate sounds to avoid duplicate answers
-        cards = cards.filter((c, i) => c.character === card.character ||
-        c.pinyin !== card.pinyin);
-    }
     switch (action.game) {
         case MATCH_DEFINITION:
+            // 4 cards will be used in the game.
+            cards = noDupeTranslations(cards);
+            // shuffle them again
+            cards = shuffleCards({ cards });
+            // add the goal card at the front
+            cards.unshift(card);
+            break;
         case MATCH_SOUND:
             // 4 cards will be used in the game.
-            cards = cards.slice(0, 4);
+            cards = noDupePinyin(cards);
             // shuffle them again
             cards = shuffleCards({ cards });
             // add the goal card at the front
@@ -168,6 +199,10 @@ export function pickCardsForGame(_cards, action) {
             break;
     }
     return cards;
+}
+
+export function pickCardsForGame(_cards, action) {
+    return pickCardsFromDeck(chooseDeck(_cards, action), action);
 }
 
 export function cutCardDeck(state, total) {

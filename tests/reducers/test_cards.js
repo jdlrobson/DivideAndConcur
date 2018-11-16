@@ -1,6 +1,7 @@
-import { DECK_NEW, MATCH_PAIRS, MATCH_SOUND } from './../../src/constants';
-import { getHardCards, getKnownCards, getUnknownCards,
-    pickCardsForGame, revealedFlashcard
+import { DECK_NEW, MATCH_DEFINITION, MATCH_PAIRS, MATCH_SOUND } from './../../src/constants';
+import {  getHardCards, getKnownCards, getUnknownCards,
+    intersection,
+    pickCardsForGame, pickCardsFromDeck, revealedFlashcard
 } from './../../src/reducers/cards';
 import assert from 'assert';
 import example from './example.json';
@@ -14,6 +15,93 @@ const words = [
     { character: 'D', pinyin: 'D', rating: 24, wordLength: 2 },
     { character: 'E', pinyin: 'E', rating: 24, wordLength: 2 },
 ];
+
+describe('Reducer: cards#intersection', () => {
+    [
+        [
+            [ 1, 2 ], [ 3, 4, 5, 2 ], [ 2 ]
+        ],
+        [
+            [ 1, 2 ], [ 3 ], []
+        ]
+    ].forEach((test) => {
+        assert.deepEqual(intersection(test[0], test[1]), test[2]);
+    });
+});
+
+
+describe('Reducer: cards#pickCardsFromDeck (#7: pinyin)', () => {
+    const cards = [ '承', '程', '城', '惩', '乘' ].map((character) => {
+        return {
+            character,
+            pinyin: 'chéng'
+        };
+    });
+    const newCards = pickCardsFromDeck(cards, { game: MATCH_SOUND });
+    assert.equal(newCards.length, 2, 'duplicate pinyin characters are stripped');
+});
+
+describe('Reducer: cards#pickCardsFromDeck (#7: pinyin, answers)', () => {
+    const dupes = [ '承', '程', '城', '惩', '乘' ].map((character) => {
+        return {
+            character,
+            pinyin: 'chéng'
+        };
+    });
+    const cards = [
+        {
+            character: '贪',
+            pinyin: 'tān'
+        }
+    ].concat(dupes);
+    const newCards = pickCardsFromDeck(cards, { game: MATCH_SOUND });
+    assert.equal(newCards.length, 3,
+        'of the answers only 1 is not a duplicate (pinyin) of the others');
+});
+
+describe('Reducer: cards#pickCardsFromDeck (#7: english question)', () => {
+    const cards = [
+        {
+            character:'贪',
+            translations: ['to covet', 'greedy', 'corrupt']
+        },
+        {
+            character: '承',
+            translations: [ 'to bear', 'to carry', 'to hold']
+        },
+        {
+            character: '贪心',
+            translations: ['greedy']
+        }
+    ];
+    const newCards = pickCardsFromDeck(cards, { game: MATCH_DEFINITION });
+    assert.equal(newCards.length, 3, 'similarly translated characters are stripped');
+    assert.ok(
+        newCards.slice(1)
+            .findIndex(card => card.character === newCards[0].character) > -1,
+        'first card duplicated'
+    );
+});
+
+describe('Reducer: cards#pickCardsFromDeck (#7: english answers)', () => {
+    const cards = [
+        {
+            character: '承',
+            translations: [ 'to bear', 'to carry', 'to hold']
+        },
+        {
+            character:'贪',
+            translations: ['to covet', 'greedy', 'corrupt']
+        },
+        {
+            character: '贪心',
+            translations: ['greedy']
+        }
+    ];
+    const newCards = pickCardsFromDeck(cards, { game: MATCH_DEFINITION });
+    assert.equal(newCards.length, 3,
+        'similarly translated characters in the answers are stripped');
+});
 
 describe('Reducer: cards (revealedFlashcard)', () => {
     const newState = revealedFlashcard(example.cards, {
