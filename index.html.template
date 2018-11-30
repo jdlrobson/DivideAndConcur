@@ -51,7 +51,7 @@
 	<script type="text/javascript" src="src/js/main.js"></script>
 	<script type="text/javascript">
 		if ('serviceWorker' in navigator && window.location.host.indexOf('localhost:') === -1) {
-			navigator.serviceWorker.register('service-worker.js', {scope: '/'})
+			navigator.serviceWorker.register('src/service-worker.js', {scope: '/'})
 			.then(function(reg) {
 			  // registration worked
 			  console.log('Registration succeeded. Scope is ' + reg.scope);
