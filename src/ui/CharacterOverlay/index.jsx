@@ -1,7 +1,7 @@
 /** @jsx h */
 import { Component, h } from 'preact';
 import { connect } from 'preact-redux';
-import FlashCard from './../Card';
+import { FlashCard } from './../Card';
 import Overlay from './../Overlay';
 import Carousel from './Carousel';
 import Tab from './Tab';
@@ -10,7 +10,7 @@ import Decompositions from './Decompositions';
 
 import './styles.less';
 
-class CharacterOverlay extends Component {
+export class CharacterOverlay extends Component {
     render(props) {
         const character = props.character;
         const blurb = props.text || '';
