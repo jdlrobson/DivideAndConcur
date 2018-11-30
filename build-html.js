@@ -2,7 +2,7 @@ import { h } from 'preact';
 import './tests/null-compiler.js';
 import fs from 'fs';
 import render from 'preact-render-to-string';
-import StoryPanel from './src/ui/StoryPanel';
+import StoryPanel from './src/js/ui/StoryPanel';
 
 /** @jsx h */
 

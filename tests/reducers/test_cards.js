@@ -1,8 +1,8 @@
-import { DECK_NEW, MATCH_DEFINITION, MATCH_PAIRS, MATCH_SOUND } from './../../src/constants';
+import { DECK_NEW, MATCH_DEFINITION, MATCH_PAIRS, MATCH_SOUND } from './../../src/js/constants';
 import {  getHardCards, getKnownCards, getUnknownCards,
     intersection,
     pickCardsForGame, pickCardsFromDeck, revealedFlashcard
-} from './../../src/reducers/cards';
+} from './../../src/js/reducers/cards';
 import assert from 'assert';
 import example from './example.json';
 

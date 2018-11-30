@@ -1,7 +1,7 @@
 import { clean,
     markWordAsDifficult, markWordAsEasy, revealedFlashcard
-} from './../../src/reducers/difficulty-ratings';
-import { MATCH_DEFINITION } from './../../src/constants';
+} from './../../src/js/reducers/difficulty-ratings';
+import { MATCH_DEFINITION } from './../../src/js/constants';
 import assert from 'assert';
 import example from './example.json';
 

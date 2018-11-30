@@ -1,5 +1,5 @@
 import chai, { expect } from 'chai';
-import { Card } from './../../src/ui/Card';
+import { Card } from './../../src/js/ui/Card';
 import assertJsx from 'preact-jsx-chai';
 import { h } from 'preact'; /** @jsx h */
 

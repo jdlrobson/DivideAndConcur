@@ -1,6 +1,6 @@
-import dictJson from './../../data/dictionary.json';
-import blurbs from './../../data/blurbs.json';
-import DictionaryUtils from './../../data/DictionaryUtils';
+import dictJson from './../../../data/dictionary.json';
+import blurbs from './../../../data/blurbs.json';
+import DictionaryUtils from './../../../data/DictionaryUtils';
 import { getDifficultyRating } from './difficulty-ratings';
 import { MAX_DIFFICULTY } from './../constants';
 import { random } from './../utils';

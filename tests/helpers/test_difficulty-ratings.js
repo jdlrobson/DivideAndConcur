@@ -1,5 +1,5 @@
 import { getDifficultyRating,
-    getKnownWordCount, knowsWord } from './../../src/helpers/difficulty-ratings';
+    getKnownWordCount, knowsWord } from './../../src/js/helpers/difficulty-ratings';
 import assert from 'assert';
 
 describe('Helper:difficulty-ratings', () => {

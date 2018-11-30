@@ -1,5 +1,5 @@
-import { DECK_KNOWN, DECK_NEW, DECK_UNKNOWN, MATCH_SOUND } from './../src/constants';
-import { dismountDeck, endRound } from './../src/actions';
+import { DECK_KNOWN, DECK_NEW, DECK_UNKNOWN, MATCH_SOUND } from './../src/js/constants';
+import { dismountDeck, endRound } from './../src/js/actions';
 import assert from 'assert';
 import sinon from 'sinon';
 

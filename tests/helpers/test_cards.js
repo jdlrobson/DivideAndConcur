@@ -1,4 +1,4 @@
-import { mapCard, translationArray } from './../../src/helpers/cards';
+import { mapCard, translationArray } from './../../src/js/helpers/cards';
 import assert from 'assert';
 
 describe('Helper:cards', () => {

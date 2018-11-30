@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { getCardProps, obscurePinyinInCard } from './../../src/ui/GameOneInFour';
+import { getCardProps, obscurePinyinInCard } from './../../src/js/ui/GameOneInFour';
 
 describe('GameOneInFour', () => {
     it('all pinyin same length', () => {
