@@ -102,17 +102,23 @@ const store = createStore(reducer,
         focusWindow();
     };
     const hash = window.location.hash;
-    if (!hash) {
-        window.location.hash = '#panel-6';
-        focusWindow();
-    } else if (!document.querySelector(decodeURIComponent(hash))) {
-        // If the hash fragment is pointing to something that's not an element.
+    const initGameEl = document.querySelector('#init-game');
+    if (initGameEl) {
+        if (!hash) {
+            window.location.hash = '#panel-6';
+            focusWindow();
+        } else if (!document.querySelector(decodeURIComponent(hash))) {
+            // If the hash fragment is pointing to something that's not an element.
+            boot();
+            const char = decodeURIComponent(hash.replace('#', ''));
+            store.dispatch(showOverlay(char));
+        }
+        initGameEl.addEventListener('click', () => {
+            boot();
+        });
+    } else {
+        // dev mode
         boot();
-        const char = decodeURIComponent(hash.replace('#', ''));
-        store.dispatch(showOverlay(char));
     }
-    document.querySelector('#init-game').addEventListener('click', () => {
-        boot();
-    });
 }());
 
