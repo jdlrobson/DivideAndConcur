@@ -6,7 +6,7 @@
 		<meta name="google-site-verification" content="pLlfk15JNifCKE7gA1YunSblsQy64Szdavj4gaZx4QM" />
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" href="index.less">
-		<link rel="manifest" href="./manifest.webmanifest" />
+		<link rel="manifest" href="./src/manifest.webmanifest" />
 		<!-- Global site tag (gtag.js) - Google Analytics -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-75478054-3"></script>
 		<script>
@@ -23,7 +23,7 @@
 			<div class='chrome__header'>
 				<div class='chrome__header__home'>
 					<a href="/">
-						<img src='logo.png' alt='Divide and concur'
+						<img src='./src/logo.png' alt='Divide and concur'
 							width='320'
 							class='chrome__header__home__logo'>
 					</a>
