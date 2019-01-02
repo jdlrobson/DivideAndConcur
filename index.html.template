@@ -5,16 +5,7 @@
 		<meta charset="UTF-8">
 		<meta name="google-site-verification" content="pLlfk15JNifCKE7gA1YunSblsQy64Szdavj4gaZx4QM" />
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link rel="stylesheet" href="index.less">
-		<link rel="manifest" href="./src/manifest.webmanifest" />
-		<!-- Global site tag (gtag.js) - Google Analytics -->
-		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-75478054-3"></script>
-		<script>
-			window.dataLayer = window.dataLayer || [];
-			function gtag(){dataLayer.push(arguments);}
-			gtag('js', new Date());
-			gtag('config', 'UA-75478054-3');
-		</script>
+		<!-- HEAD -->
 	</head>
 	<body>
 		<script type="text/javascript">document.body.className = 'client-js';</script>
@@ -47,18 +38,5 @@
 			</footer>
 		</div>
 	</body>
-	<script type="text/javascript" src="src/js/shims.js"></script>
-	<script type="text/javascript" src="src/js/main.js"></script>
-	<script type="text/javascript">
-		if ('serviceWorker' in navigator && window.location.host.indexOf('localhost:') === -1) {
-			navigator.serviceWorker.register('src/service-worker.js', {scope: '/'})
-			.then(function(reg) {
-			  // registration worked
-			  console.log('Registration succeeded. Scope is ' + reg.scope);
-			}).catch(function(error) {
-			  // registration failed
-			  console.log('Registration failed with ' + error);
-			});
-		}
-	</script>
+	<!-- BODY -->
 </html>
