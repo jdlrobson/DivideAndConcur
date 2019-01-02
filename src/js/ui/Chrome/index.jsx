@@ -23,10 +23,10 @@ const ChromeContent = ( { children, name} ) => {
     );
 };
 
-export default ({ children }) => {
+export default ({ logo, children }) => {
     return (
         <div className='chrome'>
-            <Header />
+            <Header logo={logo} />
             <ChromeContent name="one">
                 {children}
             </ChromeContent>
