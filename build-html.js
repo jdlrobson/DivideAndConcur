@@ -2,6 +2,7 @@ import { h } from 'preact';
 import './tests/null-compiler.js';
 import fs from 'fs';
 import render from 'preact-render-to-string';
+import Chrome from './src/js/ui/Chrome';
 import StoryPanel from './src/js/ui/StoryPanel';
 
 /** @jsx h */
@@ -37,11 +38,8 @@ const bodyTags = `
 </script>`;
 
 const doSubstitution = (html) => {
-    return buf.replace(
-        /(<!-- STORY-PANEL-START -->)(.*?)(<!-- STORY-PANEL-END -->)/g,
-        `$1${html}$3`
-    ).replace('<!-- HEAD -->', headTags)
-    .replace('<!-- BODY -->', bodyTags);
+    return buf.replace('<!-- HEAD -->', headTags)
+        .replace('<!-- BODY -->', html  + bodyTags);
 };
 
 const saveFile = (filename, text) => {
@@ -63,6 +61,10 @@ const promises = [];
 promises.push(
     saveFile(
         'index.html',
-        render(<StoryPanel />)
+        render(
+            <Chrome logo="./src/logo.png">
+                <StoryPanel />
+            </Chrome>
+        )
     )
 );

@@ -9,34 +9,6 @@
 	</head>
 	<body>
 		<script type="text/javascript">document.body.className = 'client-js';</script>
-		<!-- todo: generate static HTML from jsx component -->
-		<div class='chrome'>
-			<div class='chrome__header'>
-				<div class='chrome__header__home'>
-					<a href="/">
-						<img src='./src/logo.png' alt='Divide and concur'
-							width='320'
-							class='chrome__header__home__logo'>
-					</a>
-				</div>
-			</div>
-			<div class="chrome__content" id="chrome__content__panel-one">
-				<!-- PROGRESSBAR-START --><!-- PROGRESSBAR-END -->
-				<!-- STORY-PANEL-START --><!-- STORY-PANEL-END -->
-			</div>
-			<div id="container" class="chrome__content"  style="display: none;">
-				<div id="chrome__content__panel-two" style="display: none;">
-					<!-- PROGRESSBAR-START --><!-- PROGRESSBAR-END -->
-				</div>
-			</div>
-			<footer>
-				<p>
-					<a href="http://jdlrobson.com">Jon Robson and Linz Lim's</a>
-					<a href="https://qieqie.uk">qie qie</a> a fun way to learn Mandarin
-					<span id="version">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-					<span id="modified"></span></p>
-			</footer>
-		</div>
+		<!-- BODY -->
 	</body>
-	<!-- BODY -->
 </html>
