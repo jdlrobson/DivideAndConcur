@@ -108,9 +108,12 @@ export class FlashCard extends Component {
             dLevel = -dLevel;
         }
 
+
+        const displayChar = props.displayCharacter || props.character;
+        const label = props.label !== undefined ? props.label : displayChar;
         const difficultyBar =  (
-            <div className={className(BLOCK_NAME, 'difficulty-bar')}>
-                { props.hideDifficulty ? null :
+            <div className={className(BLOCK_NAME, 'difficulty-bar')} key={`difficulty-${displayChar}`}>
+                { props.hideDifficulty || dLevel === undefined ? null :
                     new Array(dLevel).fill((<div className={isEasy ? 'easy' : ''} />))
                 }
             </div>
@@ -152,8 +155,6 @@ export class FlashCard extends Component {
 
         components = translations.concat(buttons);
 
-        const displayChar = props.displayCharacter || props.character;
-        const label = props.label !== undefined ? props.label : displayChar;
         const labelModifiers = [];
         if (props.label) {
             labelModifiers.push('custom');
