@@ -196,6 +196,12 @@ function clean() {
 			decomp[indexFlesh] = '月';
 			console.log(`Updated ⺼ to 月 for ${key}`);
 		}
+		const indexIce = decomp.indexOf( '⺀' );
+		if ( indexIce > -1 ) {
+			// moon and flesh are very similar, so we merged them into one.
+			decomp[indexIce] = '冫 ';
+			console.log(`Updated ⺀ to 冫 for ${key}`);
+		}
 		decomp.forEach((char) => {
 			Array.from(char).forEach((chinese)=> {
 				const p = dict.getPinyin(chinese);
@@ -495,6 +501,8 @@ function importWords(json) {
 				console.log(`Imported ${word}=${def}`, def === '?');
 				promises.push( dict.saveWord( word, def ) );
 			}
+		} else {
+			console.log( `skipped ${word}`)
 		}
 	})
 	console.log( 'Imported', promises.length, 'words');
@@ -504,6 +512,7 @@ function importWords(json) {
 
 if ( process.argv[2] ) {
 	const filename = process.argv[2];
+	console.log(`reading ${filename}`)
 	fs.readFile(filename, 'utf-8', ( err, data ) => {
 		const json = JSON.parse( data );
 		dict.load().then(() => {
