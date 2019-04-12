@@ -353,10 +353,8 @@ function menu() {
 					});
 					break;
 				case 6:
-					getUserInput('Enter chinese character(s)').then((msg) => {
-						var words = dict.all().filter((char) => {
-							return dict.getWordLength(char) === 1 && dict.decompose(char).length === 1;
-						});
+					getUserInput('Enter chinese character(s) separated by spaces').then((msg) => {
+						const words = msg.split( ' ' ).map((w) => w.trim());
 						batchAutoDecompose(words);
 						return dict.save().then(() => menu());
 					});
