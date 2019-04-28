@@ -320,7 +320,8 @@ function menu() {
 		'15: View cards with difficulty range',
 		'16: Add pinyin',
 		'17: Clear decompositions',
-		'18: Batch delete characters'
+		'18: Batch delete characters',
+		'19: Show unused'
 	];
 	getUserInput( '**********************\n' + options.join('\n') + '\n**********************' )
 		.then( ( val ) => {
@@ -384,7 +385,6 @@ function menu() {
 						feedback( `Used by=${usedBy.length ? translation : 'Nothing'}`)
 						feedback( `Blurb=\n${blurb.getBlurb(char)}`)
 					} ).then(() => menu());
-					break;
 					break;
 				case 10:
 					const missing = dict.missing();
@@ -462,12 +462,22 @@ function menu() {
 						dict.addDecomposition( w, [] );
 						return dict.save();
 					}).then(()=>menu());
-				break;
+					break;
 				case 18:
 					return getUserInput('Batch delete what words?').then((w) => {
 						Array.from(w).forEach((word) => dict.removeWord(word));
 						return dict.save();
 					}).then(()=>menu());
+					break;
+				case 19:
+					dict.all().filter((word) => {
+						return Array.from( word ).length < 2 &&
+							dict.usedBy(word).length === 0;
+					} ).forEach((char) => {
+						console.log( char, dict.getWord( char ) );
+					} );
+					menu();
+					break;
 				default:
 					feedback('Huh?');
 					menu();
