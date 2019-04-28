@@ -139,7 +139,8 @@ DictionaryUtils.prototype = {
   /**
    * @param {string} char
    * @return {array} of words with length greater than 1 character
-   *   that contain this character
+   *   that contain this character. Compound words are preferred, however if there
+   * are no compound words, single characters will be shown
    */
   usedBy: function ( char ) {
     const d = this.decompositions;
@@ -155,8 +156,10 @@ DictionaryUtils.prototype = {
       key => d[key].indexOf(char) > -1
     ).concat(
       Object.keys(w).filter((key)=> key.indexOf(char) > -1 && key !== char)
-    ).filter((c) => c !== char && Array.from(c).length > 1 );
-    return l === 0 ? usedByRadical( char ).concat( compoundWords ) : compoundWords; 
+    );
+    const fCompoundWords = compoundWords.filter((c) => c !== char && Array.from(c).length > 1 );
+    const usedBy = l === 0 ? usedByRadical( char ).concat( fCompoundWords ) : fCompoundWords; 
+    return usedBy.length > 0 ? usedBy : compoundWords; 
   },
   decompose: function( word, isRecursive ) {
     if ( Array.from(word).length > 1 && !isRecursive ) {

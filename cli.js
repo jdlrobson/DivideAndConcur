@@ -472,7 +472,7 @@ function menu() {
 				case 19:
 					dict.all().filter((word) => {
 						return Array.from( word ).length < 2 &&
-							dict.usedBy(word).length === 0;
+							dict.usedBy(word).length === 0 && !blurb.getBlurb(word);
 					} ).forEach((char) => {
 						console.log( char, dict.getWord( char ) );
 					} );
