@@ -69,8 +69,10 @@ DictionaryUtils.prototype = {
    */
    getDifficultyRating: function (word, forWordAlone) {
     var thisWord = ( this.difficulties[word] || 0 );
-    var combinedDifficulties = this.decompose(word)
-      .reduce((acc, component) => acc + this.difficulties[component] || 0, 0 );
+    const combinedDifficulties = this.decompose(word)
+      .reduce((acc, component) => {
+        return acc + ( this.difficulties[component] || 0 );
+      }, 0 );
     return forWordAlone ? thisWord : Math.max( thisWord, combinedDifficulties );
   },
   getWordLength: function ( word ) {
