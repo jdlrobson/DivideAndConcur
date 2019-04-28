@@ -6,9 +6,33 @@
 		<meta name="google-site-verification" content="pLlfk15JNifCKE7gA1YunSblsQy64Szdavj4gaZx4QM" />
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<!-- HEAD -->
+		<style type="text/css">
+		#app-loading-indicator:before {
+			content: "💿";
+			font-size: 100px;
+			left: 0;
+			right: 0;
+			position: absolute;
+			top: 100px;
+			text-align: center;
+			animation: spinner 3s linear;
+			animation-iteration-count: infinite;
+			transform-origin: center 50px;
+		}
+		@keyframes spinner {
+			0% {
+				transform: rotate(0deg);
+			}
+
+			100% {
+				transform: rotate(360deg);
+			}
+		}
+		</style>
 	</head>
 	<body>
 		<script type="text/javascript">document.body.className = 'client-js';</script>
+		<div id="app-loading-indicator"></div>
 		<!-- BODY -->
 	</body>
 </html>
