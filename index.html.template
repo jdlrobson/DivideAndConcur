@@ -8,7 +8,7 @@
 		<!-- HEAD -->
 		<style type="text/css">
 		#app-loading-indicator:before {
-			content: "💿";
+			content: "";
 			font-size: 100px;
 			left: 0;
 			right: 0;
