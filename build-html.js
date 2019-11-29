@@ -11,7 +11,7 @@ const buf = fs.readFileSync('index.html.template', 'utf8');
 
 const headTags = `
 <link rel="stylesheet" href="index.less">
-<link rel="manifest" href="./src/manifest.webmanifest" />
+<link rel="manifest" href="manifest.webmanifest" />
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-75478054-3"></script>
 <script>
@@ -26,7 +26,7 @@ const bodyTags = `
 <script type="text/javascript" src="src/js/main.js"></script>
 <script type="text/javascript">
     if ('serviceWorker' in navigator && window.location.host.indexOf('localhost:') === -1) {
-        navigator.serviceWorker.register('src/service-worker.js', {scope: '/'})
+        navigator.serviceWorker.register('/service-worker.js', {scope: '/'})
         .then(function(reg) {
           // registration worked
           console.log('Registration succeeded. Scope is ' + reg.scope);

@@ -3,7 +3,7 @@
   "name": "qie qie",
   "icons": [
     {
-      "src": "icon.png",
+      "src": "./src/icon.png",
       "sizes": "256x256",
       "type": "image/png"
     }
