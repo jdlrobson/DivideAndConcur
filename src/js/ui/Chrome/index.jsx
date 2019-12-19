@@ -34,14 +34,6 @@ export default ({ logo, children }) => {
             <div id='container' class='chrome__content'  style='display: none;'>
                 <ChromeContent name='two' />
             </div>
-            <footer>
-                <p>
-                    <a href='http://jdlrobson.com'>Jon Robson and Linz Lim's</a>&nbsp;
-                    <a href='https://qieqie.uk'>qie qie</a> a fun way to learn Mandarin
-                    <span id='version'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                    <span id='modified' />
-                </p>
-            </footer>
         </div>
     );
 };

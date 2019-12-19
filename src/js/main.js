@@ -8,7 +8,7 @@ import {
     TAKE_A_BREAK
 } from './constants';
 import { init, answerAllCardsInRound, highlightCharacter, switchGame,
-    showOverlay,
+    showCharacterOverlay,
     startRound } from './actions';
 import reducer from './reducer';
 import thunkMiddleware from 'redux-thunk';
@@ -112,7 +112,7 @@ const store = createStore(reducer,
             // If the hash fragment is pointing to something that's not an element.
             boot();
             const char = decodeURIComponent(hash.replace('#', ''));
-            store.dispatch(showOverlay(char));
+            store.dispatch(showCharacterOverlay(char));
         }
         initGameEl.addEventListener('click', () => {
             boot();

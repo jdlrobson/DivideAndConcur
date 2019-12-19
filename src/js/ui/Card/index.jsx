@@ -2,7 +2,7 @@
 import { Component, h } from 'preact';
 import { connect } from 'preact-redux';
 import './styles.less';
-import { revealFlashcard, answerFlashcard, showOverlay } from './../../actions';
+import { revealFlashcard, answerFlashcard, showCharacterOverlay } from './../../actions';
 import { getDifficultyRating } from './../../helpers/difficulty-ratings';
 import { className } from './../className';
 
@@ -208,7 +208,7 @@ const mapStateToProps = (state, props) => {
 
 const mapDispatchToProps = (dispatch, props) => {
     const onExpandCard = (ev, character) => {
-        dispatch(showOverlay(character));
+        dispatch(showCharacterOverlay(character));
     };
 
     return {

@@ -32,8 +32,12 @@ export function init(userData) {
     };
 }
 
-export function showOverlay(character) {
-    return { type: actionTypes.SHOW_OVERLAY, character };
+export function showOverlay(data) {
+    return Object.assign({ type: actionTypes.SHOW_OVERLAY }, data);
+}
+
+export function showCharacterOverlay(character) {
+    return showOverlay({ character, overlay: 'character' });
 }
 
 export function hideOverlay() {

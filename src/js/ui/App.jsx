@@ -10,12 +10,13 @@ import GameOneInFour from './GameOneInFour';
 import ProgressBar from './ProgressBar';
 import TakeBreak from './TakeBreak';
 import Overlay from './Overlay';
+import AboutOverlay from './AboutOverlay';
 import CharacterOverlay from './CharacterOverlay';
 import Button from './Button';
 import { getAnsweredCards, maxSize } from './../helpers/cards';
 import { getKnownWordCount, getUnKnownWordCount } from './../helpers/difficulty-ratings';
 import { dismountCurrentGame, dismountDeck, refresh,
-    hideOverlay
+    hideOverlay, showOverlay
 } from './../actions';
 import { MATCH_PAIRS, REVISE,
     ENGLISH_TO_CHINESE, PINYIN_TO_CHINESE,
@@ -25,6 +26,21 @@ import { MATCH_PAIRS, REVISE,
     DECK_UNKNOWN,
     ALLOW_DECK_SELECTION
 } from './../constants';
+
+function makeOverlay(data, stackNumber, onHideOverlay) {
+    switch (data.overlay) {
+        case 'about':
+            return <AboutOverlay onClickExit={onHideOverlay}></AboutOverlay>
+        case 'character':
+        default:
+            return (
+                <CharacterOverlay {...data} key={`overlay-${stackNumber}`}>
+                    <Button className='app__overlay__button'
+                        onClick={onHideOverlay}>Got it!</Button>
+                </CharacterOverlay>
+            );
+    }
+}
 
 class App extends Component {
     render(props) {
@@ -88,12 +104,7 @@ class App extends Component {
                         }/>
                     )
                 }
-                {overlay.length > 0 && (
-                    <CharacterOverlay {...overlay[0]} key={`overlay-${overlay.length}`}>
-                        <Button className='app__overlay__button'
-                            onClick={this.props.onHideOverlay}>Got it!</Button>
-                    </CharacterOverlay>
-                )}
+                {overlay.length > 0 && makeOverlay(overlay[0], overlay.length, this.props.onHideOverlay)}
                 {
                     props.maxSize &&
                     <ProgressBar known={props.knownWordCount} total={props.maxSize}
@@ -116,6 +127,7 @@ class App extends Component {
                                className='app__content__button'>Refresh</Button>
                     }
                 </div>
+                <div class='app__button' onClick={props.onAboutClick}>about</div>
             </div>
         );
     }
@@ -137,6 +149,9 @@ const mapDispatchToProps = (dispatch, props) => {
             } else if (props.deck) {
                 dispatch(dismountDeck());
             }
+        },
+        onAboutClick: (props) => {
+            dispatch(showOverlay({ overlay: 'about' }));
         }
     };
 };

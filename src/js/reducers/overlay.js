@@ -10,6 +10,7 @@ function pushCardToStackIfExists(stack, character) {
             }, card)
         ].concat(stack) : stack;
 }
+
 export default (state = [], action) => {
     switch (action.type) {
         case actionTypes.HIDE_OVERLAY:
@@ -17,7 +18,9 @@ export default (state = [], action) => {
             return state.slice(1);
         case actionTypes.SHOW_OVERLAY:
             // Push the new card to the top of the stack (item 0)
-            return pushCardToStackIfExists(state, action.character);
+            return action.character ?
+                pushCardToStackIfExists(state, action.character) :
+                [ action ].concat(state);
         default:
             break;
     }

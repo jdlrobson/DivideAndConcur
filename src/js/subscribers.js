@@ -1,8 +1,6 @@
 /* global SpeechSynthesisUtterance */
 import { endRound, saveComplete, renderComplete } from './actions';
 import actionTypes from './actionTypes';
-import { VERSION } from './constants';
-import { DATA_MODIFIED_LAST } from './helpers/cards';
 import App from './ui/App';
 import { h, render } from 'preact';
 import { Provider } from 'preact-redux';
@@ -60,9 +58,7 @@ export function checkForBoot(store, callback) {
                     <App />
                 </Provider>
             );
-            document.getElementById('version').innerHTML = VERSION;
             document.getElementById('container').innerHTML = '';
-            document.getElementById('modified').textContent = DATA_MODIFIED_LAST;
             render(
                 provider,
                 document.getElementById('container')
