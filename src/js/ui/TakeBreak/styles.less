@@ -11,11 +11,18 @@
   }
 }
 
-.takebreak__learn {
+.poem__verse {
   display: grid;
   width: 300px;
   grid-column-gap: @card-gutter;
   grid-row-gap: @card-gutter;
+  margin-top: 10px;
+  &:after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+
   .card {
     justify-self: start;
 
@@ -23,4 +30,25 @@
       grid-column: 3;
     }
   }
+}
+
+.poem__verse__card--unseen {
+  opacity: 0.1;
+}
+
+.poem__verse__card--hard {
+  opacity: 0.25;
+}
+
+.poem__verse__card--seen {
+  opacity: 0.5;
+}
+
+.poem__verse__card--known,
+.poem__verse--special {
+  opacity: 1;
+}
+
+.poem__verse--special .expand-button {
+  display: none;
 }

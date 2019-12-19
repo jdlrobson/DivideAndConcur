@@ -27,3 +27,28 @@ export const DEBUG_WORDS = false;
 // define which deck/game to boot up with
 export const DEBUG_DECK = false;
 export const DEBUG_GAME = false;
+
+export const POEMS = [
+    '含辛茹苦',
+    '巴山越岭',
+    `鹅、鹅、鹅，
+曲项向天歌。
+白毛浮绿水，
+红掌拨清波`,
+    `床前明月光，
+疑是地上霜。
+举头望明月，
+低头思故乡。`,
+    `锄禾日当午，
+汗滴禾下土。
+谁知盘中餐，
+粒粒皆辛苦。`,
+    `春眠不觉晓，
+处处闻啼鸟。
+夜来风雨声，
+花落知多少`,
+    `煮豆燃豆萁，
+豆在釜中泣。
+本自同根生，
+相煎何太急`
+];

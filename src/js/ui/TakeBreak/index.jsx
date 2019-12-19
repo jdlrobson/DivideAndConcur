@@ -4,13 +4,51 @@ import { connect } from 'preact-redux';
 import Button from './../Button';
 import Card from './../Card';
 import './styles.less';
+import { POEMS } from '../../constants';
 
 import { getDifficultWordsHardestFirst, getKnownWords,
     getUniqueChars } from './../../helpers/difficulty-ratings';
 import { resetNumRounds, dismountCurrentGame } from './../../actions';
 
+const getPoemCharacterClass = (char, props) => {
+    const classes = [];
+    if ([ '，', '。' ].includes(char)) {
+        return 'poem__verse--special';
+    }
+    if (props.knownWords.includes(char)) {
+        classes.push('poem__verse__card--known');
+    }
+    if (props.seenWords.includes(char)) {
+        classes.push('poem__verse__card--seen');
+    } else {
+        classes.push('poem__verse__card--unseen');
+    }
+    if (props.hardWords.includes(char)) {
+        classes.push('poem__verse__card--hard');
+    }
+    return classes.join(' ');
+}
+
+const todaysPoem = POEMS[Math.floor(Math.random() * POEMS.length)];
+
+const Poem = (text, props) => {
+    const lines = text.split('\n');
+
+    return <div class="poem">
+        {lines.map((line) => {
+            return <div class="poem__verse">{
+                Array.from(line).map((char) =>
+                    <Card character={char} isSmall={true}
+                        isAnswered={true}
+                        className={getPoemCharacterClass(char, props)} />)
+            }</div>;
+        })}
+    </div>
+}
+
 class TakeBreak extends Component {
     render(props) {
+
         return (
             <div className='game'>
                 <p>You've been playing some time today!</p>
@@ -26,15 +64,9 @@ class TakeBreak extends Component {
                 <p>Your brain is probably tired right now,
                     so please consider taking a break and playing again later!</p>
                 <Button onClick={props.onButtonClick}>不要!</Button>
-                <p>Hopefully the following words are beginning to look familiar...</p>
-                <p>{props.seenWords.map(char =>
-                    <span className='takebreak__char'>{char}</span>)}</p>
-                <h2>Your word bank contains {props.knownWords.length} characters</h2>
-                <p>Learn these words for next time to win more cards!</p>
-                <div className="takebreak__learn">{
-                    props.hardWords.map(character => <Card character={character}
-                        isKnown={false} isAnswered={true} />)
-                }</div>
+                <strong>Your word bank contains {props.knownWords.length} characters</strong>
+                <p>Hopefully things written in Chinese are starting to look more familiar...</p>
+                {Poem(todaysPoem, props)}
             </div>
         );
     }
