@@ -26,6 +26,12 @@ Gulp.
 
 == Configuration options
 
+== Shortcuts
+
+* LL - switch to end screen
+* JRG - answer all the cards in the current round incorrectly
+* JRH - answer all the cards in the current round correctly
+
 === Environment variables
 
 	export CLEAN_WORD_ORDER=1
