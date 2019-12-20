@@ -17,6 +17,10 @@ export function switchGame(game) {
     return { type: actionTypes.SWITCH_GAME, game };
 }
 
+export function launchWordBankOverlay() {
+    return showOverlay({ overlay: 'wordbank' });
+}
+
 export function init(userData) {
     const cleanWordOrder = process.env.CLEAN_WORD_ORDER !== undefined;
     return (dispatch) => {

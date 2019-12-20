@@ -45,7 +45,7 @@ export default class ProgressBar extends Component {
                 <div className='progress-bar__bar'>
                     {blocks}
                 </div>
-                {!props.noLabel && <div className='app__content progress-bar__label'>
+                {!props.noLabel && <div className='app__content progress-bar__label' onClick={props.onClick}>
                     {wordbankMsg}  &gt;&gt;&gt;</div>}
                 {props.initialKnown < props.known &&
                     <div className='progress-bar__delta'>+{props.known - props.initialKnown}</div>

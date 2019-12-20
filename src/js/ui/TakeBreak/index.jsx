@@ -2,46 +2,12 @@
 import { Component, h } from 'preact';
 import { connect } from 'preact-redux';
 import Button from './../Button';
-import Card from './../Card';
+import Poem from '../Poem';
 import './styles.less';
 
 import { getDifficultWordsHardestFirst, getKnownWords,
     getUniqueChars } from './../../helpers/difficulty-ratings';
 import { resetNumRounds, dismountCurrentGame } from './../../actions';
-
-const getPoemCharacterClass = (char, props) => {
-    const classes = [];
-    if ([ '，', '。', '；', '、' ].includes(char)) {
-        return 'poem__verse--special';
-    }
-    if (props.knownWords.includes(char)) {
-        classes.push('poem__verse__card--known');
-    }
-    if (props.seenWords.includes(char)) {
-        classes.push('poem__verse__card--seen');
-    } else {
-        classes.push('poem__verse__card--unseen');
-    }
-    if (props.hardWords.includes(char)) {
-        classes.push('poem__verse__card--hard');
-    }
-    return classes.join(' ');
-}
-
-const Poem = (props) => {
-    const lines = props.poem.split('\n');
-
-    return <div class="poem">
-        {lines.map((line) => {
-            return <div class="poem__verse">{
-                Array.from(line).map((char) =>
-                    <Card character={char} isSmall={true}
-                        isAnswered={true}
-                        className={getPoemCharacterClass(char, props)} />)
-            }</div>;
-        })}
-    </div>
-}
 
 class TakeBreak extends Component {
     render(props) {

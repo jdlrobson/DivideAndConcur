@@ -12,11 +12,12 @@ import TakeBreak from './TakeBreak';
 import Overlay from './Overlay';
 import AboutOverlay from './AboutOverlay';
 import CharacterOverlay from './CharacterOverlay';
+import WordBankOverlay from './WordBankOverlay';
 import Button from './Button';
 import { getAnsweredCards, maxSize } from './../helpers/cards';
 import { getKnownWordCount, getUnKnownWordCount } from './../helpers/difficulty-ratings';
 import { dismountCurrentGame, dismountDeck, refresh,
-    hideOverlay, showOverlay
+    hideOverlay, showOverlay, launchWordBankOverlay
 } from './../actions';
 import { MATCH_PAIRS, REVISE,
     ENGLISH_TO_CHINESE, PINYIN_TO_CHINESE,
@@ -29,6 +30,8 @@ import { MATCH_PAIRS, REVISE,
 
 function makeOverlay(data, stackNumber, onHideOverlay) {
     switch (data.overlay) {
+        case 'wordbank':
+            return <WordBankOverlay onClickExit={onHideOverlay}/>
         case 'about':
             return <AboutOverlay onClickExit={onHideOverlay}></AboutOverlay>
         case 'character':
@@ -109,6 +112,7 @@ class App extends Component {
                     props.maxSize &&
                     <ProgressBar known={props.knownWordCount} total={props.maxSize}
                         initialKnown={props.initialState.known}
+                        onClick={props.onWordbankClick}
                         unknown={props.unknownWordCount} />
                 }
                 <div className='app__header'>
@@ -137,6 +141,9 @@ App.defaultProps = {};
 
 const mapDispatchToProps = (dispatch, props) => {
     return {
+        onWordbankClick: () => {
+            dispatch(launchWordBankOverlay())
+        },
         onRefresh:() => {
             dispatch(refresh());
         },

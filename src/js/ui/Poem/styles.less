@@ -1,0 +1,51 @@
+@import './../variables.less';
+
+.poem {
+  overflow: scroll;
+  width: 100%;
+  display: block;
+  height: 300px;
+  height: 50vh;
+}
+.poem__verse {
+    display: grid;
+    margin: auto;
+    width: 300px;
+    grid-column-gap: @card-gutter;
+    grid-row-gap: @card-gutter;
+    margin-top: 10px;
+    &:after {
+      content: '';
+      display: block;
+      clear: both;
+    }
+  
+    .card {
+      justify-self: start;
+  
+      &:nth-child(3n) {
+        grid-column: 3;
+      }
+    }
+  }
+  
+  .poem__verse__card--unseen {
+    opacity: 0.1;
+  }
+  
+  .poem__verse__card--hard {
+    opacity: 0.25;
+  }
+  
+  .poem__verse__card--seen {
+    opacity: 0.5;
+  }
+  
+  .poem__verse__card--known,
+  .poem__verse--special {
+    opacity: 1;
+  }
+  
+  .poem__verse--special .expand-button {
+    display: none;
+  }
