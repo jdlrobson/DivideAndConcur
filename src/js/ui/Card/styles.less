@@ -69,8 +69,8 @@
 }
 
 .card--tiny {
-  width: 50px;
-  height: 50px;
+  width: @card-size-tiny;
+  height: @card-size-tiny;
   float: left;
 
   .card__label {
@@ -159,8 +159,13 @@
 }
 
 .card--wide {
-	width: @cardSizeSmall * 2;
+  width: @cardSizeSmall * 2;
+
+  &.card--tiny {
+    width: @card-size-tiny * 2;
+  }
 }
+
 
 @difficultyBlockSize: (@cardSizeSmall - @cardBorder - @cardBorder) / 5;
 
@@ -253,7 +258,12 @@
       padding-top: 5px;
     }
   }
-	.card--wide {
-		width: @cardSizeSmall * 2;
+
+  .card--wide {
+    width: @cardSizeSmall * 2;
+
+    &.card--tiny {
+      width: @card-size-tiny * 2;
+    }
 	}
 }

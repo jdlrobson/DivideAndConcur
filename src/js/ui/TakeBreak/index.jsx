@@ -39,6 +39,7 @@ const mapStateToProps = (state, props) => {
     const {
         initialState,
         answers,
+        words,
         poem,
         seenWords
     } = state;
@@ -51,6 +52,7 @@ const mapStateToProps = (state, props) => {
     return Object.assign({}, props, {
         seenWords,
         poem,
+        words,
         knownWords,
         hardWords,
         learnedChars,

@@ -22,16 +22,56 @@ const getPoemCharacterClass = (char, { knownWords, seenWords, hardWords }) => {
     return classes.join(' ');
 }
 
-const Poem = ({ knownWords, seenWords, hardWords, poem }) => {
+const textToCharacters = (line, validChars) => {
+    const characters = [];
+    let inspected = 0;
+    Array.from(line).forEach((char, i, chars) => {
+        let possibleWord;
+
+        if ( inspected > i ) {
+            // next.
+            return;
+        } else {
+            const nextChar = chars[i+1];
+            const nextNextChar = chars[i+2];
+
+            // any three character words?
+            if (nextNextChar) {
+                possibleWord = `${char}${nextChar}${nextNextChar}`;
+                if ( validChars.includes(possibleWord) ) {
+                    inspected += 2;
+                    characters.push(possibleWord);
+                    return;
+                }
+            }
+            // any two character words?
+            if (nextChar) {
+                possibleWord = `${char}${nextChar}`;
+                if ( validChars.includes(possibleWord) ) {
+                    inspected += 1;
+                    characters.push(possibleWord);
+                    return;
+                }
+            }
+            characters.push(char);
+        }
+    })
+
+    return characters;
+};
+
+
+const Poem = ({ knownWords, seenWords, hardWords, poem, words }) => {
     const lines = poem.split('\n');
 
     return <div class="poem">
         {lines.map((line) => {
             return <div class="poem__verse">{
-                Array.from(line).map((char) =>
-                    <Card character={char} isTiny={true} showExpandButton={true}
-                        isAnswered={true}
-                        className={getPoemCharacterClass(char, { knownWords, seenWords, hardWords })} />)
+                textToCharacters(line, words.map((w) => w.character)).map((character) => {
+                    return <Card character={character} showExpandButton={true}
+                        isAnswered={true} isTiny={true} isWide={Array.from(character).length > 1}
+                        className={getPoemCharacterClass(character, { knownWords, seenWords, hardWords })} />;
+                })
             }</div>;
         })}
     </div>
