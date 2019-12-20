@@ -17,9 +17,11 @@ import countdown from './countdown';
 import overlay from './overlay';
 import initialState from './initialState';
 import lastActionType from './lastActionType';
+import poem from './poem';
 
 export default {
     cards,
+    poem,
     countdown,
     answers,
     lastActionType,

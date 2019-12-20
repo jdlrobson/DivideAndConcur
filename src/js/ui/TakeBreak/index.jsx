@@ -4,7 +4,6 @@ import { connect } from 'preact-redux';
 import Button from './../Button';
 import Card from './../Card';
 import './styles.less';
-import { POEMS } from '../../constants';
 
 import { getDifficultWordsHardestFirst, getKnownWords,
     getUniqueChars } from './../../helpers/difficulty-ratings';
@@ -12,7 +11,7 @@ import { resetNumRounds, dismountCurrentGame } from './../../actions';
 
 const getPoemCharacterClass = (char, props) => {
     const classes = [];
-    if ([ '，', '。' ].includes(char)) {
+    if ([ '，', '。', '；', '、' ].includes(char)) {
         return 'poem__verse--special';
     }
     if (props.knownWords.includes(char)) {
@@ -29,10 +28,8 @@ const getPoemCharacterClass = (char, props) => {
     return classes.join(' ');
 }
 
-const todaysPoem = POEMS[Math.floor(Math.random() * POEMS.length)];
-
-const Poem = (text, props) => {
-    const lines = text.split('\n');
+const Poem = (props) => {
+    const lines = props.poem.split('\n');
 
     return <div class="poem">
         {lines.map((line) => {
@@ -66,7 +63,7 @@ class TakeBreak extends Component {
                 <Button onClick={props.onButtonClick}>不要!</Button>
                 <strong>Your word bank contains {props.knownWords.length} characters</strong>
                 <p>Hopefully things written in Chinese are starting to look more familiar...</p>
-                {Poem(todaysPoem, props)}
+                {Poem(props)}
             </div>
         );
     }
@@ -76,6 +73,7 @@ const mapStateToProps = (state, props) => {
     const {
         initialState,
         answers,
+        poem,
         seenWords
     } = state;
 
@@ -86,6 +84,7 @@ const mapStateToProps = (state, props) => {
     const learnedChars = uniqueChars.length - initialState.known;
     return Object.assign({}, props, {
         seenWords,
+        poem,
         knownWords,
         hardWords,
         learnedChars,
