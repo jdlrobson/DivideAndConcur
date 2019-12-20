@@ -104,7 +104,9 @@ const store = createStore(reducer,
     const hash = window.location.hash;
     const initGameEl = document.querySelector('#init-game');
     hide($('#app-loading-indicator')[0]);
-    if (initGameEl) {
+    if (process.env.DEV) {
+        boot();
+    } else if (initGameEl) {
         if (!hash) {
             window.location.hash = '#panel-6';
             focusWindow();

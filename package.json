@@ -8,7 +8,7 @@
     "deploy": "npm run build-html && parcel build index.html --no-cache  --out-dir build/ --public-url /",
     "precommit": "npm run fixlint && npm run node:test",
     "start": "npm run build-html && export DEV=1 && parcel index.html",
-    "dev": "npm run build-html &&parcel serve index.html",
+    "dev": "export DEV=1 && npm run build-html &&parcel serve index.html",
     "lint:ui": "eslint src/ui/**/*.jsx",
     "lint": "eslint src/ tests/",
     "fixlint": "eslint src/ tests/ --fix",
