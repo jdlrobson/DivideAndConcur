@@ -10,7 +10,8 @@ const AboutOverlay = ({ onClickExit }) => {
         <p>
             Qie Qie was made by <a href="https://jdlrobson.com">Jon Robson</a> and <a href="https://linzybearswings.wordpress.com/">Linz Lim</a>.
         </p>
-        <p>The version of the game you are playing is <em>{VERSION}-{DATA_MODIFIED_LAST}</em>.</p>
+        <p>The version of the game you are playing is <em>{VERSION}</em>.</p>
+        <p>The dictionary was last updated on {new Date(DATA_MODIFIED_LAST).toUTCString()}</p>
         <h2>Attribution</h2>
         <p>about icon by <a href="https://thenounproject.com/kidilandon/collection/dash-line-iconset/">kidilandon</a> from the noun project.</p>
         <Button className='app__overlay__button'

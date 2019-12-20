@@ -14,7 +14,7 @@ export const DECK_UNKNOWN = 'unknown';
 export const DECK_START = 'start';
 export const ALLOW_DECK_SELECTION = false;
 
-export const VERSION = '0.6.0';
+export const VERSION = '0.7.0';
 
 export const MAXIMUM_UNKNOWN_WORDS = 50;
 export const BREAK_AFTER_ROUNDS = 30;
