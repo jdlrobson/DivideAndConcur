@@ -62,7 +62,7 @@ class TakeBreak extends Component {
                     so please consider taking a break and playing again later!</p>
                 <Button onClick={props.onButtonClick}>不要!</Button>
                 <strong>Your word bank contains {props.knownWords.length} characters</strong>
-                <p>Hopefully things written in Chinese are starting to look more familiar...</p>
+                <p>Hopefully things written in Chinese are starting to look more familiar?</p>
                 {Poem(props)}
             </div>
         );
