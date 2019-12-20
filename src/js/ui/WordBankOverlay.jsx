@@ -41,7 +41,6 @@ const mapStateToProps = (state, props) => {
     // While we're building out the game it's possible I've removed words from the game
     // that are included in unknown word count.
     const unknownWordCount = Math.min(maxSize - knownWordCount, getUnKnownWordCount(answers));
-    console.log('got', words);
 
     return Object.assign({}, props, {
         words,

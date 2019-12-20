@@ -3,10 +3,13 @@ import { Component, h } from 'preact';
 import Card from '../Card';
 import './styles.less';
 
-const getPoemCharacterClass = (char, { knownWords, seenWords, hardWords }) => {
+const getPoemCharacterClass = (char, { knownWords, seenWords, hardWords }, isValidCharacter) => {
     const classes = [];
     if ([ '，', '。', '；', '、' ].includes(char)) {
         return 'poem__verse--special';
+    }
+    if (!isValidCharacter) {
+        return 'poem__verse--invalid';
     }
     if (knownWords.includes(char)) {
         classes.push('poem__verse__card--known');
@@ -63,14 +66,16 @@ const textToCharacters = (line, validChars) => {
 
 const Poem = ({ knownWords, seenWords, hardWords, poem, words }) => {
     const lines = poem.split('\n');
+    const validChars = words.map((w) => w.character);
 
     return <div class="poem">
         {lines.map((line) => {
             return <div class="poem__verse">{
-                textToCharacters(line, words.map((w) => w.character)).map((character) => {
-                    return <Card character={character} showExpandButton={true}
+                textToCharacters(line, validChars).map((character) => {
+                    const isValidCharacter = validChars.includes(character);
+                    return <Card character={character} showExpandButton={isValidCharacter}
                         isAnswered={true} isTiny={true} isWide={Array.from(character).length > 1}
-                        className={getPoemCharacterClass(character, { knownWords, seenWords, hardWords })} />;
+                        className={getPoemCharacterClass(character, { knownWords, seenWords, hardWords }, isValidCharacter)} />;
                 })
             }</div>;
         })}
