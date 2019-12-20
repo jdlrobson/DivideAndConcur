@@ -4,11 +4,12 @@
   overflow: scroll;
   width: 100%;
   display: block;
-  height: 300px;
-  height: 50vh;
+  height: 20vh;
 }
+
 .poem__verse {
     display: grid;
+    grid-template-columns: repeat(6, 1fr);
     margin: auto;
     width: 300px;
     grid-column-gap: @card-gutter;
@@ -23,8 +24,8 @@
     .card {
       justify-self: start;
   
-      &:nth-child(3n) {
-        grid-column: 3;
+      &:nth-child(6n) {
+        grid-column: 6;
       }
     }
   }

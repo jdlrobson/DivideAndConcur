@@ -102,6 +102,10 @@ export class FlashCard extends Component {
         const isFrozen = props.isFrozen;
         const isTiny = props.isTiny;
         const done = props.isAnswered;
+        const showExpandButton = props.showExpandButton || (
+            !isTiny && props.isAnswered && props.onExpandCard !== false
+        );
+
         let components = [];
 
         if (isEasy) {
@@ -169,7 +173,7 @@ export class FlashCard extends Component {
             <Card {...props} onClick={this.onClick.bind(this)} >
                 {!isTiny && props.debug && difficultyBar}
                 {
-                    !isTiny && props.isAnswered && props.onExpandCard !== false && (
+                    showExpandButton && (
                         <ExpandButton
                             className='card__expand-button'
                             onClick={this.onExpand.bind(this)} />

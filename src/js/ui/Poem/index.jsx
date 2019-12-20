@@ -29,7 +29,7 @@ const Poem = ({ knownWords, seenWords, hardWords, poem }) => {
         {lines.map((line) => {
             return <div class="poem__verse">{
                 Array.from(line).map((char) =>
-                    <Card character={char} isSmall={true}
+                    <Card character={char} isTiny={true} showExpandButton={true}
                         isAnswered={true}
                         className={getPoemCharacterClass(char, { knownWords, seenWords, hardWords })} />)
             }</div>;
