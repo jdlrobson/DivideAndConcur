@@ -70,12 +70,20 @@ const Poem = ({ knownWords, seenWords, hardWords, poem, words }) => {
 
     return <div class="poem">
         {lines.map((line) => {
+            let i = 0;
             return <div class="poem__verse">{
                 textToCharacters(line, validChars).map((character) => {
                     const isValidCharacter = validChars.includes(character);
+                    i += Array.from(character).length;
+                    let className = getPoemCharacterClass(character, { knownWords, seenWords, hardWords }, isValidCharacter);
+
+                    if ( i > 6 ) {
+                        i = 0;
+                        className += ' poem__verse__card--break';
+                    }
                     return <Card character={character} showExpandButton={isValidCharacter}
                         isAnswered={true} isTiny={true} isWide={Array.from(character).length > 1}
-                        className={getPoemCharacterClass(character, { knownWords, seenWords, hardWords }, isValidCharacter)} />;
+                        className={className} />;
                 })
             }</div>;
         })}
